@@ -16,7 +16,8 @@
   const COVER = { slot: 1.1, w: 1.0, h: 1.5, depth: 0.08 };
   const SPINE = { slot: 0.27, depth: 1.0 };
   const CAM_DIST = 9;            // camera distance in front of the helix face, at zoom 1
-  const ZOOM = { min: 0.45, max: 1.9 };
+  const ZOOM = { min: 0.45, max: 1.9 };   // max grows on narrow screens so the whole helix fits
+  let zoomMax = ZOOM.max;
   const VISIBLE_ARC = 1.75;      // radians either side of the front that get meshes
   const TURNS_VISIBLE = { covers: 3, spines: 2 };
   const THUMB = '150x225';
@@ -153,7 +154,7 @@
   blank.needsUpdate = true;
 
   // Shelf plank under every visible book: one instanced draw call.
-  const MAX_BOOKS = 900;
+  const MAX_BOOKS = 1600;
   const shelfMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(css('--walnut', '#5b3b22')) });
   const shelves = new THREE.InstancedMesh(box, shelfMat, MAX_BOOKS);
   shelves.count = 0;
@@ -208,7 +209,7 @@
     while (thumbLoads < MAX_THUMB_LOADS && thumbQueue.length) {
       const id = thumbQueue.pop();
       const i = indexOf.get(id);
-      if (i === undefined || Math.abs(i - front()) > booksPerTurn() * (TURNS_VISIBLE[mode] + 1)) {
+      if (i === undefined || Math.abs(i - front()) > booksPerTurn() * (turnsShown() + 1)) {
         thumbPending.delete(id);      // scrolled away; ask again if it comes back
         continue;
       }
@@ -427,6 +428,11 @@
   const slot = () => lerp(COVER.slot, SPINE.slot, m);
   const booksPerTurn = () => (2 * Math.PI * R) / slot();
   const front = () => pos + lift * booksPerTurn();       // the book level with the camera
+  // Turns above and below the middle that get meshes: what the camera can see, plus one.
+  function turnsShown() {
+    const seen = (Math.tan((camera.fov * Math.PI) / 360) * camera.position.z) / PITCH + 1;
+    return Math.max(TURNS_VISIBLE[mode], seen);
+  }
   function clampLift(l) {
     const n = booksPerTurn();
     return clamp(l, -pos / n, (Math.max(0, ids.length - 1) - pos) / n);
@@ -465,7 +471,7 @@
     helix.rotation.y = -theta(pos);
     helix.position.y = -shelfY(pos) + lift * PITCH - 0.75 - pull * 0.45 * worldPerPixel();
 
-    const span = Math.ceil(perTurn * TURNS_VISIBLE[mode] * Math.max(1, zoom));
+    const span = Math.ceil(perTurn * turnsShown());
     const mid = Math.round(front());
     const want = new Set();
     // Nearest the camera first, so the pool runs out at the edges, not mid-screen.
@@ -531,14 +537,20 @@
 
   function placeCamera() {
     // On narrow screens back off a little so a few covers fit across.
-    const dist = CAM_DIST * zoom + (camera.aspect < 0.8 ? 3 : 0);
+    const extra = camera.aspect < 0.8 ? 3 : 0;
+    // Fully zoomed out, the helix's whole width fits across the screen with a little margin.
+    const halfWidth = Math.tan((camera.fov * Math.PI) / 360) * camera.aspect;
+    const fit = (R + 1.2) / halfWidth - R;
+    zoomMax = Math.max(ZOOM.max, (fit - extra) / CAM_DIST);
+    zoom = clamp(zoom, ZOOM.min, zoomMax);
+    const dist = CAM_DIST * zoom + extra;
     camera.position.z = R + dist;
     scene.fog.near = dist + 2;
     scene.fog.far = dist + R * 1.6;
     dirty = true;
   }
   function setZoom(z) {
-    zoom = clamp(z, ZOOM.min, ZOOM.max);
+    zoom = clamp(z, ZOOM.min, zoomMax);
     placeCamera();
   }
   function resize() {
