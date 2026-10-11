@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bookcase</title>
+<meta name="description" content="A calibre library as an endless helical bookcase.">
+<style>
+  /* EB Garamond, if served next to the page (Debian: fonts-ebgaramond). Georgia otherwise. */
+  @font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap;
+               src: url("fonts/EBGaramond12-Regular.otf") format("opentype"); }
+  @font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap;
+               src: url("fonts/EBGaramond12-Italic.otf") format("opentype"); }
+
+  :root {
+    --wall: #14211b;        /* bottle-green reading room */
+    --wall-raised: #1c2e25;
+    --walnut: #5b3b22;
+    --paper: #ece3cf;
+    --muted: #a7ae9c;
+    --brass: #c9a24a;
+    --rule: rgba(236, 227, 207, 0.22);
+    --serif: "EB Garamond", Georgia, "Times New Roman", serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    background: var(--wall);
+    color: var(--paper);
+    font: 17px/1.5 var(--serif);
+    font-variant-numeric: oldstyle-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage { position: fixed; inset: 0; touch-action: none; cursor: grab; }
+  #stage.dragging { cursor: grabbing; }
+  #stage:focus { outline: none; }
+  canvas { display: block; }
+  :focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; flex-wrap: wrap; gap: 6px 24px; align-items: baseline;
+    padding: max(14px, env(safe-area-inset-top)) 24px 28px;
+    background: linear-gradient(var(--wall) 55%, transparent);
+    pointer-events: none;
+  }
+  header > * { pointer-events: auto; }
+  .mark { font-size: 24px; line-height: 1; margin: 0; font-weight: 400; }
+  .mark a { color: inherit; text-decoration: none; }
+  .count { color: var(--muted); font-style: italic; margin-right: auto; }
+
+  .search { display: flex; gap: 10px; align-items: baseline; flex: 0 1 300px; }
+  .search input {
+    flex: 1; min-width: 0; font: inherit; color: var(--paper);
+    background: none; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0;
+    padding: 2px 0 3px;
+  }
+  .search input::placeholder { color: var(--muted); font-style: italic; opacity: 1; }
+  .search input:focus { outline: none; border-bottom-color: var(--brass); }
+  .search input::-webkit-search-cancel-button { filter: invert(0.7); }
+  .hits { color: var(--muted); white-space: nowrap; }
+  [hidden] { display: none !important; }
+
+  .textbtn {
+    font: inherit; color: var(--muted); background: none; border: 0; padding: 2px 0;
+    cursor: pointer; border-bottom: 1px solid transparent;
+  }
+  .textbtn:hover { color: var(--paper); }
+  .textbtn[aria-pressed="true"] { color: var(--paper); border-bottom-color: var(--brass); }
+  .modes { display: inline-flex; gap: 12px; align-items: baseline; }
+  .modes .sep { color: var(--rule); }
+
+  select {
+    font: inherit; color: var(--muted); background: none; border: 0; padding: 2px 0;
+    cursor: pointer; -webkit-appearance: none; appearance: none;
+  }
+  select:hover { color: var(--paper); }
+  select option { color: #1a1a1a; }
+
+  #facing {
+    position: fixed; left: 50%; bottom: max(22px, env(safe-area-inset-bottom));
+    transform: translateX(-50%); width: min(36em, calc(100% - 48px));
+    text-align: center; pointer-events: none;
+    text-shadow: 0 1px 6px var(--wall), 0 0 18px var(--wall);
+  }
+  #facing .t { font-style: italic; font-size: 22px; line-height: 1.2; }
+  #facing .a, #facing .s { color: var(--muted); }
+
+  #status {
+    position: fixed; inset: 0; display: grid; place-items: center;
+    color: var(--muted); font-style: italic; text-align: center; padding: 24px; pointer-events: none;
+  }
+  #status a { color: var(--paper); text-decoration-color: var(--brass); pointer-events: auto; }
+
+  #detail {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(25em, 100%);
+    background: var(--wall-raised); border-left: 1px solid var(--rule);
+    padding: max(20px, env(safe-area-inset-top)) 28px 32px;
+    overflow-y: auto; transform: translateX(102%); transition: transform 0.28s ease;
+    box-shadow: -18px 0 40px rgba(0, 0, 0, 0.35);
+  }
+  #detail.open { transform: none; }
+  #detail .close { float: right; font-size: 17px; }
+  #detail .cover {
+    display: block; width: 168px; max-width: 48%; aspect-ratio: 2 / 3; object-fit: cover;
+    margin: 6px 0 22px; background: var(--wall);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+  }
+  #detail h2 { font-style: italic; font-weight: 400; font-size: 28px; line-height: 1.15; margin: 0; }
+  #detail .sub { font-size: 19px; line-height: 1.3; color: var(--muted); margin: 6px 0 0; }
+  #detail .by { margin: 12px 0 0; }
+  #detail .series, #detail .pub { margin: 0; color: var(--muted); }
+  #detail .links { display: flex; gap: 6px 20px; flex-wrap: wrap; margin: 18px 0 22px; }
+  #detail .links a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--brass);
+                     text-underline-offset: 3px; }
+  #detail .links a:hover { color: var(--brass); }
+  #detail .desc { border-top: 1px solid var(--rule); padding-top: 16px; max-width: 34em; }
+  #detail .desc p { margin: 0 0 0.75em; }
+
+  @media (max-width: 640px) {
+    header { padding-left: 16px; padding-right: 16px; gap: 6px 16px; }
+    .count { display: none; }
+    .mark { margin-right: auto; }
+    .search { order: 3; flex-basis: 100%; }
+    #detail { top: auto; height: 74%; width: 100%; border-left: 0; border-top: 1px solid var(--rule);
+              transform: translateY(102%); padding: 18px 20px 28px; }
+    #facing .t { font-size: 19px; }
+  }
+  @media (prefers-reduced-motion: reduce) { #detail { transition: none; } }
+</style>
+</head>
+<body>
+<div id="stage" tabindex="0" aria-label="Bookcase. Drag sideways to turn it, up and down to slide; pinch or plus and minus to zoom; Enter opens the book in front."></div>
+
+<header>
+  <p class="mark"><a href="/" title="Back to the library">Library</a></p>
+  <span class="count" id="count"></span>
+  <form class="search" id="search" role="search">
+    <input id="q" type="search" placeholder="Find a title, author or series" aria-label="Find a book" autocomplete="off">
+    <button type="button" class="textbtn" id="prev" aria-label="Previous match" hidden>‹</button>
+    <span class="hits" id="hits" hidden></span>
+    <button type="button" class="textbtn" id="next" aria-label="Next match" hidden>›</button>
+  </form>
+  <span class="modes" role="group" aria-label="Show books as">
+    <button type="button" class="textbtn" id="mode-covers" aria-pressed="true">Covers</button>
+    <span class="sep" aria-hidden="true">/</span>
+    <button type="button" class="textbtn" id="mode-spines" aria-pressed="false">Spines</button>
+  </span>
+  <select id="sort" aria-label="Order books">
+    <option value="author">by author</option>
+    <option value="title">by title</option>
+    <option value="added">newest first</option>
+  </select>
+</header>
+
+<div id="facing" aria-live="polite"><div class="t"></div><div class="a"></div><div class="s"></div></div>
+<div id="status">Opening the bookcase…</div>
+
+<aside id="detail" aria-label="Book details" aria-hidden="true">
+  <button type="button" class="textbtn close" id="close">Close</button>
+  <img class="cover" alt="">
+  <h2></h2>
+  <p class="sub"></p>
+  <p class="by"></p>
+  <p class="series"></p>
+  <p class="pub"></p>
+  <div class="links"></div>
+  <div class="desc"></div>
+</aside>
+
+<script src="three.min.js"></script>
+<script src="bookcase.js"></script>
+</body>
+</html>
