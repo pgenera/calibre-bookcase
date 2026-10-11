@@ -676,9 +676,25 @@
     detail.querySelector('h2').textContent = b.title || '';
     const sub = (b.user_metadata && b.user_metadata['#subtitle'] && b.user_metadata['#subtitle']['#value#']) || '';
     detail.querySelector('.sub').textContent = sub;
-    detail.querySelector('.by').textContent = authorsText(b);
+    // Authors and series link to the rest of their books on the shelf.
+    const authors = b.authors || [];
+    const by = detail.querySelector('.by');
+    by.replaceChildren();
+    if (authors.length) {
+      by.append('by ');
+      authors.forEach((a, k) => {
+        if (k) by.append(k === authors.length - 1 ? ' and ' : ', ');
+        by.append(shelfLink(a, `Show every book by ${a}`, `authors:"=${quoteQuery(a)}"`, id, false));
+      });
+    }
     const year = b.pubdate && !String(b.pubdate).startsWith('0101') ? String(b.pubdate).slice(0, 4) : '';
-    detail.querySelector('.series').textContent = seriesText(b);
+    const series = detail.querySelector('.series');
+    series.replaceChildren();
+    if (b.series) {
+      const text = seriesText(b);
+      series.append(text.slice(0, text.length - b.series.length),
+                    shelfLink(b.series, `Show the whole ${b.series} series`, `series:"=${quoteQuery(b.series)}"`, id, true));
+    }
     detail.querySelector('.pub').textContent =
       b.publisher ? `Published by ${b.publisher}${year ? ', ' + year : ''}` : (year ? `Published ${year}` : '');
     const links = detail.querySelector('.links');
@@ -693,6 +709,21 @@
     const main = b.main_format || (meta.get(id) || {}).main || {};
     for (const [fmt, href] of Object.entries(main)) add(`Download ${fmt.toUpperCase()}`, href, true);
     detail.querySelector('.desc').replaceChildren(...sanitize(b.comments || ''));
+  }
+
+  function quoteQuery(s) { return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"'); }
+  function shelfLink(text, title, query, fromId, seriesOrder) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'shelflink';
+    btn.textContent = text;
+    btn.title = title;
+    btn.addEventListener('click', () => {
+      q.value = query;
+      close();
+      search(query, { fromId, seriesOrder });
+    });
+    return btn;
   }
 
   // calibre descriptions are HTML from many stores: keep only simple text formatting.
@@ -719,18 +750,23 @@
 
   // --- search, mode, sort -------------------------------------------------------------
   const q = $('#q');
-  async function search(text) {
+  // Matches are stepped through in shelf order, or for a series in reading order.
+  // fromId starts the walk at that book (the one whose card was open).
+  async function search(text, { fromId = null, seriesOrder = false } = {}) {
     text = text.trim();
     if (!text) { clearSearch(); return; }
+    const order = seriesOrder ? 'sort=series_index&sort_order=asc' : SORTS[sortKey];
     let res;
     try {
-      res = await getJSON(`/ajax/search/${library}?num=100000&${SORTS[sortKey]}&query=${encodeURIComponent(text)}`);
+      res = await getJSON(`/ajax/search/${library}?num=100000&${order}&query=${encodeURIComponent(text)}`);
     } catch (e) { showHits('Search didn’t answer; try again'); return; }
-    const list = res.book_ids.map((id) => indexOf.get(id)).filter((i) => i !== undefined).sort((a, b) => a - b);
+    const list = res.book_ids.map((id) => indexOf.get(id)).filter((i) => i !== undefined);
+    if (!seriesOrder) list.sort((a, b) => a - b);
     hits = { list, set: new Set(list) };
     if (!list.length) { showHits('Nothing found'); dirty = true; return; }
-    // Start at the first match at or after where we are.
-    hitAt = Math.max(0, list.findIndex((i) => i >= Math.round(front())));
+    const from = fromId !== null && indexOf.has(fromId) ? list.indexOf(indexOf.get(fromId)) : -1;
+    // Otherwise start at the first match at or after where we are.
+    hitAt = from >= 0 ? from : Math.max(0, list.findIndex((i) => i >= Math.round(front())));
     jumpHit(0);
   }
   function jumpHit(step) {

@@ -14,6 +14,8 @@ Inspired by Google's [WebGL Bookcase](https://developers.googleblog.com/designin
 - Orders books newest first (the default), by author (then series and position), or by title.
 - Search uses calibre's own search syntax, so `author:wolfe` or `series:"Book of the New Sun"` work.
 - Click a book to pull it off the shelf and see its cover, description and download links.
+  Its authors and series link to the rest of their books, which light up on the shelf.
+  A series is stepped through in reading order.
 - `#book=<id>` links straight to a book.
 - Installs as an app on phones and desktops. A service worker keeps the page, covers you've seen and
   book details on the device, so it opens instantly and still works offline for shelves already visited.
