@@ -24,6 +24,7 @@
   const CHUNK = 100;             // ids per /ajax/books request
   const CHECK_EVERY = 60e3;      // look for new or removed books this often while visible
   const GROW_MS = 900;           // a new book grows onto the shelf over this long
+  const LIFT = { friction: 1.2, maxVel: 16, settle: 0.35 };   // vertical flicks: turns/s
   const PULL_REFRESH = 120;      // px past the top of the shelf that triggers a refresh
   const PREFETCH = { covers: 2, idleMs: 1500 };   // background filling of the offline cache
   const MAX_META_FETCHES = 2;
@@ -615,11 +616,12 @@
         const d = liftTarget - lift;
         if (Math.abs(d) < 0.001) { lift = liftTarget; liftTarget = null; } else { lift += d * Math.min(1, dt * 7); }
         dirty = true;
-      } else if (!dragging && Math.abs(liftVel) > 0.01) {
+      } else if (!dragging && Math.abs(liftVel) > LIFT.settle) {
         const l = clampLift(lift + liftVel * dt);
+        liftDir = Math.sign(liftVel);
         if (l !== lift + liftVel * dt) liftVel = 0;
         lift = l;
-        liftVel *= Math.exp(-dt * 3.2);
+        liftVel *= Math.exp(-dt * LIFT.friction);
         dirty = true;
       } else if (!dragging && lift !== 0) {
         liftVel = 0;
@@ -726,7 +728,7 @@
       const [t0, p0, l0] = samples[0], [t1, p1, l1] = samples[samples.length - 1];
       if (t1 - t0 > 0) {
         vel = clamp(((p1 - p0) / (t1 - t0)) * 1000, -booksPerTurn() * 3, booksPerTurn() * 3);
-        liftVel = clamp(((l1 - l0) / (t1 - t0)) * 1000, -6, 6);
+        liftVel = clamp(((l1 - l0) / (t1 - t0)) * 1000, -LIFT.maxVel, LIFT.maxVel);
       }
     }
     down = null;
