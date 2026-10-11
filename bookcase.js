@@ -24,6 +24,7 @@
   const CHECK_EVERY = 60e3;      // look for new or removed books this often while visible
   const GROW_MS = 900;           // a new book grows onto the shelf over this long
   const PULL_REFRESH = 120;      // px past the top of the shelf that triggers a refresh
+  const PREFETCH = { covers: 2, idleMs: 1500 };   // background filling of the offline cache
   const MAX_META_FETCHES = 2;
   const MAX_THUMB_LOADS = 6;
   const TEXTURE_CACHE = 450;
@@ -94,8 +95,10 @@
   let library = 'books';         // calibre library id, from /ajax/library-info
   let ids = [];                  // book ids in display order
   let indexOf = new Map();       // id -> position
-  const meta = new Map();        // id -> {title, authors, series, series_index, formats}
+  const meta = new Map();        // id -> {title, authors, series, series_index, main}
   const chunkState = new Map();  // chunk number -> 'loading' | 'done'
+  const fresh = new Set();       // ids whose metadata came from calibre during this visit
+  let lastInput = 0;             // time of the last touch, click, wheel or key
   let metaInFlight = 0;
 
   const params = new URLSearchParams(location.hash.slice(1));
@@ -191,6 +194,7 @@
   let thumbLoads = 0;
   const avgColor = new Map();    // id -> css color from the cover
 
+  const thumbUrl = (id) => `/get/thumb/${id}/${library}?sz=${THUMB}`;
   function wantThumb(id) {
     const key = 't' + id;
     if (textures.has(key)) return touch(key).tex;
@@ -223,7 +227,7 @@
         dirty = true; pumpThumbs();
       };
       img.onerror = () => { thumbLoads--; thumbPending.delete(id); pumpThumbs(); };
-      img.src = `/get/thumb/${id}/${library}?sz=${THUMB}`;
+      img.src = thumbUrl(id);
     }
   }
 
@@ -315,16 +319,12 @@
     chunkState.set(c, 'loading');
     metaInFlight++;
     const order = ids;
-    // Only books we know nothing about yet: after a re-sort or a new book, most are known.
-    const slice = order.slice(c * CHUNK, (c + 1) * CHUNK).filter((id) => !meta.has(id));
+    // Books on screen get fresh details once per visit; the saved copy shows meanwhile.
+    const slice = order.slice(c * CHUNK, (c + 1) * CHUNK).filter((id) => !fresh.has(id));
     try {
       if (!slice.length) { chunkState.set(c, 'done'); return; }
       const data = await getJSON(`/ajax/books/${library}?ids=${slice.join(',')}&category_urls=false`);
-      for (const [id, b] of Object.entries(data)) {
-        if (!b) continue;
-        meta.set(+id, { title: b.title, authors: b.authors, series: b.series, series_index: b.series_index,
-                        formats: b.formats || [], main: b.main_format || {} });
-      }
+      storeBooks(data);
       if (order === ids) chunkState.set(c, 'done');
       dirty = true;
       updateFacing();
@@ -335,6 +335,77 @@
       metaInFlight--;
       pumpMeta();
     }
+  }
+
+  function storeBooks(data) {
+    for (const [id, b] of Object.entries(data)) {
+      if (!b) continue;
+      meta.set(+id, { title: b.title, authors: b.authors, series: b.series, series_index: b.series_index,
+                      main: b.main_format || {} });
+      fresh.add(+id);
+    }
+    saveMeta();
+  }
+
+  // Titles, authors and series are kept on the device, so the whole shelf is
+  // labelled at once on the next launch, online or not.
+  const metaKey = () => `bookcase.meta.${library}`;
+  function loadMeta() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(metaKey()) || 'null');
+      if (!saved || saved.v !== 1) return;
+      for (const [id, [title, authors, series, series_index, main]] of Object.entries(saved.books)) {
+        if (!meta.has(+id)) meta.set(+id, { title, authors, series, series_index, main });
+      }
+    } catch (e) { /* no storage, or a damaged copy: start empty */ }
+  }
+  let saveTimer = null;
+  function saveMeta() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const books = {};
+      for (const [id, mt] of meta) books[id] = [mt.title, mt.authors, mt.series, mt.series_index, mt.main];
+      try { localStorage.setItem(metaKey(), JSON.stringify({ v: 1, books })); } catch (e) { /* full or private */ }
+    }, 2000);
+  }
+
+  // --- background cache filling ---------------------------------------------------
+  // While nobody is touching the screen, fetch every other cover (nearest first) so
+  // the service worker keeps it, then the details of any book never seen before.
+  let prefetchQueue = null, prefetchAt = 0, prefetching = 0, metaPrefetching = false;
+  function prefetchAllowed() {
+    const net = navigator.connection;
+    if (net && (net.saveData || /2g/.test(net.effectiveType || ''))) return false;
+    return !document.hidden && !dragging && !pinch && target === null && liftTarget === null &&
+           performance.now() - lastInput > PREFETCH.idleMs && thumbLoads === 0 && metaInFlight === 0;
+  }
+  function pumpPrefetch() {
+    if (!ids.length || !navigator.serviceWorker || !navigator.serviceWorker.controller) return;
+    if (!prefetchQueue) {
+      const mid = clamp(Math.round(front()), 0, ids.length - 1);
+      prefetchQueue = [];
+      for (let d = 0; d < ids.length; d++) {
+        for (const i of d ? [mid - d, mid + d] : [mid]) if (i >= 0 && i < ids.length) prefetchQueue.push(ids[i]);
+      }
+      prefetchAt = 0;
+    }
+    while (prefetching < PREFETCH.covers && prefetchAt < prefetchQueue.length && prefetchAllowed()) {
+      const id = prefetchQueue[prefetchAt++];
+      if (textures.has('t' + id)) continue;
+      prefetching++;
+      fetch(thumbUrl(id)).then((r) => r.blob()).catch(() => {}).finally(() => { prefetching--; });
+    }
+    if (prefetchAt >= prefetchQueue.length && !metaPrefetching && prefetchAllowed()) {
+      const missing = ids.filter((id) => !meta.has(id)).slice(0, CHUNK);
+      if (!missing.length) return;
+      metaPrefetching = true;
+      getJSON(`/ajax/books/${library}?ids=${missing.join(',')}&category_urls=false`)
+        .then(storeBooks).catch(() => {}).finally(() => { metaPrefetching = false; });
+    }
+  }
+  setInterval(pumpPrefetch, 250);
+  for (const type of ['pointerdown', 'wheel', 'keydown']) {
+    addEventListener(type, () => { lastInput = performance.now(); }, { capture: true, passive: true });
   }
 
   // --- layout -----------------------------------------------------------------------
@@ -856,6 +927,8 @@
       if (!load.started) {
         load.started = true;
         library = (await getJSON('/ajax/library-info')).default_library || library;
+        loadMeta();
+        if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
       }
       res = await getJSON(`/ajax/search/${library}?num=100000&${SORTS[sortKey]}`);
     } catch (e) {
@@ -865,6 +938,7 @@
     ids = res.book_ids;
     indexOf = new Map(ids.map((id, i) => [id, i]));
     chunkState.clear();
+    prefetchQueue = null;
     hits = null; clearSearch();
     $('#count').textContent = `${ids.length.toLocaleString()} ${ids.length === 1 ? 'book' : 'books'}`;
     statusEl.hidden = true;
@@ -891,6 +965,8 @@
   // stay cached), then reload.
   async function refresh() {
     refreshing = true;
+    clearTimeout(saveTimer);
+    try { localStorage.removeItem(metaKey()); } catch (e) { /* nothing saved */ }
     pull = PULL_REFRESH;
     showPull();
     try {
@@ -959,6 +1035,7 @@
       hitAt = Math.min(hitAt, Math.max(0, hits.list.length - 1));
     }
     chunkState.clear();
+    prefetchQueue = null;
     const now = performance.now();
     for (const id of added) born.set(id, now);
     $('#count').textContent = `${ids.length.toLocaleString()} ${ids.length === 1 ? 'book' : 'books'}`;
