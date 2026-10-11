@@ -386,37 +386,57 @@
   }
 
   // --- background cache filling ---------------------------------------------------
-  // While nobody is touching the screen, fetch every other cover (nearest first) so
-  // the service worker keeps it, then the details of any book never seen before.
-  let prefetchQueue = null, prefetchAt = 0, prefetching = 0, metaPrefetching = false;
+  // While nobody is touching the screen, fetch covers and titles so they're on the
+  // device before they're needed. First the books level with you but round the back
+  // of the helix (out of sight, and next to appear when you turn it), then everything
+  // else outward from where you are. The order follows you as you move.
+  let prefetchQueue = null, prefetchAt = 0, prefetchFrom = 0, prefetching = 0, metaPrefetching = false;
+  const prefetched = new Set();  // covers already requested during this visit
   function prefetchAllowed() {
     const net = navigator.connection;
     if (net && (net.saveData || /2g/.test(net.effectiveType || ''))) return false;
     return !document.hidden && !dragging && !pinch && target === null && liftTarget === null &&
            performance.now() - lastInput > PREFETCH.idleMs && thumbLoads === 0 && metaInFlight === 0;
   }
+  function prefetchOrder() {
+    const here = front(), perBook = slot() / R, near = booksPerTurn() * turnsShown();
+    const hidden = (i) => {
+      let phi = ((i - pos) * perBook) % (2 * Math.PI);
+      if (phi > Math.PI) phi -= 2 * Math.PI;
+      if (phi < -Math.PI) phi += 2 * Math.PI;
+      return Math.abs(phi) > VISIBLE_ARC;
+    };
+    const order = ids.map((id, i) => [id, Math.abs(i - here), Math.abs(i - here) <= near && hidden(i) ? 0 : 1]);
+    order.sort((a, b) => a[2] - b[2] || a[1] - b[1]);
+    return order.map((o) => o[0]);
+  }
   function pumpPrefetch() {
     if (!ids.length || !navigator.serviceWorker || !navigator.serviceWorker.controller) return;
-    if (!prefetchQueue) {
-      const mid = clamp(Math.round(front()), 0, ids.length - 1);
-      prefetchQueue = [];
-      for (let d = 0; d < ids.length; d++) {
-        for (const i of d ? [mid - d, mid + d] : [mid]) if (i >= 0 && i < ids.length) prefetchQueue.push(ids[i]);
-      }
+    if (!prefetchAllowed()) return;
+    if (!prefetchQueue || Math.abs(front() - prefetchFrom) > booksPerTurn() / 2) {
+      prefetchQueue = prefetchOrder();
       prefetchAt = 0;
+      prefetchFrom = front();
+    }
+    // Titles for the next books in line, a chunk at a time, ahead of their covers.
+    if (!metaPrefetching) {
+      const missing = [];
+      for (let k = prefetchAt; k < prefetchQueue.length && missing.length < CHUNK; k++) {
+        if (!meta.has(prefetchQueue[k])) missing.push(prefetchQueue[k]);
+        if (k - prefetchAt > 4 * CHUNK) break;      // only look a little way ahead
+      }
+      if (missing.length) {
+        metaPrefetching = true;
+        getJSON(`/ajax/books/${library}?ids=${missing.join(',')}&category_urls=false`)
+          .then(storeBooks).catch(() => {}).finally(() => { metaPrefetching = false; });
+      }
     }
     while (prefetching < PREFETCH.covers && prefetchAt < prefetchQueue.length && prefetchAllowed()) {
       const id = prefetchQueue[prefetchAt++];
-      if (textures.has('t' + id)) continue;
+      if (prefetched.has(id) || textures.has('t' + id)) continue;
+      prefetched.add(id);
       prefetching++;
-      fetch(thumbUrl(id)).then((r) => r.blob()).catch(() => {}).finally(() => { prefetching--; });
-    }
-    if (prefetchAt >= prefetchQueue.length && !metaPrefetching && prefetchAllowed()) {
-      const missing = ids.filter((id) => !meta.has(id)).slice(0, CHUNK);
-      if (!missing.length) return;
-      metaPrefetching = true;
-      getJSON(`/ajax/books/${library}?ids=${missing.join(',')}&category_urls=false`)
-        .then(storeBooks).catch(() => {}).finally(() => { metaPrefetching = false; });
+      fetch(thumbUrl(id)).then((r) => r.blob()).catch(() => prefetched.delete(id)).finally(() => { prefetching--; });
     }
   }
   setInterval(pumpPrefetch, 250);
@@ -920,6 +940,7 @@
 
   function setMode(next) {
     mode = next;
+    prefetchQueue = null;          // which books are round the back depends on the layout
     store.set('bookcase.mode', mode);
     $('#mode-covers').setAttribute('aria-pressed', String(mode === 'covers'));
     $('#mode-spines').setAttribute('aria-pressed', String(mode === 'spines'));
