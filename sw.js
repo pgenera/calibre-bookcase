@@ -36,6 +36,24 @@ self.addEventListener('activate', (event) => {
   })());
 });
 
+// Pull-to-refresh: refetch every cached app file, forget cached titles and
+// details (covers stay), then tell the page it can reload.
+self.addEventListener('message', (event) => {
+  if (!event.data || event.data.type !== 'refresh') return;
+  event.waitUntil((async () => {
+    await caches.delete(DATA);
+    const cache = await caches.open(SHELL);
+    const keys = await cache.keys();
+    await Promise.all(keys.map(async (req) => {
+      try {
+        const res = await fetch(req, { cache: 'reload' });
+        if (res.ok) await cache.put(req, res);
+      } catch (e) { /* keep the cached copy */ }
+    }));
+    if (event.ports[0]) event.ports[0].postMessage('done');
+  })());
+});
+
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;

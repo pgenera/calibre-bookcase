@@ -19,6 +19,8 @@ Inspired by Google's [WebGL Bookcase](https://developers.googleblog.com/designin
 - `#book=<id>` links straight to a book.
 - Notices new books while it's open (it checks once a minute, and whenever you return to it) and grows
   them onto the shelf without moving what you're looking at.
+- Pull down past the top of the shelf to refresh: it fetches the newest copy of the page and fresh book
+  details, then reloads.
 - Installs as an app on phones and desktops. A service worker keeps the page, covers you've seen and
   book details on the device, so it opens instantly and still works offline for shelves already visited.
 

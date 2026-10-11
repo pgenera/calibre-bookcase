@@ -23,6 +23,7 @@
   const CHUNK = 100;             // ids per /ajax/books request
   const CHECK_EVERY = 60e3;      // look for new or removed books this often while visible
   const GROW_MS = 900;           // a new book grows onto the shelf over this long
+  const PULL_REFRESH = 120;      // px past the top of the shelf that triggers a refresh
   const MAX_META_FETCHES = 2;
   const MAX_THUMB_LOADS = 6;
   const TEXTURE_CACHE = 450;
@@ -113,6 +114,8 @@
   let liftDir = 0;               // direction of the last slide, so small nudges carry on to the next turn
   let zoom = 1;
   const born = new Map();        // id -> time it appeared, for the grow-in animation
+  let pull = 0;                  // px dragged down past the top of the shelf
+  let refreshing = false;
   let selected = null;           // index of the opened book
   let selT = 0;                  // pull-out animation 0..1
   let hits = null, hitAt = 0;    // search results (indices) and the current one
@@ -374,7 +377,7 @@
     const shelfY = (i) => -(theta(i) / (2 * Math.PI)) * PITCH;
     // Rotate and lift the helix so book `pos` is front and centre.
     helix.rotation.y = -theta(pos);
-    helix.position.y = -shelfY(pos) + lift * PITCH - 0.75;
+    helix.position.y = -shelfY(pos) + lift * PITCH - 0.75 - pull * 0.45 * worldPerPixel();
 
     const span = Math.ceil(perTurn * TURNS_VISIBLE[mode] * Math.max(1, zoom));
     const mid = Math.round(front());
@@ -520,6 +523,11 @@
         dirty = true;
       }
     }
+    if (pull > 0 && !dragging && !refreshing) {
+      pull = pull < 1 ? 0 : pull * Math.exp(-dt * 12);
+      showPull();
+      dirty = true;
+    }
     if (born.size) dirty = true;
     if (dirty) {
       dirty = false;
@@ -571,10 +579,14 @@
     if (!down) return;
     const dx = e.clientX - down.x, dy = e.clientY - down.y;
     moved = Math.max(moved, Math.hypot(dx, dy));
-    // World units per pixel at the helix face.
-    const wpp = (2 * Math.tan((camera.fov * Math.PI) / 360) * (camera.position.z - R)) / stage.clientHeight;
+    const wpp = worldPerPixel();
     pos = clamp(down.pos - (dx * wpp) / slot(), 0, ids.length - 1);
-    slide(down.lift - (dy * wpp) / PITCH);
+    // Dragging down past the top of the shelf is pull-to-refresh.
+    const wanted = down.lift - (dy * wpp) / PITCH;
+    const top = -pos / booksPerTurn();
+    pull = !refreshing && wanted < top ? ((top - wanted) * PITCH) / wpp : refreshing ? pull : 0;
+    showPull();
+    slide(wanted);
     samples.push([performance.now(), pos, lift]);
     if (samples.length > 6) samples.shift();
     dirty = true;
@@ -585,6 +597,11 @@
     if (!down) return;
     dragging = false;
     stage.classList.remove('dragging');
+    if (pull >= PULL_REFRESH && !refreshing) {
+      down = null;
+      refresh();
+      return;
+    }
     if (moved < 6) {
       pick(e);
     } else if (!reduceMotion && samples.length > 1) {
@@ -855,6 +872,43 @@
     goTo(i, true);
     if (selected !== null) selected = indexOf.has(focusId) ? i : null;
     setHash();
+  }
+
+  function worldPerPixel() {     // world units per screen pixel at the helix face
+    return (2 * Math.tan((camera.fov * Math.PI) / 360) * (camera.position.z - R)) / Math.max(1, stage.clientHeight);
+  }
+
+  const pullEl = $('#pull');
+  function showPull() {
+    const shown = pull > 4 || refreshing;
+    pullEl.hidden = !shown;
+    if (!shown) return;
+    pullEl.textContent = refreshing ? 'Refreshing…' : pull >= PULL_REFRESH ? 'Release to refresh' : 'Pull to refresh';
+    pullEl.style.opacity = refreshing ? 1 : Math.min(1, pull / PULL_REFRESH);
+  }
+
+  // A full refresh: newest copy of the app itself, fresh titles and details (covers
+  // stay cached), then reload.
+  async function refresh() {
+    refreshing = true;
+    pull = PULL_REFRESH;
+    showPull();
+    try {
+      const reg = navigator.serviceWorker && (await navigator.serviceWorker.getRegistration());
+      if (reg) {
+        await Promise.race([reg.update().catch(() => {}), new Promise((r) => setTimeout(r, 4000))]);
+        const worker = reg.active;
+        if (worker) {
+          await new Promise((resolve) => {
+            const ch = new MessageChannel();
+            ch.port1.onmessage = resolve;
+            worker.postMessage({ type: 'refresh' }, [ch.port2]);
+            setTimeout(resolve, 5000);   // an older worker never answers
+          });
+        }
+      }
+    } catch (e) { /* reload anyway */ }
+    location.reload();
   }
 
   // --- keeping up with the library ------------------------------------------------------

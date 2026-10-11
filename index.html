@@ -96,6 +96,11 @@
   #facing .t { font-style: italic; font-size: 22px; line-height: 1.2; }
   #facing .a, #facing .s { color: var(--muted); }
 
+  #pull {
+    position: fixed; left: 50%; top: calc(max(14px, env(safe-area-inset-top)) + 64px);
+    transform: translateX(-50%); color: var(--muted); font-style: italic;
+    pointer-events: none; text-shadow: 0 1px 6px var(--wall);
+  }
   #status {
     position: fixed; inset: 0; display: grid; place-items: center;
     color: var(--muted); font-style: italic; text-align: center; padding: 24px; pointer-events: none;
@@ -171,6 +176,7 @@
 
 <div id="facing" aria-live="polite"><div class="t"></div><div class="a"></div><div class="s"></div></div>
 <div id="status">Opening the bookcase…</div>
+<div id="pull" aria-live="polite" hidden></div>
 
 <aside id="detail" aria-label="Book details" aria-hidden="true">
   <button type="button" class="textbtn close" id="close">Close</button>
