@@ -55,8 +55,9 @@ bookcase/
 - **three.js:** Debian and Ubuntu ship it as `libjs-three` (`/usr/share/javascript/three/three.min.js`).
   Any build that defines the global `THREE` works.
 - **Fonts:** EB Garamond is in Debian as `fonts-ebgaramond`. Without it the page falls back to Georgia.
-- **Service worker:** it caches covers for 30 days (at most 4,000, about 25 MB). It needs HTTPS,
-  as all service workers do. Bump `VERSION` in `sw.js` to discard every cached copy.
+- **Service worker:** it keeps covers until calibre reports the book changed (at most 6,000, about
+  35 MB). It needs HTTPS, as all service workers do. Bump `VERSION` in `sw.js` to discard every
+  cached copy.
 - **Proxy:** put a reverse proxy (nginx, Caddy, Envoy…) in front of `calibre-server`. Have it serve the
   `bookcase/` directory and pass everything else through to calibre.
 

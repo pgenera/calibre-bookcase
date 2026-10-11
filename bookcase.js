@@ -95,7 +95,7 @@
   let library = 'books';         // calibre library id, from /ajax/library-info
   let ids = [];                  // book ids in display order
   let indexOf = new Map();       // id -> position
-  const meta = new Map();        // id -> {title, authors, series, series_index, main}
+  const meta = new Map();        // id -> {title, authors, series, series_index, main, lm (last modified)}
   const chunkState = new Map();  // chunk number -> 'loading' | 'done'
   const fresh = new Set();       // ids whose metadata came from calibre during this visit
   let lastInput = 0;             // time of the last touch, click, wheel or key
@@ -338,12 +338,27 @@
   }
 
   function storeBooks(data) {
-    for (const [id, b] of Object.entries(data)) {
+    const changed = [];
+    for (const [key, b] of Object.entries(data)) {
       if (!b) continue;
-      meta.set(+id, { title: b.title, authors: b.authors, series: b.series, series_index: b.series_index,
-                      main: b.main_format || {} });
-      fresh.add(+id);
+      const id = +key;
+      const before = meta.get(id);
+      // Covers are kept indefinitely; a book edited in calibre gets its cover fetched again.
+      if (before && before.lm && b.last_modified && before.lm !== b.last_modified) {
+        changed.push(thumbUrl(id));
+        for (const k of ['t' + id, 's' + id]) {
+          if (textures.has(k)) { textures.get(k).tex.dispose(); textures.delete(k); }
+        }
+        avgColor.delete(id);
+      }
+      meta.set(id, { title: b.title, authors: b.authors, series: b.series, series_index: b.series_index,
+                     main: b.main_format || {}, lm: b.last_modified });
+      fresh.add(id);
     }
+    if (changed.length && navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'forget', urls: changed.map((u) => new URL(u, location.href).href) });
+    }
+    if (changed.length) dirty = true;
     saveMeta();
   }
 
@@ -354,8 +369,8 @@
     try {
       const saved = JSON.parse(localStorage.getItem(metaKey()) || 'null');
       if (!saved || saved.v !== 1) return;
-      for (const [id, [title, authors, series, series_index, main]] of Object.entries(saved.books)) {
-        if (!meta.has(+id)) meta.set(+id, { title, authors, series, series_index, main });
+      for (const [id, [title, authors, series, series_index, main, lm]] of Object.entries(saved.books)) {
+        if (!meta.has(+id)) meta.set(+id, { title, authors, series, series_index, main, lm });
       }
     } catch (e) { /* no storage, or a damaged copy: start empty */ }
   }
@@ -364,7 +379,7 @@
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       const books = {};
-      for (const [id, mt] of meta) books[id] = [mt.title, mt.authors, mt.series, mt.series_index, mt.main];
+      for (const [id, mt] of meta) books[id] = [mt.title, mt.authors, mt.series, mt.series_index, mt.main, mt.lm];
       try { localStorage.setItem(metaKey(), JSON.stringify({ v: 1, books })); } catch (e) { /* full or private */ }
     }, 2000);
   }

@@ -4,17 +4,18 @@
    The page, three.js and fonts   cached copy first, refreshed in the background
    /ajax/search (book order)      network first, cached copy when offline
    /ajax/books, /ajax/book, info  cached copy first, refreshed in the background
-   /get/thumb (covers)            cached for 30 days, at most THUMB_LIMIT of them
+   /get/thumb (covers)            kept until the page says the book changed (covers rarely
+                                  do), at most THUMB_LIMIT of them
    Downloads and anything else go straight to the network. */
 'use strict';
 
+// Changing VERSION discards every cache, covers included.
 const VERSION = 'v1';
 const SHELL = `bookcase-shell-${VERSION}`;
 const DATA = `bookcase-data-${VERSION}`;
 const COVERS = `bookcase-covers-${VERSION}`;
 const KEEP = new Set([SHELL, DATA, COVERS]);
-const THUMB_LIMIT = 4000;
-const THUMB_DAYS = 30;
+const THUMB_LIMIT = 6000;
 const DATA_LIMIT = 600;
 const SHELL_FILES = ['./', 'bookcase.js', 'three.min.js', 'manifest.webmanifest', 'icons/icon-192.png'];
 
@@ -39,6 +40,11 @@ self.addEventListener('activate', (event) => {
 // Pull-to-refresh: refetch every cached app file, forget cached titles and
 // details (covers stay), then tell the page it can reload.
 self.addEventListener('message', (event) => {
+  // The page saw a book's last-modified time change: drop its cover so it's fetched again.
+  if (event.data && event.data.type === 'forget' && Array.isArray(event.data.urls)) {
+    event.waitUntil(caches.open(COVERS).then((c) => Promise.all(event.data.urls.map((u) => c.delete(u)))));
+    return;
+  }
   if (!event.data || event.data.type !== 'refresh') return;
   event.waitUntil((async () => {
     await caches.delete(DATA);
@@ -108,20 +114,8 @@ async function networkFirst(req, cacheName) {
 async function coverFirst(req, event) {
   const cache = await caches.open(COVERS);
   const cached = await cache.match(req);
-  if (cached) {
-    const fetched = Date.parse(cached.headers.get('date') || '');
-    if (isNaN(fetched) || Date.now() - fetched < THUMB_DAYS * 864e5) return cached;
-  }
-  try {
-    const res = await fetch(req);
-    if (res.ok) {
-      // Re-adding moves it to the end, so trimming drops the least recently fetched.
-      await cache.delete(req);
-      event.waitUntil(put(COVERS, req, res.clone(), THUMB_LIMIT));
-    }
-    return res;
-  } catch (e) {
-    if (cached) return cached;
-    throw e;
-  }
+  if (cached) return cached;
+  const res = await fetch(req);
+  if (res.ok) event.waitUntil(put(COVERS, req, res.clone(), THUMB_LIMIT));
+  return res;
 }
