@@ -98,8 +98,8 @@
   const params = new URLSearchParams(location.hash.slice(1));
   let mode = params.get('mode') || store.get('bookcase.mode') || 'covers';
   if (mode !== 'covers' && mode !== 'spines') mode = 'covers';
-  let sortKey = params.get('sort') || store.get('bookcase.sort') || 'author';
-  if (!SORTS[sortKey]) sortKey = 'author';
+  let sortKey = params.get('sort') || store.get('bookcase.sort') || 'added';
+  if (!SORTS[sortKey]) sortKey = 'added';
   let m = mode === 'spines' ? 1 : 0;   // animated 0 (covers) .. 1 (spines)
 
   let pos = 0;                   // continuous position along the helix, in books
@@ -779,7 +779,7 @@
     const p = new URLSearchParams();
     if (selected !== null) p.set('book', ids[selected]);
     if (mode !== 'covers') p.set('mode', mode);
-    if (sortKey !== 'author') p.set('sort', sortKey);
+    if (sortKey !== 'added') p.set('sort', sortKey);
     const h = p.toString();
     history.replaceState(null, '', h ? '#' + h : location.pathname);
   }
