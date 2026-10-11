@@ -15,6 +15,8 @@ Inspired by Google's [WebGL Bookcase](https://developers.googleblog.com/designin
 - Search uses calibre's own search syntax, so `author:wolfe` or `series:"Book of the New Sun"` work.
 - Click a book to pull it off the shelf and see its cover, description and download links.
 - `#book=<id>` links straight to a book.
+- Installs as an app on phones and desktops. A service worker keeps the page, covers you've seen and
+  book details on the device, so it opens instantly and still works offline for shelves already visited.
 
 It only ever reads from calibre, using these endpoints:
 
@@ -35,6 +37,9 @@ calibre 5 or later), for example under `/bookcase/`:
 bookcase/
   index.html
   bookcase.js
+  sw.js               service worker (offline cache)
+  manifest.webmanifest
+  icons/
   three.min.js        three.js, r111 or later
   fonts/              optional: EBGaramond12-Regular.otf and EBGaramond12-Italic.otf
 ```
@@ -42,6 +47,8 @@ bookcase/
 - **three.js:** Debian and Ubuntu ship it as `libjs-three` (`/usr/share/javascript/three/three.min.js`).
   Any build that defines the global `THREE` works.
 - **Fonts:** EB Garamond is in Debian as `fonts-ebgaramond`. Without it the page falls back to Georgia.
+- **Service worker:** it caches covers for 30 days (at most 4,000, about 25 MB). It needs HTTPS,
+  as all service workers do. Bump `VERSION` in `sw.js` to discard every cached copy.
 - **Proxy:** put a reverse proxy (nginx, Caddy, Envoy…) in front of `calibre-server`. Have it serve the
   `bookcase/` directory and pass everything else through to calibre.
 

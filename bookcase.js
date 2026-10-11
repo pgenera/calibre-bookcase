@@ -817,6 +817,11 @@
     }).catch(() => {});
   }
 
+  // Installable, quick to reopen, and browsable offline (see sw.js).
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+
   setMode(mode);
   resize();
   requestAnimationFrame(frame);

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full-bleed background so the same art works as a maskable icon;
+       the books stay inside the central safe circle (radius 205). -->
+  <rect width="512" height="512" fill="#14211b"/>
+  <!-- the shelf -->
+  <rect x="120" y="352" width="272" height="16" rx="3" fill="#5b3b22"/>
+  <!-- spines, standing on the shelf -->
+  <g>
+    <rect x="148" y="176" width="44" height="176" rx="4" fill="#ece3cf"/>
+    <rect x="148" y="194" width="44" height="5" fill="#14211b" opacity="0.35"/>
+    <rect x="148" y="328" width="44" height="5" fill="#14211b" opacity="0.35"/>
+    <rect x="200" y="150" width="54" height="202" rx="4" fill="#c9a24a"/>
+    <rect x="200" y="170" width="54" height="5" fill="#14211b" opacity="0.35"/>
+    <rect x="200" y="328" width="54" height="5" fill="#14211b" opacity="0.35"/>
+    <rect x="262" y="190" width="38" height="162" rx="4" fill="#a7ae9c"/>
+    <rect x="262" y="206" width="38" height="5" fill="#14211b" opacity="0.35"/>
+    <!-- the last book leans on its neighbour -->
+    <g transform="rotate(-12 335 352)">
+      <rect x="335" y="182" width="42" height="170" rx="4" fill="#8a5a35"/>
+      <rect x="335" y="200" width="42" height="5" fill="#ece3cf" opacity="0.4"/>
+      <rect x="335" y="328" width="42" height="5" fill="#ece3cf" opacity="0.4"/>
+    </g>
+  </g>
+</svg>
