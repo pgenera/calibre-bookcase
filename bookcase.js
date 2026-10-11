@@ -21,6 +21,8 @@
   const TURNS_VISIBLE = { covers: 3, spines: 2 };
   const THUMB = '150x225';
   const CHUNK = 100;             // ids per /ajax/books request
+  const CHECK_EVERY = 60e3;      // look for new or removed books this often while visible
+  const GROW_MS = 900;           // a new book grows onto the shelf over this long
   const MAX_META_FETCHES = 2;
   const MAX_THUMB_LOADS = 6;
   const TEXTURE_CACHE = 450;
@@ -110,6 +112,7 @@
   let lift = 0, liftVel = 0, liftTarget = null;
   let liftDir = 0;               // direction of the last slide, so small nudges carry on to the next turn
   let zoom = 1;
+  const born = new Map();        // id -> time it appeared, for the grow-in animation
   let selected = null;           // index of the opened book
   let selT = 0;                  // pull-out animation 0..1
   let hits = null, hitAt = 0;    // search results (indices) and the current one
@@ -309,8 +312,10 @@
     chunkState.set(c, 'loading');
     metaInFlight++;
     const order = ids;
-    const slice = order.slice(c * CHUNK, (c + 1) * CHUNK);
+    // Only books we know nothing about yet: after a re-sort or a new book, most are known.
+    const slice = order.slice(c * CHUNK, (c + 1) * CHUNK).filter((id) => !meta.has(id));
     try {
+      if (!slice.length) { chunkState.set(c, 'done'); return; }
       const data = await getJSON(`/ajax/books/${library}?ids=${slice.join(',')}&category_urls=false`);
       for (const [id, b] of Object.entries(data)) {
         if (!b) continue;
@@ -404,9 +409,15 @@
       let out = 0;
       if (i === selected) out = selT * (0.6 + 0.6 * m);
       const r = R - dim.d / 2 + out;
-      mesh.position.set(Math.sin(th) * r, shelfY(i) + dim.h / 2 + selT * 0.15 * (i === selected), Math.cos(th) * r);
+      // A book that just arrived grows up from the shelf.
+      let g = 1;
+      if (born.has(id)) {
+        const t = (performance.now() - born.get(id)) / GROW_MS;
+        if (t >= 1 || reduceMotion) born.delete(id); else g = 1 - Math.pow(1 - t, 3);
+      }
+      mesh.position.set(Math.sin(th) * r, shelfY(i) + (dim.h * g) / 2 + selT * 0.15 * (i === selected), Math.cos(th) * r);
       mesh.rotation.set(0, th, 0);
-      mesh.scale.set(dim.w, dim.h, dim.d);
+      mesh.scale.set(dim.w * Math.max(0.001, g), dim.h * Math.max(0.001, g), dim.d);
 
       // Face texture: the cover, or the spine drawn in the cover's colour.
       const face = mesh.userData.face;
@@ -509,6 +520,7 @@
         dirty = true;
       }
     }
+    if (born.size) dirty = true;
     if (dirty) {
       dirty = false;
       if (ids.length) { layout(); updateFacing(); }
@@ -762,7 +774,7 @@
     } catch (e) { showHits('Search didn’t answer; try again'); return; }
     const list = res.book_ids.map((id) => indexOf.get(id)).filter((i) => i !== undefined);
     if (!seriesOrder) list.sort((a, b) => a - b);
-    hits = { list, set: new Set(list) };
+    hits = { list, set: new Set(list), ids: list.map((i) => ids[i]), seriesOrder };
     if (!list.length) { showHits('Nothing found'); dirty = true; return; }
     const from = fromId !== null && indexOf.has(fromId) ? list.indexOf(indexOf.get(fromId)) : -1;
     // Otherwise start at the first match at or after where we are.
@@ -844,6 +856,65 @@
     if (selected !== null) selected = indexOf.has(focusId) ? i : null;
     setHash();
   }
+
+  // --- keeping up with the library ------------------------------------------------------
+  // New imports appear while the bookcase is open. Every book keeps its place on
+  // screen; new ones grow onto the shelf, and when you're at the top of the shelf
+  // the helix glides over to the newest.
+  let checking = false;
+  async function checkForChanges() {
+    if (checking || !ids.length || document.hidden) return;
+    if (dragging || pinch || target !== null || liftTarget !== null) { setTimeout(checkForChanges, 2000); return; }
+    checking = true;
+    try {
+      const res = await getJSON(`/ajax/search/${library}?num=100000&${SORTS[sortKey]}`);
+      merge(res.book_ids);
+    } catch (e) { /* calibre restarts briefly during imports; try again next time */ }
+    checking = false;
+  }
+
+  function merge(next) {
+    const old = ids;
+    if (next.length === old.length && next.every((id, k) => id === old[k])) return;
+    const frontIndex = clamp(Math.round(front()), 0, old.length - 1);
+    const frontId = old[frontIndex];
+    const atTop = frontIndex === 0 && selected === null && !hits && Math.abs(lift) < 0.001;
+    const selId = selected !== null ? old[selected] : null;
+    const added = next.filter((id) => !indexOf.has(id));
+
+    ids = next;
+    indexOf = new Map(ids.map((id, i) => [id, i]));
+    // Shift the position by however far the front book moved, so nothing on screen jumps.
+    if (indexOf.has(frontId)) pos += indexOf.get(frontId) - frontIndex;
+    pos = clamp(pos, 0, Math.max(0, ids.length - 1));
+    vel = 0;
+    // Meshes follow their books to the new indices.
+    const moved = new Map();
+    for (const [i, mesh] of active) {
+      const ni = indexOf.get(old[i]);
+      if (ni === undefined || moved.has(ni)) { mesh.visible = false; pool.push(mesh); }
+      else { mesh.userData.index = ni; moved.set(ni, mesh); }
+    }
+    active.clear();
+    for (const [i, mesh] of moved) active.set(i, mesh);
+    if (selId !== null) { if (indexOf.has(selId)) selected = indexOf.get(selId); else close(); }
+    if (hits) {
+      hits.list = hits.ids.filter((id) => indexOf.has(id)).map((id) => indexOf.get(id));
+      if (!hits.seriesOrder) hits.list.sort((a, b) => a - b);
+      hits.set = new Set(hits.list);
+      hitAt = Math.min(hitAt, Math.max(0, hits.list.length - 1));
+    }
+    chunkState.clear();
+    const now = performance.now();
+    for (const id of added) born.set(id, now);
+    $('#count').textContent = `${ids.length.toLocaleString()} ${ids.length === 1 ? 'book' : 'books'}`;
+    if (atTop && added.length && indexOf.get(added[0]) === 0) goTo(0);
+    dirty = true;
+  }
+
+  setInterval(checkForChanges, CHECK_EVERY);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) checkForChanges(); });
+  addEventListener('online', checkForChanges);
 
   // Spines are drawn on canvases; redraw them once the book face has loaded.
   if (document.fonts) {

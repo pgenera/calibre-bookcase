@@ -17,6 +17,8 @@ Inspired by Google's [WebGL Bookcase](https://developers.googleblog.com/designin
   Its authors and series link to the rest of their books, which light up on the shelf.
   A series is stepped through in reading order.
 - `#book=<id>` links straight to a book.
+- Notices new books while it's open (it checks once a minute, and whenever you return to it) and grows
+  them onto the shelf without moving what you're looking at.
 - Installs as an app on phones and desktops. A service worker keeps the page, covers you've seen and
   book details on the device, so it opens instantly and still works offline for shelves already visited.
 
