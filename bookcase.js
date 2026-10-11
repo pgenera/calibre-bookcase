@@ -24,7 +24,11 @@
   const CHUNK = 100;             // ids per /ajax/books request
   const CHECK_EVERY = 60e3;      // look for new or removed books this often while visible
   const GROW_MS = 900;           // a new book grows onto the shelf over this long
-  const LIFT = { friction: 1.2, maxVel: 16, settle: 0.35 };   // vertical flicks: turns/s
+  // Vertical flicks, in turns/s. A flick's speed is multiplied by `boost`, and a flick
+  // in the direction the helix is already sliding adds to it.
+  const LIFT = { friction: 1.2, maxVel: 40, settle: 0.35, boost: 2.5 };
+  // Work allowed per frame, so books streaming past don't stall the frame.
+  const PER_FRAME = { uploads: 6, spines: 3 };
   const PULL_REFRESH = 120;      // px past the top of the shelf that triggers a refresh
   const PREFETCH = { covers: 2, idleMs: 1500 };   // background filling of the offline cache
   const MAX_META_FETCHES = 2;
@@ -197,16 +201,24 @@
   const avgColor = new Map();    // id -> css color from the cover
 
   const thumbUrl = (id) => `/get/thumb/${id}/${library}?sz=${THUMB}`;
-  function wantThumb(id) {
+  function wantThumb(id, request = true) {
     const key = 't' + id;
     if (textures.has(key)) return touch(key).tex;
-    if (!thumbPending.has(id)) { thumbPending.add(id); thumbQueue.push(id); }
+    if (request && !thumbPending.has(id)) { thumbPending.add(id); thumbQueue.push(id); thumbQueueDirty = true; }
     return null;
   }
+  let thumbQueueDirty = false;
   function pumpThumbs() {
-    // Nearest to the front first.
-    const dist = (id) => (indexOf.has(id) ? Math.abs(indexOf.get(id) - front()) : Infinity);
-    thumbQueue.sort((a, b) => dist(b) - dist(a));
+    if (thumbQueueDirty) {
+      // Forget books that have scrolled out of range, then nearest to the front first.
+      const here = front(), range = booksPerTurn() * (turnsShown() + 1);
+      const dist = (id) => (indexOf.has(id) ? Math.abs(indexOf.get(id) - here) : Infinity);
+      for (let k = thumbQueue.length - 1; k >= 0; k--) {
+        if (dist(thumbQueue[k]) > range) { thumbPending.delete(thumbQueue[k]); thumbQueue.splice(k, 1); }
+      }
+      thumbQueue.sort((a, b) => dist(b) - dist(a));
+      thumbQueueDirty = false;
+    }
     while (thumbLoads < MAX_THUMB_LOADS && thumbQueue.length) {
       const id = thumbQueue.pop();
       const i = indexOf.get(id);
@@ -248,7 +260,8 @@
     const key = 's' + id;
     if (textures.has(key)) return touch(key).tex;
     const mt = meta.get(id);
-    if (!mt) return null;
+    if (!mt || frameBudget.spines <= 0) return null;
+    frameBudget.spines--;
     const c = document.createElement('canvas');
     c.width = 64; c.height = 384;
     const g = c.getContext('2d');
@@ -397,6 +410,7 @@
     const net = navigator.connection;
     if (net && (net.saveData || /2g/.test(net.effectiveType || ''))) return false;
     return !document.hidden && !dragging && !pinch && target === null && liftTarget === null &&
+           Math.abs(vel) < 0.02 && Math.abs(liftVel) < 0.01 && lift === 0 &&
            performance.now() - lastInput > PREFETCH.idleMs && thumbLoads === 0 && metaInFlight === 0;
   }
   function prefetchOrder() {
@@ -483,7 +497,13 @@
   const tmpP = new THREE.Vector3();
   const yAxis = new THREE.Vector3(0, 1, 0);
 
+  const onGpu = new WeakSet();    // textures already drawn once (so uploaded)
+  const frameBudget = { uploads: 0, spines: 0 };
+  let lastPump = 0, pumpLater = null;
   function layout() {
+    frameBudget.uploads = PER_FRAME.uploads;
+    frameBudget.spines = PER_FRAME.spines;
+    const fast = Math.abs(liftVel) > 2.5 || Math.abs(vel) > booksPerTurn() * 2;
     const s = slot();
     const perTurn = booksPerTurn();
     const theta = (i) => (i * s) / R;
@@ -537,8 +557,13 @@
 
       // Face texture: the cover, or the spine drawn in the cover's colour.
       const face = mesh.userData.face;
-      const cover = wantThumb(id);
-      const tex = m < 0.5 ? (cover || blank) : (spineTexture(id) || blank);
+      // While flying past at speed, use only covers already loaded; fill in as it slows.
+      const cover = wantThumb(id, !fast);
+      let tex = m < 0.5 ? (cover || blank) : (spineTexture(id) || blank);
+      if (tex !== blank && !onGpu.has(tex)) {
+        // A texture is uploaded to the GPU the first time it's drawn: only a few a frame.
+        if (frameBudget.uploads > 0) { frameBudget.uploads--; onGpu.add(tex); } else tex = blank;
+      }
       if (face.map !== tex) face.map = tex;
       face.color.setScalar(hits && !hits.set.has(i) ? 0.28 : 1);   // dim non-matches
 
@@ -551,9 +576,17 @@
     }
     shelves.count = n;
     shelves.instanceMatrix.needsUpdate = true;
-    core.position.y = 0;
-    pumpMeta();
-    pumpThumbs();
+    // Placeholders still waiting for their turn to upload: keep drawing until they're in.
+    if (frameBudget.uploads <= 0 || frameBudget.spines <= 0) dirty = true;
+    const now = performance.now();
+    if (now - lastPump > 100) {
+      lastPump = now;
+      pumpMeta();
+      pumpThumbs();
+    } else if (!pumpLater) {
+      // Make sure what this frame asked for is requested even if nothing moves again.
+      pumpLater = setTimeout(() => { pumpLater = null; lastPump = performance.now(); pumpMeta(); pumpThumbs(); }, 110);
+    }
   }
 
   function placeCamera() {
@@ -688,7 +721,7 @@
       return;
     }
     if (pointers.size > 2 || pinch) return;
-    down = { x: e.clientX, y: e.clientY, pos, lift };
+    down = { x: e.clientX, y: e.clientY, pos, lift, liftVel };
     moved = 0; samples = [[performance.now(), pos, lift]];
     dragging = true; target = null; liftTarget = null; vel = 0; liftVel = 0;
     stage.classList.add('dragging');
@@ -728,7 +761,10 @@
       const [t0, p0, l0] = samples[0], [t1, p1, l1] = samples[samples.length - 1];
       if (t1 - t0 > 0) {
         vel = clamp(((p1 - p0) / (t1 - t0)) * 1000, -booksPerTurn() * 3, booksPerTurn() * 3);
-        liftVel = clamp(((l1 - l0) / (t1 - t0)) * 1000, -LIFT.maxVel, LIFT.maxVel);
+        let v = ((l1 - l0) / (t1 - t0)) * 1000 * LIFT.boost;
+        // Flicking again in the same direction adds to the slide already under way.
+        if (Math.abs(v) > 0.5 && Math.sign(v) === Math.sign(down.liftVel)) v += down.liftVel;
+        liftVel = clamp(v, -LIFT.maxVel, LIFT.maxVel);
       }
     }
     down = null;
