@@ -597,12 +597,41 @@
     const fit = (R + 1.2) / halfWidth - R;
     zoomMax = Math.max(ZOOM.max, (fit - extra) / CAM_DIST);
     zoom = clamp(zoom, ZOOM.min, zoomMax);
-    const dist = CAM_DIST * zoom + extra;
+    // While the book card is open the camera may back off so the open book fits beside it.
+    const dist = Math.max(CAM_DIST * zoom + extra, view.need);
     camera.position.z = R + dist;
     scene.fog.near = dist + 2;
     scene.fog.far = dist + R * 1.6;
     dirty = true;
   }
+  // --- keeping the open book in view beside its card -----------------------------------
+  // The card covers the bottom of a phone screen, or the right of a wide one. Each frame
+  // it's open (or moving), shift the picture so the open book is centred in the space
+  // left over, and back the camera off if the book wouldn't fit there. Both follow the
+  // card's real position, so they move with its slide and with a swipe.
+  const view = { x: 0, y: 0, need: 0 };
+  const headerEl = document.querySelector('header');
+  function followCard(force) {
+    if (!force && selected === null && !view.x && !view.y && !view.need) return;
+    const W = stage.clientWidth, H = stage.clientHeight;
+    const r = detail.getBoundingClientRect();
+    const bottomSheet = sheetLayout.matches;
+    const coverY = bottomSheet ? clamp(H - r.top, 0, H) : 0;
+    const coverX = bottomSheet ? 0 : clamp(W - r.left, 0, W);
+    const top = coverY ? Math.max(0, headerEl.getBoundingClientRect().bottom - 24) : 0;
+    const availH = Math.max(80, H - coverY - top), availW = Math.max(80, W - coverX);
+    const k = 2 * Math.tan((camera.fov * Math.PI) / 360);   // visible height per unit of distance
+    // Distance at which the pulled-out book (about 1.5 tall, 1 wide, 1 unit nearer) fits.
+    const need = coverY || coverX
+      ? Math.max(1 + (1.5 * H) / (k * 0.8 * availH), 1 + (1.0 * H) / (k * 0.7 * availW)) : 0;
+    const x = Math.round(coverX / 2);
+    const y = coverY ? Math.round(H / 2 - (top + availH / 2)) : 0;
+    if (!force && x === view.x && y === view.y && Math.abs(need - view.need) < 0.01) return;
+    view.x = x; view.y = y; view.need = need;
+    if (x || y) camera.setViewOffset(W, H, x, y, W, H); else camera.clearViewOffset();
+    placeCamera();
+  }
+
   function setZoom(z) {
     zoom = clamp(z, ZOOM.min, zoomMax);
     placeCamera();
@@ -613,6 +642,7 @@
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     placeCamera();
+    if (selected !== null || view.x || view.y) followCard(true);
   }
   addEventListener('resize', resize);
 
@@ -630,6 +660,7 @@
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
+    followCard(false);
     if (ids.length) {
       if (target !== null) {
         const d = target - pos;
