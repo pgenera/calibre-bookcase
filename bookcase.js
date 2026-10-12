@@ -871,7 +871,7 @@
     if (e.key === 'Home') goTo(0);
     else if (e.key === 'End') goTo(ids.length - 1);
     else if (e.key === 'Enter' && document.activeElement === stage) open(Math.round(front()));
-    else if (e.key === 'Escape') { if (selected !== null) close(); else if (hits) clearSearch(); }
+    else if (e.key === 'Escape') { if (selected !== null) close(); else if (hits) clearSearch(true); }
     else if (e.key === '/') { e.preventDefault(); $('#q').focus(); }
   });
 
@@ -895,6 +895,14 @@
     const id = ids[i];
     if (id === undefined) return;
     if (selected !== null && selected !== i) { prevSel = selected; prevT = selT; selT = 0; }
+    // A book outside the highlighted matches ends that selection; its history entry
+    // becomes the card's.
+    if (hits && !hits.set.has(i)) {
+      const wasHits = history.state && history.state.layer === 'hits';
+      clearSearch(false);
+      if (wasHits) replaceLayer('card');
+    }
+    if (selected === null) pushLayer('card');
     selected = i;
     goTo(i);
     setHash();
@@ -909,8 +917,25 @@
       if (token === detailToken) fillDetail(id, b);
     } catch (e) { /* keep what we have */ }
   }
-  function close() {
+  // Back (Android's gesture, the browser button) closes the card, then clears the
+  // highlighted matches, then leaves. Each is a history entry tagged with its layer.
+  let skipPop = 0;
+  function pushLayer(layer) {
+    if (!history.state || history.state.layer !== layer) history.pushState({ layer }, '', location.href);
+  }
+  function replaceLayer(layer) { history.replaceState({ layer }, '', location.href); }
+  function dropLayer(layer) {        // closed from the page: remove its history entry too
+    if (history.state && history.state.layer === layer) { skipPop++; history.back(); }
+  }
+  addEventListener('popstate', () => {
+    if (skipPop) { skipPop--; return; }
+    if (selected !== null) close(false);
+    else if (hits) clearSearch(false);
+  });
+
+  function close(fromPage = true) {
     if (selected === null) return;
+    if (fromPage) dropLayer('card');
     selected = null;
     detailToken++;
     detail.classList.remove('open');
@@ -919,7 +944,7 @@
     dirty = true;
     stage.focus({ preventScroll: true });
   }
-  $('#close').addEventListener('click', close);
+  $('#close').addEventListener('click', () => close());
 
   // Step to the next or previous book without closing the card: through the current
   // matches (a series in reading order) when the open book is one of them, otherwise
@@ -1048,7 +1073,9 @@
     btn.title = title;
     btn.addEventListener('click', () => {
       q.value = query;
-      close();
+      // The card's history entry becomes the selection's.
+      close(false);
+      replaceLayer('hits');
       search(query, { fromId, seriesOrder });
     });
     return btn;
@@ -1082,7 +1109,7 @@
   // fromId starts the walk at that book (the one whose card was open).
   async function search(text, { fromId = null, seriesOrder = false } = {}) {
     text = text.trim();
-    if (!text) { clearSearch(); return; }
+    if (!text) { clearSearch(true); return; }
     const order = seriesOrder ? 'sort=series_index&sort_order=asc' : SORTS[sortKey];
     let res;
     try {
@@ -1091,6 +1118,7 @@
     const list = res.book_ids.map((id) => indexOf.get(id)).filter((i) => i !== undefined);
     if (!seriesOrder) list.sort((a, b) => a - b);
     hits = { list, set: new Set(list), ids: list.map((i) => ids[i]), seriesOrder };
+    pushLayer('hits');
     if (!list.length) { showHits('Nothing found'); dirty = true; return; }
     const from = fromId !== null && indexOf.has(fromId) ? list.indexOf(indexOf.get(fromId)) : -1;
     // Otherwise start at the first match at or after where we are.
@@ -1111,16 +1139,17 @@
     $('#clear').hidden = false;
   }
   // Back to the whole shelf: no highlights, empty search box.
-  function clearSearch() {
+  function clearSearch(fromPage = false) {
+    if (fromPage && hits) dropLayer('hits');
     hits = null;
     q.value = '';
     $('#hits').hidden = $('#prev').hidden = $('#next').hidden = $('#clear').hidden = true;
     updateCardNav();
     dirty = true;
   }
-  $('#clear').addEventListener('click', () => { clearSearch(); stage.focus({ preventScroll: true }); });
+  $('#clear').addEventListener('click', () => { clearSearch(true); stage.focus({ preventScroll: true }); });
   $('#search').addEventListener('submit', (e) => { e.preventDefault(); search(q.value); q.blur(); });
-  q.addEventListener('input', () => { if (!q.value) clearSearch(); });
+  q.addEventListener('input', () => { if (!q.value) clearSearch(true); });
   $('#prev').addEventListener('click', () => jumpHit(-1));
   $('#next').addEventListener('click', () => jumpHit(1));
 
@@ -1151,7 +1180,7 @@
     if (mode !== 'covers') p.set('mode', mode);
     if (sortKey !== 'added') p.set('sort', sortKey);
     const h = p.toString();
-    history.replaceState(null, '', h ? '#' + h : location.pathname);
+    history.replaceState(history.state, '', h ? '#' + h : location.pathname);
   }
 
   // --- start ---------------------------------------------------------------------------
@@ -1173,7 +1202,7 @@
     indexOf = new Map(ids.map((id, i) => [id, i]));
     chunkState.clear();
     prefetchQueue = null;
-    hits = null; clearSearch();
+    clearSearch(true);
     $('#count').textContent = `${ids.length.toLocaleString()} ${ids.length === 1 ? 'book' : 'books'}`;
     statusEl.hidden = true;
     const i = indexOf.has(focusId) ? indexOf.get(focusId) : 0;
