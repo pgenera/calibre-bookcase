@@ -5,6 +5,8 @@
      /ajax/books    title/author/series for a chunk of ids
      /ajax/book     one book's full details (description) when it is opened
      /get/thumb     cover thumbnails, always at one size so calibre caches one copy
+   With no calibre server (say, on GitHub Pages), or with ?demo in the URL, it shows
+   the public-domain demo library in demo/ instead.
    Needs three.js as the global THREE: r111 (Debian's libjs-three) and current
    releases both work. */
 'use strict';
@@ -97,8 +99,88 @@
   const css = (name, fallback) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
   const SERIF = '"EB Garamond", Georgia, serif';
 
+  // --- where the books come from ---------------------------------------------------------
+  // calibre's content server, or the static demo library. Both answer the same questions.
+  function calibreSource(library) {
+    const q = (path) => getJSON(path);
+    const order = (sortKey, seriesOrder) => (seriesOrder ? 'sort=series_index&sort_order=asc' : SORTS[sortKey]);
+    return {
+      name: library, home: '/', live: true, demo: false,
+      order: async (sortKey) => (await q(`/ajax/search/${library}?num=100000&${order(sortKey)}`)).book_ids,
+      search: async (text, sortKey, seriesOrder) =>
+        (await q(`/ajax/search/${library}?num=100000&${order(sortKey, seriesOrder)}&query=${encodeURIComponent(text)}`)).book_ids,
+      books: (list) => q(`/ajax/books/${library}?ids=${list.join(',')}&category_urls=false`),
+      book: (id) => q(`/ajax/book/${id}/${library}?category_urls=false`),
+      thumb: (id) => `/get/thumb/${id}/${library}?sz=${THUMB}`,
+      cover: (id) => `/get/cover/${id}/${library}`,
+      links: (id, b) => [
+        { text: 'Open in the library', href: `/#book_id=${id}&library_id=${encodeURIComponent(library)}&panel=book_details` },
+        ...Object.entries(b.main_format || {}).map(([fmt, href]) => ({ text: `Download ${fmt.toUpperCase()}`, href, download: true })),
+      ],
+    };
+  }
+
+  function demoSource(data) {
+    const byId = new Map(data.books.map((b) => [b.id, b]));
+    const fold = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const titleKey = (b) => fold(b.title).replace(/^(the|a|an) /, '');
+    const sorters = {
+      added: (a, b) => (a.added < b.added ? 1 : a.added > b.added ? -1 : 0),
+      title: (a, b) => titleKey(a).localeCompare(titleKey(b)),
+      author: (a, b) => fold(a.author_sort).localeCompare(fold(b.author_sort)) ||
+        fold(a.series || '').localeCompare(fold(b.series || '')) ||
+        (a.series_index || 0) - (b.series_index || 0) || titleKey(a).localeCompare(titleKey(b)),
+    };
+    const sorted = (list, sortKey) => list.slice().sort(sorters[sortKey] || sorters.added).map((b) => b.id);
+    // Enough of calibre's search syntax for the page's own links (authors:"=X",
+    // series:"=X") plus plain words, each of which must appear somewhere.
+    function matches(text) {
+      const exact = /^(authors|series|title):"=((?:[^"\\]|\\.)*)"$/.exec(text.trim());
+      if (exact) {
+        const want = fold(exact[2].replace(/\\(.)/g, '$1'));
+        const field = exact[1];
+        return (b) => (field === 'authors' ? b.authors.some((a) => fold(a) === want) : fold(b[field]) === want);
+      }
+      const words = fold(text).split(/\s+/).filter(Boolean).map((w) => w.replace(/^\w+:/, '').replace(/"/g, ''));
+      return (b) => {
+        const hay = fold([b.title, b.authors.join(' '), b.series || ''].join(' '));
+        return words.every((w) => hay.includes(w));
+      };
+    }
+    const brief = (b) => ({ title: b.title, authors: b.authors, series: b.series, series_index: b.series_index,
+                            main_format: {}, last_modified: b.added });
+    return {
+      name: 'demo', home: data.home || '.', live: false, demo: true,
+      order: async (sortKey) => sorted(data.books, sortKey),
+      search: async (text, sortKey, seriesOrder) => {
+        const hits = data.books.filter(matches(text));
+        return seriesOrder ? hits.slice().sort((a, b) => (a.series_index || 0) - (b.series_index || 0)).map((b) => b.id)
+                           : sorted(hits, sortKey);
+      },
+      books: async (list) => Object.fromEntries(list.filter((id) => byId.has(id)).map((id) => [id, brief(byId.get(id))])),
+      book: async (id) => {
+        const b = byId.get(id);
+        return Object.assign(brief(b), { comments: b.comments, pubdate: b.pubdate, links: b.links });
+      },
+      thumb: (id) => `demo/covers/${id}.svg`,
+      cover: (id) => `demo/covers/${id}.svg`,
+      links: (id, b) => b.links || (byId.get(id) || {}).links || [],
+    };
+  }
+
+  async function chooseSource() {
+    const wantDemo = new URLSearchParams(location.search).has('demo');
+    if (!wantDemo) {
+      try {
+        const info = await getJSON('/ajax/library-info');
+        return calibreSource(info.default_library || 'books');
+      } catch (e) { /* no calibre here: try the demo */ }
+    }
+    return demoSource(await getJSON('demo/library.json'));
+  }
+  let source = null;
+
   // --- state ---------------------------------------------------------------------
-  let library = 'books';         // calibre library id, from /ajax/library-info
   let ids = [];                  // book ids in display order
   let indexOf = new Map();       // id -> position
   const meta = new Map();        // id -> {title, authors, series, series_index, main, lm (last modified)}
@@ -201,7 +283,7 @@
   let thumbLoads = 0;
   const avgColor = new Map();    // id -> css color from the cover
 
-  const thumbUrl = (id) => `/get/thumb/${id}/${library}?sz=${THUMB}`;
+  const thumbUrl = (id) => source.thumb(id);
   function wantThumb(id, request = true) {
     const key = 't' + id;
     if (textures.has(key)) return touch(key).tex;
@@ -339,7 +421,7 @@
     const slice = order.slice(c * CHUNK, (c + 1) * CHUNK).filter((id) => !fresh.has(id));
     try {
       if (!slice.length) { chunkState.set(c, 'done'); return; }
-      const data = await getJSON(`/ajax/books/${library}?ids=${slice.join(',')}&category_urls=false`);
+      const data = await source.books(slice);
       storeBooks(data);
       if (order === ids) chunkState.set(c, 'done');
       dirty = true;
@@ -380,7 +462,7 @@
 
   // Titles, authors and series are kept on the device, so the whole shelf is
   // labelled at once on the next launch, online or not.
-  const metaKey = () => `bookcase.meta.${library}`;
+  const metaKey = () => `bookcase.meta.${source.name}`;
   function loadMeta() {
     try {
       const saved = JSON.parse(localStorage.getItem(metaKey()) || 'null');
@@ -443,7 +525,7 @@
       }
       if (missing.length) {
         metaPrefetching = true;
-        getJSON(`/ajax/books/${library}?ids=${missing.join(',')}&category_urls=false`)
+        source.books(missing)
           .then(storeBooks).catch(() => {}).finally(() => { metaPrefetching = false; });
       }
     }
@@ -913,7 +995,7 @@
     detail.classList.add('open');
     detail.setAttribute('aria-hidden', 'false');
     try {
-      const b = await getJSON(`/ajax/book/${id}/${library}?category_urls=false`);
+      const b = await source.book(id);
       if (token === detailToken) fillDetail(id, b);
     } catch (e) { /* keep what we have */ }
   }
@@ -1023,7 +1105,7 @@
 
   function fillDetail(id, b) {
     const img = detail.querySelector('.cover');
-    const src = `/get/cover/${id}/${library}`;
+    const src = source.cover(id);
     if (img.getAttribute('src') !== src) img.src = src;
     img.alt = b.title ? `Cover of ${b.title}` : '';
     detail.querySelector('h2').textContent = b.title || '';
@@ -1058,9 +1140,8 @@
       if (download) a.setAttribute('download', '');
       links.append(a);
     };
-    add('Open in the library', `/#book_id=${id}&library_id=${encodeURIComponent(library)}&panel=book_details`);
     const main = b.main_format || (meta.get(id) || {}).main || {};
-    for (const [fmt, href] of Object.entries(main)) add(`Download ${fmt.toUpperCase()}`, href, true);
+    for (const link of source.links(id, Object.assign({}, b, { main_format: main }))) add(link.text, link.href, link.download);
     detail.querySelector('.desc').replaceChildren(...sanitize(b.comments || ''));
   }
 
@@ -1110,12 +1191,11 @@
   async function search(text, { fromId = null, seriesOrder = false } = {}) {
     text = text.trim();
     if (!text) { clearSearch(true); return; }
-    const order = seriesOrder ? 'sort=series_index&sort_order=asc' : SORTS[sortKey];
-    let res;
+    let found;
     try {
-      res = await getJSON(`/ajax/search/${library}?num=100000&${order}&query=${encodeURIComponent(text)}`);
+      found = await source.search(text, sortKey, seriesOrder);
     } catch (e) { showHits('Search didn’t answer; try again'); return; }
-    const list = res.book_ids.map((id) => indexOf.get(id)).filter((i) => i !== undefined);
+    const list = found.map((id) => indexOf.get(id)).filter((i) => i !== undefined);
     if (!seriesOrder) list.sort((a, b) => a - b);
     hits = { list, set: new Set(list), ids: list.map((i) => ids[i]), seriesOrder };
     pushLayer('hits');
@@ -1184,26 +1264,30 @@
   }
 
   // --- start ---------------------------------------------------------------------------
+  function countText() {
+    const n = `${ids.length.toLocaleString()} ${source && source.demo ? 'public-domain ' : ''}${ids.length === 1 ? 'book' : 'books'}`;
+    return n;
+  }
+
   async function load(focusId) {
-    let res;
     try {
-      if (!load.started) {
-        load.started = true;
-        library = (await getJSON('/ajax/library-info')).default_library || library;
+      if (!source) {
+        source = await chooseSource();
+        $('.mark a').href = source.home;
+        if (source.demo) $('.mark a').title = 'About this demo';
         loadMeta();
         if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
       }
-      res = await getJSON(`/ajax/search/${library}?num=100000&${SORTS[sortKey]}`);
+      ids = await source.order(sortKey);
     } catch (e) {
       fail('The library isn’t answering right now. <a href="/">Open the regular library view</a> or reload in a minute.');
       return;
     }
-    ids = res.book_ids;
     indexOf = new Map(ids.map((id, i) => [id, i]));
     chunkState.clear();
     prefetchQueue = null;
     clearSearch(true);
-    $('#count').textContent = `${ids.length.toLocaleString()} ${ids.length === 1 ? 'book' : 'books'}`;
+    $('#count').textContent = countText();
     statusEl.hidden = true;
     const i = indexOf.has(focusId) ? indexOf.get(focusId) : 0;
     goTo(i, true);
@@ -1256,12 +1340,11 @@
   // the helix glides over to the newest.
   let checking = false;
   async function checkForChanges() {
-    if (checking || !ids.length || document.hidden) return;
+    if (checking || !ids.length || document.hidden || !source.live) return;
     if (dragging || pinch || target !== null || liftTarget !== null) { setTimeout(checkForChanges, 2000); return; }
     checking = true;
     try {
-      const res = await getJSON(`/ajax/search/${library}?num=100000&${SORTS[sortKey]}`);
-      merge(res.book_ids);
+      merge(await source.order(sortKey));
     } catch (e) { /* calibre restarts briefly during imports; try again next time */ }
     checking = false;
   }
@@ -1301,7 +1384,7 @@
     prefetchQueue = null;
     const now = performance.now();
     for (const id of added) born.set(id, now);
-    $('#count').textContent = `${ids.length.toLocaleString()} ${ids.length === 1 ? 'book' : 'books'}`;
+    $('#count').textContent = countText();
     if (atTop && added.length && indexOf.get(added[0]) === 0) goTo(0);
     dirty = true;
   }

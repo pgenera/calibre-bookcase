@@ -1,0 +1,2875 @@
+{
+ "name": "Public-domain demo",
+ "home": "https://github.com/pgenera/calibre-bookcase",
+ "books": [
+  {
+   "id": 1,
+   "title": "A Study in Scarlet",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 1,
+   "pubdate": "1887-01-01",
+   "added": "2026-06-11T12:00:00+00:00",
+   "comments": "<p>Dr. Watson takes rooms at 221B Baker Street with a consulting detective, and a body in an empty house in Brixton leads back to the American West.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Study+in+Scarlet+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "title": "The Sign of the Four",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 2,
+   "pubdate": "1890-01-01",
+   "added": "2025-11-06T12:00:00+00:00",
+   "comments": "<p>A young woman receives a pearl every year from an unknown sender; Holmes follows the trail to a stolen Indian treasure.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Sign+of+the+Four+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "title": "The Adventures of Sherlock Holmes",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 3,
+   "pubdate": "1892-01-01",
+   "added": "2026-03-26T12:00:00+00:00",
+   "comments": "<p>Twelve stories, among them A Scandal in Bohemia, The Red-Headed League and The Speckled Band.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Adventures+of+Sherlock+Holmes+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "title": "The Memoirs of Sherlock Holmes",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 4,
+   "pubdate": "1894-01-01",
+   "added": "2026-06-16T12:00:00+00:00",
+   "comments": "<p>Eleven more cases, ending at the Reichenbach Falls with Professor Moriarty.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Memoirs+of+Sherlock+Holmes+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "title": "The Hound of the Baskervilles",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 5,
+   "pubdate": "1902-01-01",
+   "added": "2026-03-11T12:00:00+00:00",
+   "comments": "<p>A family legend of a spectral hound, a death on Dartmoor, and an heir who may be next.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Hound+of+the+Baskervilles+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "title": "The Return of Sherlock Holmes",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 6,
+   "pubdate": "1905-01-01",
+   "added": "2026-02-06T12:00:00+00:00",
+   "comments": "<p>Holmes comes back from the dead in The Empty House, followed by twelve new cases.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Return+of+Sherlock+Holmes+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "title": "The Valley of Fear",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 7,
+   "pubdate": "1915-01-01",
+   "added": "2026-05-08T12:00:00+00:00",
+   "comments": "<p>A coded warning, a murder at a moated manor house, and a long story of a secret society in Pennsylvania coal country.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Valley+of+Fear+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "title": "His Last Bow",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 8,
+   "pubdate": "1917-01-01",
+   "added": "2025-12-31T12:00:00+00:00",
+   "comments": "<p>Later cases, closing with Holmes out of retirement on the eve of the First World War.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=His+Last+Bow+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "title": "The Case-Book of Sherlock Holmes",
+   "authors": [
+    "Arthur Conan Doyle"
+   ],
+   "author_sort": "Doyle, Arthur Conan",
+   "series": "Sherlock Holmes",
+   "series_index": 9,
+   "pubdate": "1927-01-01",
+   "added": "2026-09-04T12:00:00+00:00",
+   "comments": "<p>The final twelve stories.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Case-Book+of+Sherlock+Holmes+Arthur+Conan+Doyle"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "title": "The Wonderful Wizard of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 1,
+   "pubdate": "1900-01-01",
+   "added": "2026-09-09T12:00:00+00:00",
+   "comments": "<p>A cyclone carries Dorothy from Kansas to Oz, where she travels the yellow brick road to the Emerald City.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Wonderful+Wizard+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "title": "The Marvelous Land of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 2,
+   "pubdate": "1904-01-01",
+   "added": "2026-07-20T12:00:00+00:00",
+   "comments": "<p>Tip and a pumpkin-headed man he brought to life escape to the Emerald City, just as General Jinjur&#x27;s army seizes it.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Marvelous+Land+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "title": "Ozma of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 3,
+   "pubdate": "1907-01-01",
+   "added": "2026-07-08T12:00:00+00:00",
+   "comments": "<p>Shipwrecked with a talking hen, Dorothy lands in Ev and helps rescue its royal family from the Nome King.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Ozma+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "title": "Dorothy and the Wizard in Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 4,
+   "pubdate": "1908-01-01",
+   "added": "2025-11-20T12:00:00+00:00",
+   "comments": "<p>An earthquake drops Dorothy and the Wizard into a land of glass people beneath California.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Dorothy+and+the+Wizard+in+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "title": "The Road to Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 5,
+   "pubdate": "1909-01-01",
+   "added": "2026-03-16T12:00:00+00:00",
+   "comments": "<p>Dorothy and the Shaggy Man wander the roads toward Ozma&#x27;s birthday party.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Road+to+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "title": "The Emerald City of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 6,
+   "pubdate": "1910-01-01",
+   "added": "2025-10-01T12:00:00+00:00",
+   "comments": "<p>Dorothy brings Aunt Em and Uncle Henry to live in Oz while the Nome King plots an invasion.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Emerald+City+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "title": "The Patchwork Girl of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 7,
+   "pubdate": "1913-01-01",
+   "added": "2026-06-09T12:00:00+00:00",
+   "comments": "<p>Ojo searches Oz for the ingredients of a charm to restore his uncle, with Scraps the patchwork girl.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Patchwork+Girl+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "title": "Tik-Tok of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 8,
+   "pubdate": "1914-01-01",
+   "added": "2026-05-16T12:00:00+00:00",
+   "comments": "<p>Betsy Bobbin and the clockwork Tik-Tok join a queen&#x27;s march against the Nome King.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Tik-Tok+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "title": "The Scarecrow of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 9,
+   "pubdate": "1915-01-01",
+   "added": "2025-12-02T12:00:00+00:00",
+   "comments": "<p>Trot and Cap&#x27;n Bill are swept into Jinxland, where the Scarecrow comes to their aid.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Scarecrow+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "title": "Rinkitink in Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 10,
+   "pubdate": "1916-01-01",
+   "added": "2026-06-21T12:00:00+00:00",
+   "comments": "<p>Prince Inga sets out with three magic pearls to free his parents and people.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Rinkitink+in+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "title": "The Lost Princess of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 11,
+   "pubdate": "1917-01-01",
+   "added": "2026-05-04T12:00:00+00:00",
+   "comments": "<p>Ozma disappears along with every magic tool in Oz, and search parties set out.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Lost+Princess+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "title": "The Tin Woodman of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 12,
+   "pubdate": "1918-01-01",
+   "added": "2026-07-30T12:00:00+00:00",
+   "comments": "<p>The Tin Woodman goes looking for the Munchkin girl he once meant to marry.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Tin+Woodman+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "title": "The Magic of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 13,
+   "pubdate": "1919-01-01",
+   "added": "2025-10-30T12:00:00+00:00",
+   "comments": "<p>A boy who knows a transformation word plots with the Nome King against Oz.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Magic+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "title": "Glinda of Oz",
+   "authors": [
+    "L. Frank Baum"
+   ],
+   "author_sort": "Baum, L. Frank",
+   "series": "Oz",
+   "series_index": 14,
+   "pubdate": "1920-01-01",
+   "added": "2026-07-25T12:00:00+00:00",
+   "comments": "<p>Ozma and Dorothy try to stop a war between the Flatheads and the Skeezers.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Glinda+of+Oz+L.+Frank+Baum"
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "title": "Anne of Green Gables",
+   "authors": [
+    "L. M. Montgomery"
+   ],
+   "author_sort": "Montgomery, L. M.",
+   "series": "Anne of Green Gables",
+   "series_index": 1,
+   "pubdate": "1908-01-01",
+   "added": "2026-08-20T12:00:00+00:00",
+   "comments": "<p>The Cuthberts ask for an orphan boy to help on their Prince Edward Island farm and are sent Anne Shirley instead.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Anne+of+Green+Gables+L.+M.+Montgomery"
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "title": "Anne of Avonlea",
+   "authors": [
+    "L. M. Montgomery"
+   ],
+   "author_sort": "Montgomery, L. M.",
+   "series": "Anne of Green Gables",
+   "series_index": 2,
+   "pubdate": "1909-01-01",
+   "added": "2026-01-08T12:00:00+00:00",
+   "comments": "<p>Anne, now sixteen, teaches at the Avonlea school.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Anne+of+Avonlea+L.+M.+Montgomery"
+    }
+   ]
+  },
+  {
+   "id": 26,
+   "title": "Anne of the Island",
+   "authors": [
+    "L. M. Montgomery"
+   ],
+   "author_sort": "Montgomery, L. M.",
+   "series": "Anne of Green Gables",
+   "series_index": 3,
+   "pubdate": "1915-01-01",
+   "added": "2026-03-07T12:00:00+00:00",
+   "comments": "<p>Anne goes to college in Kingsport.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Anne+of+the+Island+L.+M.+Montgomery"
+    }
+   ]
+  },
+  {
+   "id": 27,
+   "title": "Anne's House of Dreams",
+   "authors": [
+    "L. M. Montgomery"
+   ],
+   "author_sort": "Montgomery, L. M.",
+   "series": "Anne of Green Gables",
+   "series_index": 5,
+   "pubdate": "1917-01-01",
+   "added": "2026-08-30T12:00:00+00:00",
+   "comments": "<p>Anne and Gilbert begin married life in a small house at Four Winds Harbour.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Anne%27s+House+of+Dreams+L.+M.+Montgomery"
+    }
+   ]
+  },
+  {
+   "id": 28,
+   "title": "Rainbow Valley",
+   "authors": [
+    "L. M. Montgomery"
+   ],
+   "author_sort": "Montgomery, L. M.",
+   "series": "Anne of Green Gables",
+   "series_index": 7,
+   "pubdate": "1919-01-01",
+   "added": "2026-07-10T12:00:00+00:00",
+   "comments": "<p>Anne&#x27;s children and the motherless children of the new minister share a hollow they call Rainbow Valley.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Rainbow+Valley+L.+M.+Montgomery"
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "title": "Rilla of Ingleside",
+   "authors": [
+    "L. M. Montgomery"
+   ],
+   "author_sort": "Montgomery, L. M.",
+   "series": "Anne of Green Gables",
+   "series_index": 8,
+   "pubdate": "1921-01-01",
+   "added": "2025-11-08T12:00:00+00:00",
+   "comments": "<p>Anne&#x27;s youngest daughter comes of age on the home front during the First World War.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Rilla+of+Ingleside+L.+M.+Montgomery"
+    }
+   ]
+  },
+  {
+   "id": 30,
+   "title": "Little Women",
+   "authors": [
+    "Louisa May Alcott"
+   ],
+   "author_sort": "Alcott, Louisa May",
+   "series": "Little Women",
+   "series_index": 1,
+   "pubdate": "1868-01-01",
+   "added": "2026-05-28T12:00:00+00:00",
+   "comments": "<p>The four March sisters grow up in Massachusetts while their father serves in the Civil War.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Little+Women+Louisa+May+Alcott"
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "title": "Little Men",
+   "authors": [
+    "Louisa May Alcott"
+   ],
+   "author_sort": "Alcott, Louisa May",
+   "series": "Little Women",
+   "series_index": 2,
+   "pubdate": "1871-01-01",
+   "added": "2026-02-18T12:00:00+00:00",
+   "comments": "<p>Jo and her husband run Plumfield, a school for boys.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Little+Men+Louisa+May+Alcott"
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "title": "Jo's Boys",
+   "authors": [
+    "Louisa May Alcott"
+   ],
+   "author_sort": "Alcott, Louisa May",
+   "series": "Little Women",
+   "series_index": 3,
+   "pubdate": "1886-01-01",
+   "added": "2026-03-28T12:00:00+00:00",
+   "comments": "<p>The Plumfield boys, grown up and scattered.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Jo%27s+Boys+Louisa+May+Alcott"
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "title": "Alice's Adventures in Wonderland",
+   "authors": [
+    "Lewis Carroll"
+   ],
+   "author_sort": "Carroll, Lewis",
+   "series": "Alice",
+   "series_index": 1,
+   "pubdate": "1865-01-01",
+   "added": "2026-04-19T12:00:00+00:00",
+   "comments": "<p>Alice follows a White Rabbit down a rabbit hole.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Alice%27s+Adventures+in+Wonderland+Lewis+Carroll"
+    }
+   ]
+  },
+  {
+   "id": 34,
+   "title": "Through the Looking-Glass",
+   "authors": [
+    "Lewis Carroll"
+   ],
+   "author_sort": "Carroll, Lewis",
+   "series": "Alice",
+   "series_index": 2,
+   "pubdate": "1871-01-01",
+   "added": "2026-02-23T12:00:00+00:00",
+   "comments": "<p>Alice steps through a mirror into a world laid out like a chessboard.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Through+the+Looking-Glass+Lewis+Carroll"
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "title": "The Adventures of Tom Sawyer",
+   "authors": [
+    "Mark Twain"
+   ],
+   "author_sort": "Twain, Mark",
+   "series": "Tom Sawyer & Huckleberry Finn",
+   "series_index": 1,
+   "pubdate": "1876-01-01",
+   "added": "2026-05-06T12:00:00+00:00",
+   "comments": "<p>A boyhood on the Mississippi: fence-painting, a buried treasure, and a murder witnessed in a graveyard.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Adventures+of+Tom+Sawyer+Mark+Twain"
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "title": "Adventures of Huckleberry Finn",
+   "authors": [
+    "Mark Twain"
+   ],
+   "author_sort": "Twain, Mark",
+   "series": "Tom Sawyer & Huckleberry Finn",
+   "series_index": 2,
+   "pubdate": "1884-01-01",
+   "added": "2025-10-08T12:00:00+00:00",
+   "comments": "<p>Huck escapes his father and travels down the Mississippi on a raft with Jim, who is fleeing slavery.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Adventures+of+Huckleberry+Finn+Mark+Twain"
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "title": "The Deerslayer",
+   "authors": [
+    "James Fenimore Cooper"
+   ],
+   "author_sort": "Cooper, James Fenimore",
+   "series": "Leatherstocking Tales",
+   "series_index": 1,
+   "pubdate": "1841-01-01",
+   "added": "2026-06-26T12:00:00+00:00",
+   "comments": "<p>Natty Bumppo&#x27;s first adventure, on a New York lake during the French and Indian War.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Deerslayer+James+Fenimore+Cooper"
+    }
+   ]
+  },
+  {
+   "id": 38,
+   "title": "The Last of the Mohicans",
+   "authors": [
+    "James Fenimore Cooper"
+   ],
+   "author_sort": "Cooper, James Fenimore",
+   "series": "Leatherstocking Tales",
+   "series_index": 2,
+   "pubdate": "1826-01-01",
+   "added": "2025-11-23T12:00:00+00:00",
+   "comments": "<p>Hawkeye and his Mohican friends guide two sisters through the wilderness around Fort William Henry.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Last+of+the+Mohicans+James+Fenimore+Cooper"
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "title": "The Pathfinder",
+   "authors": [
+    "James Fenimore Cooper"
+   ],
+   "author_sort": "Cooper, James Fenimore",
+   "series": "Leatherstocking Tales",
+   "series_index": 3,
+   "pubdate": "1840-01-01",
+   "added": "2026-09-28T12:00:00+00:00",
+   "comments": "<p>Natty Bumppo on Lake Ontario, and in love.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Pathfinder+James+Fenimore+Cooper"
+    }
+   ]
+  },
+  {
+   "id": 40,
+   "title": "The Pioneers",
+   "authors": [
+    "James Fenimore Cooper"
+   ],
+   "author_sort": "Cooper, James Fenimore",
+   "series": "Leatherstocking Tales",
+   "series_index": 4,
+   "pubdate": "1823-01-01",
+   "added": "2025-11-11T12:00:00+00:00",
+   "comments": "<p>An older Natty Bumppo clashes with the settlers of Templeton.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Pioneers+James+Fenimore+Cooper"
+    }
+   ]
+  },
+  {
+   "id": 41,
+   "title": "The Prairie",
+   "authors": [
+    "James Fenimore Cooper"
+   ],
+   "author_sort": "Cooper, James Fenimore",
+   "series": "Leatherstocking Tales",
+   "series_index": 5,
+   "pubdate": "1827-01-01",
+   "added": "2026-04-02T12:00:00+00:00",
+   "comments": "<p>Natty Bumppo&#x27;s last days, on the Great Plains.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Prairie+James+Fenimore+Cooper"
+    }
+   ]
+  },
+  {
+   "id": 42,
+   "title": "The Three Musketeers",
+   "authors": [
+    "Alexandre Dumas"
+   ],
+   "author_sort": "Dumas, Alexandre",
+   "series": "The d'Artagnan Romances",
+   "series_index": 1,
+   "pubdate": "1844-01-01",
+   "added": "2026-01-05T12:00:00+00:00",
+   "comments": "<p>D&#x27;Artagnan comes to Paris and falls in with Athos, Porthos and Aramis against Cardinal Richelieu.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Three+Musketeers+Alexandre+Dumas"
+    }
+   ]
+  },
+  {
+   "id": 43,
+   "title": "Twenty Years After",
+   "authors": [
+    "Alexandre Dumas"
+   ],
+   "author_sort": "Dumas, Alexandre",
+   "series": "The d'Artagnan Romances",
+   "series_index": 2,
+   "pubdate": "1845-01-01",
+   "added": "2026-04-12T12:00:00+00:00",
+   "comments": "<p>The musketeers reunite during the Fronde and the English Civil War.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Twenty+Years+After+Alexandre+Dumas"
+    }
+   ]
+  },
+  {
+   "id": 44,
+   "title": "The Vicomte of Bragelonne",
+   "authors": [
+    "Alexandre Dumas"
+   ],
+   "author_sort": "Dumas, Alexandre",
+   "series": "The d'Artagnan Romances",
+   "series_index": 3,
+   "pubdate": "1847-01-01",
+   "added": "2026-07-01T12:00:00+00:00",
+   "comments": "<p>The last of the romances, including the story of the Man in the Iron Mask.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Vicomte+of+Bragelonne+Alexandre+Dumas"
+    }
+   ]
+  },
+  {
+   "id": 45,
+   "title": "A Princess of Mars",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Barsoom",
+   "series_index": 1,
+   "pubdate": "1917-01-01",
+   "added": "2026-07-03T12:00:00+00:00",
+   "comments": "<p>Confederate veteran John Carter wakes on Mars and fights for the princess Dejah Thoris.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Princess+of+Mars+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 46,
+   "title": "The Gods of Mars",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Barsoom",
+   "series_index": 2,
+   "pubdate": "1918-01-01",
+   "added": "2026-09-26T12:00:00+00:00",
+   "comments": "<p>John Carter returns to Mars and exposes the religion of the River Iss.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Gods+of+Mars+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 47,
+   "title": "The Warlord of Mars",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Barsoom",
+   "series_index": 3,
+   "pubdate": "1919-01-01",
+   "added": "2026-06-19T12:00:00+00:00",
+   "comments": "<p>John Carter pursues Dejah Thoris&#x27;s kidnappers to the north pole of Mars.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Warlord+of+Mars+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 48,
+   "title": "Thuvia, Maid of Mars",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Barsoom",
+   "series_index": 4,
+   "pubdate": "1920-01-01",
+   "added": "2026-05-30T12:00:00+00:00",
+   "comments": "<p>John Carter&#x27;s son Carthoris and the princess Thuvia.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Thuvia%2C+Maid+of+Mars+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 49,
+   "title": "The Chessmen of Mars",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Barsoom",
+   "series_index": 5,
+   "pubdate": "1922-01-01",
+   "added": "2025-12-07T12:00:00+00:00",
+   "comments": "<p>Tara of Helium is captured, and played for, in a game of living chess.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Chessmen+of+Mars+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 50,
+   "title": "The Master Mind of Mars",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Barsoom",
+   "series_index": 6,
+   "pubdate": "1928-01-01",
+   "added": "2026-04-05T12:00:00+00:00",
+   "comments": "<p>An Earthman apprenticed to a Martian surgeon who transplants brains.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Master+Mind+of+Mars+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 51,
+   "title": "Tarzan of the Apes",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Tarzan",
+   "series_index": 1,
+   "pubdate": "1914-01-01",
+   "added": "2026-03-21T12:00:00+00:00",
+   "comments": "<p>An English lord&#x27;s orphaned son is raised by apes in the African jungle.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Tarzan+of+the+Apes+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 52,
+   "title": "The Return of Tarzan",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Tarzan",
+   "series_index": 2,
+   "pubdate": "1915-01-01",
+   "added": "2026-02-13T12:00:00+00:00",
+   "comments": "<p>Tarzan tries civilization in Paris and North Africa, then returns to the jungle.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Return+of+Tarzan+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 53,
+   "title": "The Beasts of Tarzan",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Tarzan",
+   "series_index": 3,
+   "pubdate": "1916-01-01",
+   "added": "2025-10-20T12:00:00+00:00",
+   "comments": "<p>Tarzan raises a band of animals to rescue his wife and son.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Beasts+of+Tarzan+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 54,
+   "title": "The Son of Tarzan",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Tarzan",
+   "series_index": 4,
+   "pubdate": "1917-01-01",
+   "added": "2025-10-13T12:00:00+00:00",
+   "comments": "<p>Tarzan&#x27;s son runs away to Africa.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Son+of+Tarzan+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 55,
+   "title": "Tarzan and the Jewels of Opar",
+   "authors": [
+    "Edgar Rice Burroughs"
+   ],
+   "author_sort": "Burroughs, Edgar Rice",
+   "series": "Tarzan",
+   "series_index": 5,
+   "pubdate": "1918-01-01",
+   "added": "2026-03-02T12:00:00+00:00",
+   "comments": "<p>A blow to the head leaves Tarzan without his memory in the lost city of Opar.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Tarzan+and+the+Jewels+of+Opar+Edgar+Rice+Burroughs"
+    }
+   ]
+  },
+  {
+   "id": 56,
+   "title": "The Mysterious Affair at Styles",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Hercule Poirot",
+   "series_index": 1,
+   "pubdate": "1920-01-01",
+   "added": "2026-04-14T12:00:00+00:00",
+   "comments": "<p>A wealthy widow is poisoned in an Essex country house, and a Belgian refugee detective investigates.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Mysterious+Affair+at+Styles+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 57,
+   "title": "The Murder on the Links",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Hercule Poirot",
+   "series_index": 2,
+   "pubdate": "1923-01-01",
+   "added": "2026-03-19T12:00:00+00:00",
+   "comments": "<p>Poirot answers a call for help and finds the man who sent it dead on a French golf course.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Murder+on+the+Links+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 58,
+   "title": "Poirot Investigates",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Hercule Poirot",
+   "series_index": 3,
+   "pubdate": "1924-01-01",
+   "added": "2025-10-05T12:00:00+00:00",
+   "comments": "<p>Eleven short cases.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Poirot+Investigates+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 59,
+   "title": "The Murder of Roger Ackroyd",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Hercule Poirot",
+   "series_index": 4,
+   "pubdate": "1926-01-01",
+   "added": "2026-02-08T12:00:00+00:00",
+   "comments": "<p>Poirot, retired to grow marrows, is drawn into a village murder.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Murder+of+Roger+Ackroyd+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 60,
+   "title": "The Big Four",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Hercule Poirot",
+   "series_index": 5,
+   "pubdate": "1927-01-01",
+   "added": "2026-05-11T12:00:00+00:00",
+   "comments": "<p>Poirot against an international criminal organization.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Big+Four+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 61,
+   "title": "The Mystery of the Blue Train",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Hercule Poirot",
+   "series_index": 6,
+   "pubdate": "1928-01-01",
+   "added": "2026-08-13T12:00:00+00:00",
+   "comments": "<p>An heiress is murdered on the train to the Riviera.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Mystery+of+the+Blue+Train+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 62,
+   "title": "The Secret Adversary",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Tommy and Tuppence",
+   "series_index": 1,
+   "pubdate": "1922-01-01",
+   "added": "2026-01-27T12:00:00+00:00",
+   "comments": "<p>Two young friends start a business as adventurers and are soon hunting for a missing treaty.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Secret+Adversary+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 63,
+   "title": "The Murder at the Vicarage",
+   "authors": [
+    "Agatha Christie"
+   ],
+   "author_sort": "Christie, Agatha",
+   "series": "Miss Marple",
+   "series_index": 1,
+   "pubdate": "1930-01-01",
+   "added": "2026-02-10T12:00:00+00:00",
+   "comments": "<p>A disliked colonel is shot in the vicar&#x27;s study at St. Mary Mead.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Murder+at+the+Vicarage+Agatha+Christie"
+    }
+   ]
+  },
+  {
+   "id": 64,
+   "title": "The Innocence of Father Brown",
+   "authors": [
+    "G. K. Chesterton"
+   ],
+   "author_sort": "Chesterton, G. K.",
+   "series": "Father Brown",
+   "series_index": 1,
+   "pubdate": "1911-01-01",
+   "added": "2026-02-03T12:00:00+00:00",
+   "comments": "<p>The first stories of the unassuming priest who solves crimes by understanding sin.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Innocence+of+Father+Brown+G.+K.+Chesterton"
+    }
+   ]
+  },
+  {
+   "id": 65,
+   "title": "The Wisdom of Father Brown",
+   "authors": [
+    "G. K. Chesterton"
+   ],
+   "author_sort": "Chesterton, G. K.",
+   "series": "Father Brown",
+   "series_index": 2,
+   "pubdate": "1914-01-01",
+   "added": "2025-11-18T12:00:00+00:00",
+   "comments": "<p>Twelve more stories.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Wisdom+of+Father+Brown+G.+K.+Chesterton"
+    }
+   ]
+  },
+  {
+   "id": 66,
+   "title": "The Incredulity of Father Brown",
+   "authors": [
+    "G. K. Chesterton"
+   ],
+   "author_sort": "Chesterton, G. K.",
+   "series": "Father Brown",
+   "series_index": 3,
+   "pubdate": "1926-01-01",
+   "added": "2026-09-11T12:00:00+00:00",
+   "comments": "<p>Father Brown faces crimes that seem to have supernatural causes.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Incredulity+of+Father+Brown+G.+K.+Chesterton"
+    }
+   ]
+  },
+  {
+   "id": 67,
+   "title": "The Secret of Father Brown",
+   "authors": [
+    "G. K. Chesterton"
+   ],
+   "author_sort": "Chesterton, G. K.",
+   "series": "Father Brown",
+   "series_index": 4,
+   "pubdate": "1927-01-01",
+   "added": "2025-12-22T12:00:00+00:00",
+   "comments": "<p>Father Brown explains his method.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Secret+of+Father+Brown+G.+K.+Chesterton"
+    }
+   ]
+  },
+  {
+   "id": 68,
+   "title": "The Thirty-Nine Steps",
+   "authors": [
+    "John Buchan"
+   ],
+   "author_sort": "Buchan, John",
+   "series": "Richard Hannay",
+   "series_index": 1,
+   "pubdate": "1915-01-01",
+   "added": "2025-12-10T12:00:00+00:00",
+   "comments": "<p>Richard Hannay is framed for murder and flees across Scotland with a dead man&#x27;s notebook.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Thirty-Nine+Steps+John+Buchan"
+    }
+   ]
+  },
+  {
+   "id": 69,
+   "title": "Greenmantle",
+   "authors": [
+    "John Buchan"
+   ],
+   "author_sort": "Buchan, John",
+   "series": "Richard Hannay",
+   "series_index": 2,
+   "pubdate": "1916-01-01",
+   "added": "2026-04-22T12:00:00+00:00",
+   "comments": "<p>Hannay crosses wartime Europe to Constantinople.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Greenmantle+John+Buchan"
+    }
+   ]
+  },
+  {
+   "id": 70,
+   "title": "Mr Standfast",
+   "authors": [
+    "John Buchan"
+   ],
+   "author_sort": "Buchan, John",
+   "series": "Richard Hannay",
+   "series_index": 3,
+   "pubdate": "1919-01-01",
+   "added": "2026-01-03T12:00:00+00:00",
+   "comments": "<p>Hannay goes undercover among pacifists to find a German spy.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Mr+Standfast+John+Buchan"
+    }
+   ]
+  },
+  {
+   "id": 71,
+   "title": "The Three Hostages",
+   "authors": [
+    "John Buchan"
+   ],
+   "author_sort": "Buchan, John",
+   "series": "Richard Hannay",
+   "series_index": 4,
+   "pubdate": "1924-01-01",
+   "added": "2026-09-16T12:00:00+00:00",
+   "comments": "<p>Hannay searches for three hostages held by a criminal mastermind.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Three+Hostages+John+Buchan"
+    }
+   ]
+  },
+  {
+   "id": 72,
+   "title": "My Man Jeeves",
+   "authors": [
+    "P. G. Wodehouse"
+   ],
+   "author_sort": "Wodehouse, P. G.",
+   "series": "Jeeves",
+   "series_index": 1,
+   "pubdate": "1919-01-01",
+   "added": "2025-11-03T12:00:00+00:00",
+   "comments": "<p>The first stories of Bertie Wooster and his valet.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=My+Man+Jeeves+P.+G.+Wodehouse"
+    }
+   ]
+  },
+  {
+   "id": 73,
+   "title": "The Inimitable Jeeves",
+   "authors": [
+    "P. G. Wodehouse"
+   ],
+   "author_sort": "Wodehouse, P. G.",
+   "series": "Jeeves",
+   "series_index": 2,
+   "pubdate": "1923-01-01",
+   "added": "2025-12-19T12:00:00+00:00",
+   "comments": "<p>Bertie&#x27;s friend Bingo Little falls in love, repeatedly.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Inimitable+Jeeves+P.+G.+Wodehouse"
+    }
+   ]
+  },
+  {
+   "id": 74,
+   "title": "Carry On, Jeeves",
+   "authors": [
+    "P. G. Wodehouse"
+   ],
+   "author_sort": "Wodehouse, P. G.",
+   "series": "Jeeves",
+   "series_index": 3,
+   "pubdate": "1925-01-01",
+   "added": "2025-11-25T12:00:00+00:00",
+   "comments": "<p>Ten stories, including how Jeeves came to work for Bertie.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Carry+On%2C+Jeeves+P.+G.+Wodehouse"
+    }
+   ]
+  },
+  {
+   "id": 75,
+   "title": "Very Good, Jeeves!",
+   "authors": [
+    "P. G. Wodehouse"
+   ],
+   "author_sort": "Wodehouse, P. G.",
+   "series": "Jeeves",
+   "series_index": 4,
+   "pubdate": "1930-01-01",
+   "added": "2026-04-29T12:00:00+00:00",
+   "comments": "<p>Eleven more stories.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Very+Good%2C+Jeeves%21+P.+G.+Wodehouse"
+    }
+   ]
+  },
+  {
+   "id": 76,
+   "title": "Winnie-the-Pooh",
+   "authors": [
+    "A. A. Milne"
+   ],
+   "author_sort": "Milne, A. A.",
+   "series": "Winnie-the-Pooh",
+   "series_index": 1,
+   "pubdate": "1926-01-01",
+   "added": "2026-01-25T12:00:00+00:00",
+   "comments": "<p>Christopher Robin&#x27;s bear and his friends in the Hundred Acre Wood.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Winnie-the-Pooh+A.+A.+Milne"
+    }
+   ]
+  },
+  {
+   "id": 77,
+   "title": "The House at Pooh Corner",
+   "authors": [
+    "A. A. Milne"
+   ],
+   "author_sort": "Milne, A. A.",
+   "series": "Winnie-the-Pooh",
+   "series_index": 2,
+   "pubdate": "1928-01-01",
+   "added": "2026-06-23T12:00:00+00:00",
+   "comments": "<p>Tigger arrives, and Christopher Robin prepares to go away.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+House+at+Pooh+Corner+A.+A.+Milne"
+    }
+   ]
+  },
+  {
+   "id": 78,
+   "title": "Pride and Prejudice",
+   "authors": [
+    "Jane Austen"
+   ],
+   "author_sort": "Austen, Jane",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1813-01-01",
+   "added": "2025-10-17T12:00:00+00:00",
+   "comments": "<p>Elizabeth Bennet and Mr. Darcy get off on the wrong foot.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Pride+and+Prejudice+Jane+Austen"
+    }
+   ]
+  },
+  {
+   "id": 79,
+   "title": "Sense and Sensibility",
+   "authors": [
+    "Jane Austen"
+   ],
+   "author_sort": "Austen, Jane",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1811-01-01",
+   "added": "2026-02-20T12:00:00+00:00",
+   "comments": "<p>The Dashwood sisters, one prudent and one passionate, in love and short of money.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Sense+and+Sensibility+Jane+Austen"
+    }
+   ]
+  },
+  {
+   "id": 80,
+   "title": "Emma",
+   "authors": [
+    "Jane Austen"
+   ],
+   "author_sort": "Austen, Jane",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1815-01-01",
+   "added": "2026-08-01T12:00:00+00:00",
+   "comments": "<p>A young woman who considers herself a fine matchmaker.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Emma+Jane+Austen"
+    }
+   ]
+  },
+  {
+   "id": 81,
+   "title": "Persuasion",
+   "authors": [
+    "Jane Austen"
+   ],
+   "author_sort": "Austen, Jane",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1817-01-01",
+   "added": "2025-11-13T12:00:00+00:00",
+   "comments": "<p>Anne Elliot meets again the naval officer she was persuaded not to marry.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Persuasion+Jane+Austen"
+    }
+   ]
+  },
+  {
+   "id": 82,
+   "title": "Northanger Abbey",
+   "authors": [
+    "Jane Austen"
+   ],
+   "author_sort": "Austen, Jane",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1817-01-01",
+   "added": "2026-09-14T12:00:00+00:00",
+   "comments": "<p>A reader of Gothic novels visits an abbey and imagines the worst.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Northanger+Abbey+Jane+Austen"
+    }
+   ]
+  },
+  {
+   "id": 83,
+   "title": "Mansfield Park",
+   "authors": [
+    "Jane Austen"
+   ],
+   "author_sort": "Austen, Jane",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1814-01-01",
+   "added": "2026-08-03T12:00:00+00:00",
+   "comments": "<p>Fanny Price grows up as the poor relation in her uncle&#x27;s house.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Mansfield+Park+Jane+Austen"
+    }
+   ]
+  },
+  {
+   "id": 84,
+   "title": "Frankenstein",
+   "authors": [
+    "Mary Shelley"
+   ],
+   "author_sort": "Shelley, Mary",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1818-01-01",
+   "added": "2026-07-13T12:00:00+00:00",
+   "comments": "<p>A young scientist creates a living being and abandons it.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Frankenstein+Mary+Shelley"
+    }
+   ]
+  },
+  {
+   "id": 85,
+   "title": "Dracula",
+   "authors": [
+    "Bram Stoker"
+   ],
+   "author_sort": "Stoker, Bram",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1897-01-01",
+   "added": "2025-10-10T12:00:00+00:00",
+   "comments": "<p>Told in letters and diaries: a Transylvanian count comes to England.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Dracula+Bram+Stoker"
+    }
+   ]
+  },
+  {
+   "id": 86,
+   "title": "Moby-Dick",
+   "authors": [
+    "Herman Melville"
+   ],
+   "author_sort": "Melville, Herman",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1851-01-01",
+   "added": "2025-12-14T12:00:00+00:00",
+   "comments": "<p>Ishmael ships aboard the Pequod, whose captain is hunting one white whale.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Moby-Dick+Herman+Melville"
+    }
+   ]
+  },
+  {
+   "id": 87,
+   "title": "Jane Eyre",
+   "authors": [
+    "Charlotte Brontë"
+   ],
+   "author_sort": "Brontë, Charlotte",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1847-01-01",
+   "added": "2026-01-15T12:00:00+00:00",
+   "comments": "<p>An orphaned governess and her employer, Mr. Rochester, who has a secret.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Jane+Eyre+Charlotte+Bront%C3%AB"
+    }
+   ]
+  },
+  {
+   "id": 88,
+   "title": "Wuthering Heights",
+   "authors": [
+    "Emily Brontë"
+   ],
+   "author_sort": "Brontë, Emily",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1847-01-01",
+   "added": "2026-01-10T12:00:00+00:00",
+   "comments": "<p>Catherine Earnshaw and Heathcliff on the Yorkshire moors, and the wreckage they leave.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Wuthering+Heights+Emily+Bront%C3%AB"
+    }
+   ]
+  },
+  {
+   "id": 89,
+   "title": "Great Expectations",
+   "authors": [
+    "Charles Dickens"
+   ],
+   "author_sort": "Dickens, Charles",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1861-01-01",
+   "added": "2025-12-12T12:00:00+00:00",
+   "comments": "<p>Pip, an orphan, is raised to be a gentleman by an unknown benefactor.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Great+Expectations+Charles+Dickens"
+    }
+   ]
+  },
+  {
+   "id": 90,
+   "title": "A Tale of Two Cities",
+   "authors": [
+    "Charles Dickens"
+   ],
+   "author_sort": "Dickens, Charles",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1859-01-01",
+   "added": "2025-10-22T12:00:00+00:00",
+   "comments": "<p>London and Paris before and during the French Revolution.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Tale+of+Two+Cities+Charles+Dickens"
+    }
+   ]
+  },
+  {
+   "id": 91,
+   "title": "Bleak House",
+   "authors": [
+    "Charles Dickens"
+   ],
+   "author_sort": "Dickens, Charles",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1853-01-01",
+   "added": "2026-02-27T12:00:00+00:00",
+   "comments": "<p>An endless lawsuit in Chancery, and the lives tangled in it.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Bleak+House+Charles+Dickens"
+    }
+   ]
+  },
+  {
+   "id": 92,
+   "title": "Oliver Twist",
+   "authors": [
+    "Charles Dickens"
+   ],
+   "author_sort": "Dickens, Charles",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1838-01-01",
+   "added": "2025-11-28T12:00:00+00:00",
+   "comments": "<p>A workhouse orphan falls in with Fagin&#x27;s gang of London pickpockets.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Oliver+Twist+Charles+Dickens"
+    }
+   ]
+  },
+  {
+   "id": 93,
+   "title": "David Copperfield",
+   "authors": [
+    "Charles Dickens"
+   ],
+   "author_sort": "Dickens, Charles",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1850-01-01",
+   "added": "2026-06-14T12:00:00+00:00",
+   "comments": "<p>A life told from childhood, with Mr. Micawber, Uriah Heep and Betsey Trotwood.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=David+Copperfield+Charles+Dickens"
+    }
+   ]
+  },
+  {
+   "id": 94,
+   "title": "A Christmas Carol",
+   "authors": [
+    "Charles Dickens"
+   ],
+   "author_sort": "Dickens, Charles",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1843-01-01",
+   "added": "2026-08-11T12:00:00+00:00",
+   "comments": "<p>Three spirits visit Ebenezer Scrooge on Christmas Eve.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Christmas+Carol+Charles+Dickens"
+    }
+   ]
+  },
+  {
+   "id": 95,
+   "title": "The Time Machine",
+   "authors": [
+    "H. G. Wells"
+   ],
+   "author_sort": "Wells, H. G.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1895-01-01",
+   "added": "2026-05-18T12:00:00+00:00",
+   "comments": "<p>A Victorian inventor travels to the year 802,701.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Time+Machine+H.+G.+Wells"
+    }
+   ]
+  },
+  {
+   "id": 96,
+   "title": "The War of the Worlds",
+   "authors": [
+    "H. G. Wells"
+   ],
+   "author_sort": "Wells, H. G.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1898-01-01",
+   "added": "2025-12-27T12:00:00+00:00",
+   "comments": "<p>Martians land in Surrey.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+War+of+the+Worlds+H.+G.+Wells"
+    }
+   ]
+  },
+  {
+   "id": 97,
+   "title": "The Invisible Man",
+   "authors": [
+    "H. G. Wells"
+   ],
+   "author_sort": "Wells, H. G.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1897-01-01",
+   "added": "2025-12-05T12:00:00+00:00",
+   "comments": "<p>A scientist makes himself invisible and cannot undo it.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Invisible+Man+H.+G.+Wells"
+    }
+   ]
+  },
+  {
+   "id": 98,
+   "title": "The Island of Doctor Moreau",
+   "authors": [
+    "H. G. Wells"
+   ],
+   "author_sort": "Wells, H. G.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1896-01-01",
+   "added": "2025-10-03T12:00:00+00:00",
+   "comments": "<p>A shipwrecked man reaches an island where a vivisectionist works on animals.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Island+of+Doctor+Moreau+H.+G.+Wells"
+    }
+   ]
+  },
+  {
+   "id": 99,
+   "title": "Twenty Thousand Leagues Under the Seas",
+   "authors": [
+    "Jules Verne"
+   ],
+   "author_sort": "Verne, Jules",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1870-01-01",
+   "added": "2025-10-15T12:00:00+00:00",
+   "comments": "<p>A naturalist becomes a captive aboard Captain Nemo&#x27;s submarine, the Nautilus.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Twenty+Thousand+Leagues+Under+the+Seas+Jules+Verne"
+    }
+   ]
+  },
+  {
+   "id": 100,
+   "title": "Around the World in Eighty Days",
+   "authors": [
+    "Jules Verne"
+   ],
+   "author_sort": "Verne, Jules",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1872-01-01",
+   "added": "2026-08-16T12:00:00+00:00",
+   "comments": "<p>Phileas Fogg wagers that he can circle the globe in eighty days.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Around+the+World+in+Eighty+Days+Jules+Verne"
+    }
+   ]
+  },
+  {
+   "id": 101,
+   "title": "Journey to the Centre of the Earth",
+   "authors": [
+    "Jules Verne"
+   ],
+   "author_sort": "Verne, Jules",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1864-01-01",
+   "added": "2026-06-06T12:00:00+00:00",
+   "comments": "<p>A professor and his nephew descend through an Icelandic volcano.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Journey+to+the+Centre+of+the+Earth+Jules+Verne"
+    }
+   ]
+  },
+  {
+   "id": 102,
+   "title": "Treasure Island",
+   "authors": [
+    "Robert Louis Stevenson"
+   ],
+   "author_sort": "Stevenson, Robert Louis",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1883-01-01",
+   "added": "2026-08-08T12:00:00+00:00",
+   "comments": "<p>Jim Hawkins, a treasure map, and Long John Silver.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Treasure+Island+Robert+Louis+Stevenson"
+    }
+   ]
+  },
+  {
+   "id": 103,
+   "title": "Strange Case of Dr Jekyll and Mr Hyde",
+   "authors": [
+    "Robert Louis Stevenson"
+   ],
+   "author_sort": "Stevenson, Robert Louis",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1886-01-01",
+   "added": "2026-09-01T12:00:00+00:00",
+   "comments": "<p>A London lawyer looks into his friend&#x27;s connection to a violent man.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Strange+Case+of+Dr+Jekyll+and+Mr+Hyde+Robert+Louis+Stevenson"
+    }
+   ]
+  },
+  {
+   "id": 104,
+   "title": "Kidnapped",
+   "authors": [
+    "Robert Louis Stevenson"
+   ],
+   "author_sort": "Stevenson, Robert Louis",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1886-01-01",
+   "added": "2026-08-25T12:00:00+00:00",
+   "comments": "<p>David Balfour is sold onto a ship by his uncle and escapes across the Highlands with Alan Breck.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Kidnapped+Robert+Louis+Stevenson"
+    }
+   ]
+  },
+  {
+   "id": 105,
+   "title": "The Picture of Dorian Gray",
+   "authors": [
+    "Oscar Wilde"
+   ],
+   "author_sort": "Wilde, Oscar",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1890-01-01",
+   "added": "2026-08-28T12:00:00+00:00",
+   "comments": "<p>A portrait ages while the young man it depicts does not.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Picture+of+Dorian+Gray+Oscar+Wilde"
+    }
+   ]
+  },
+  {
+   "id": 106,
+   "title": "Tess of the d'Urbervilles",
+   "authors": [
+    "Thomas Hardy"
+   ],
+   "author_sort": "Hardy, Thomas",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1891-01-01",
+   "added": "2026-07-18T12:00:00+00:00",
+   "comments": "<p>A poor girl learns her family descends from nobility.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Tess+of+the+d%27Urbervilles+Thomas+Hardy"
+    }
+   ]
+  },
+  {
+   "id": 107,
+   "title": "Far from the Madding Crowd",
+   "authors": [
+    "Thomas Hardy"
+   ],
+   "author_sort": "Hardy, Thomas",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1874-01-01",
+   "added": "2026-05-13T12:00:00+00:00",
+   "comments": "<p>Bathsheba Everdene, a farmer, and three very different suitors.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Far+from+the+Madding+Crowd+Thomas+Hardy"
+    }
+   ]
+  },
+  {
+   "id": 108,
+   "title": "Jude the Obscure",
+   "authors": [
+    "Thomas Hardy"
+   ],
+   "author_sort": "Hardy, Thomas",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1895-01-01",
+   "added": "2026-02-15T12:00:00+00:00",
+   "comments": "<p>A stonemason dreams of the university at Christminster.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Jude+the+Obscure+Thomas+Hardy"
+    }
+   ]
+  },
+  {
+   "id": 109,
+   "title": "Middlemarch",
+   "authors": [
+    "George Eliot"
+   ],
+   "author_sort": "Eliot, George",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1871-01-01",
+   "added": "2026-01-22T12:00:00+00:00",
+   "comments": "<p>A study of provincial life, centred on Dorothea Brooke and the doctor Tertius Lydgate.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Middlemarch+George+Eliot"
+    }
+   ]
+  },
+  {
+   "id": 110,
+   "title": "War and Peace",
+   "authors": [
+    "Leo Tolstoy"
+   ],
+   "author_sort": "Tolstoy, Leo",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1869-01-01",
+   "added": "2026-01-17T12:00:00+00:00",
+   "comments": "<p>Russian families through the Napoleonic Wars.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=War+and+Peace+Leo+Tolstoy"
+    }
+   ]
+  },
+  {
+   "id": 111,
+   "title": "Anna Karenina",
+   "authors": [
+    "Leo Tolstoy"
+   ],
+   "author_sort": "Tolstoy, Leo",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1878-01-01",
+   "added": "2026-03-04T12:00:00+00:00",
+   "comments": "<p>A married woman&#x27;s affair with an officer, alongside Levin&#x27;s search for meaning on his estate.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Anna+Karenina+Leo+Tolstoy"
+    }
+   ]
+  },
+  {
+   "id": 112,
+   "title": "Crime and Punishment",
+   "authors": [
+    "Fyodor Dostoevsky"
+   ],
+   "author_sort": "Dostoevsky, Fyodor",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1866-01-01",
+   "added": "2026-01-20T12:00:00+00:00",
+   "comments": "<p>A former student in St. Petersburg commits a murder and lives with it.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Crime+and+Punishment+Fyodor+Dostoevsky"
+    }
+   ]
+  },
+  {
+   "id": 113,
+   "title": "The Brothers Karamazov",
+   "authors": [
+    "Fyodor Dostoevsky"
+   ],
+   "author_sort": "Dostoevsky, Fyodor",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1880-01-01",
+   "added": "2025-12-17T12:00:00+00:00",
+   "comments": "<p>Three brothers and the murder of their father.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Brothers+Karamazov+Fyodor+Dostoevsky"
+    }
+   ]
+  },
+  {
+   "id": 114,
+   "title": "Madame Bovary",
+   "authors": [
+    "Gustave Flaubert"
+   ],
+   "author_sort": "Flaubert, Gustave",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1857-01-01",
+   "added": "2026-09-18T12:00:00+00:00",
+   "comments": "<p>A doctor&#x27;s wife in provincial Normandy longs for the life in her novels.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Madame+Bovary+Gustave+Flaubert"
+    }
+   ]
+  },
+  {
+   "id": 115,
+   "title": "Les Misérables",
+   "authors": [
+    "Victor Hugo"
+   ],
+   "author_sort": "Hugo, Victor",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1862-01-01",
+   "added": "2026-09-21T12:00:00+00:00",
+   "comments": "<p>Jean Valjean, a released convict, is pursued for decades by the inspector Javert.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Les+Mis%C3%A9rables+Victor+Hugo"
+    }
+   ]
+  },
+  {
+   "id": 116,
+   "title": "The Great Gatsby",
+   "authors": [
+    "F. Scott Fitzgerald"
+   ],
+   "author_sort": "Fitzgerald, F. Scott",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1925-01-01",
+   "added": "2026-03-14T12:00:00+00:00",
+   "comments": "<p>Nick Carraway&#x27;s neighbour on Long Island throws parties for one guest who never comes.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Great+Gatsby+F.+Scott+Fitzgerald"
+    }
+   ]
+  },
+  {
+   "id": 117,
+   "title": "This Side of Paradise",
+   "authors": [
+    "F. Scott Fitzgerald"
+   ],
+   "author_sort": "Fitzgerald, F. Scott",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1920-01-01",
+   "added": "2026-06-02T12:00:00+00:00",
+   "comments": "<p>Amory Blaine at Princeton and after.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=This+Side+of+Paradise+F.+Scott+Fitzgerald"
+    }
+   ]
+  },
+  {
+   "id": 118,
+   "title": "The Sun Also Rises",
+   "authors": [
+    "Ernest Hemingway"
+   ],
+   "author_sort": "Hemingway, Ernest",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1926-01-01",
+   "added": "2026-05-21T12:00:00+00:00",
+   "comments": "<p>Expatriates travel from Paris to the bullfights at Pamplona.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Sun+Also+Rises+Ernest+Hemingway"
+    }
+   ]
+  },
+  {
+   "id": 119,
+   "title": "A Farewell to Arms",
+   "authors": [
+    "Ernest Hemingway"
+   ],
+   "author_sort": "Hemingway, Ernest",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1929-01-01",
+   "added": "2025-11-01T12:00:00+00:00",
+   "comments": "<p>An American ambulance driver on the Italian front and an English nurse.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Farewell+to+Arms+Ernest+Hemingway"
+    }
+   ]
+  },
+  {
+   "id": 120,
+   "title": "Mrs Dalloway",
+   "authors": [
+    "Virginia Woolf"
+   ],
+   "author_sort": "Woolf, Virginia",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1925-01-01",
+   "added": "2025-12-29T12:00:00+00:00",
+   "comments": "<p>One June day in London as Clarissa Dalloway prepares for a party.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Mrs+Dalloway+Virginia+Woolf"
+    }
+   ]
+  },
+  {
+   "id": 121,
+   "title": "To the Lighthouse",
+   "authors": [
+    "Virginia Woolf"
+   ],
+   "author_sort": "Woolf, Virginia",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1927-01-01",
+   "added": "2026-08-18T12:00:00+00:00",
+   "comments": "<p>The Ramsay family&#x27;s summers on the Isle of Skye, before and after the war.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=To+the+Lighthouse+Virginia+Woolf"
+    }
+   ]
+  },
+  {
+   "id": 122,
+   "title": "Orlando",
+   "authors": [
+    "Virginia Woolf"
+   ],
+   "author_sort": "Woolf, Virginia",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1928-01-01",
+   "added": "2025-10-27T12:00:00+00:00",
+   "comments": "<p>A biography of a poet who lives for centuries and changes sex.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Orlando+Virginia+Woolf"
+    }
+   ]
+  },
+  {
+   "id": 123,
+   "title": "Dubliners",
+   "authors": [
+    "James Joyce"
+   ],
+   "author_sort": "Joyce, James",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1914-01-01",
+   "added": "2026-04-09T12:00:00+00:00",
+   "comments": "<p>Fifteen stories of Dublin life, ending with The Dead.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Dubliners+James+Joyce"
+    }
+   ]
+  },
+  {
+   "id": 124,
+   "title": "Ulysses",
+   "authors": [
+    "James Joyce"
+   ],
+   "author_sort": "Joyce, James",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1922-01-01",
+   "added": "2025-12-24T12:00:00+00:00",
+   "comments": "<p>One day in Dublin, 16 June 1904, following Leopold Bloom.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Ulysses+James+Joyce"
+    }
+   ]
+  },
+  {
+   "id": 125,
+   "title": "The Age of Innocence",
+   "authors": [
+    "Edith Wharton"
+   ],
+   "author_sort": "Wharton, Edith",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1920-01-01",
+   "added": "2026-06-28T12:00:00+00:00",
+   "comments": "<p>A New York lawyer engaged to a suitable bride falls for her unconventional cousin.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Age+of+Innocence+Edith+Wharton"
+    }
+   ]
+  },
+  {
+   "id": 126,
+   "title": "The House of Mirth",
+   "authors": [
+    "Edith Wharton"
+   ],
+   "author_sort": "Wharton, Edith",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1905-01-01",
+   "added": "2026-05-01T12:00:00+00:00",
+   "comments": "<p>Lily Bart, beautiful and unmarried, in New York society.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+House+of+Mirth+Edith+Wharton"
+    }
+   ]
+  },
+  {
+   "id": 127,
+   "title": "Ethan Frome",
+   "authors": [
+    "Edith Wharton"
+   ],
+   "author_sort": "Wharton, Edith",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1911-01-01",
+   "added": "2026-07-27T12:00:00+00:00",
+   "comments": "<p>A Massachusetts farmer, his ailing wife, and her young cousin.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Ethan+Frome+Edith+Wharton"
+    }
+   ]
+  },
+  {
+   "id": 128,
+   "title": "My Ántonia",
+   "authors": [
+    "Willa Cather"
+   ],
+   "author_sort": "Cather, Willa",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1918-01-01",
+   "added": "2026-08-23T12:00:00+00:00",
+   "comments": "<p>A Bohemian immigrant girl on the Nebraska prairie, remembered by a friend.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=My+%C3%81ntonia+Willa+Cather"
+    }
+   ]
+  },
+  {
+   "id": 129,
+   "title": "O Pioneers!",
+   "authors": [
+    "Willa Cather"
+   ],
+   "author_sort": "Cather, Willa",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1913-01-01",
+   "added": "2026-06-04T12:00:00+00:00",
+   "comments": "<p>Alexandra Bergson holds her family&#x27;s Nebraska farm together.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=O+Pioneers%21+Willa+Cather"
+    }
+   ]
+  },
+  {
+   "id": 130,
+   "title": "Heart of Darkness",
+   "authors": [
+    "Joseph Conrad"
+   ],
+   "author_sort": "Conrad, Joseph",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1899-01-01",
+   "added": "2025-11-30T12:00:00+00:00",
+   "comments": "<p>Marlow travels up the Congo River in search of the ivory trader Kurtz.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Heart+of+Darkness+Joseph+Conrad"
+    }
+   ]
+  },
+  {
+   "id": 131,
+   "title": "Lord Jim",
+   "authors": [
+    "Joseph Conrad"
+   ],
+   "author_sort": "Conrad, Joseph",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1900-01-01",
+   "added": "2026-03-09T12:00:00+00:00",
+   "comments": "<p>A young mate abandons his ship and spends his life trying to make up for it.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Lord+Jim+Joseph+Conrad"
+    }
+   ]
+  },
+  {
+   "id": 132,
+   "title": "A Room with a View",
+   "authors": [
+    "E. M. Forster"
+   ],
+   "author_sort": "Forster, E. M.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1908-01-01",
+   "added": "2026-09-06T12:00:00+00:00",
+   "comments": "<p>Lucy Honeychurch in Florence, and the choice that follows her home.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Room+with+a+View+E.+M.+Forster"
+    }
+   ]
+  },
+  {
+   "id": 133,
+   "title": "Howards End",
+   "authors": [
+    "E. M. Forster"
+   ],
+   "author_sort": "Forster, E. M.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1910-01-01",
+   "added": "2026-04-17T12:00:00+00:00",
+   "comments": "<p>The Schlegel sisters, the Wilcoxes, and who will inherit a house.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Howards+End+E.+M.+Forster"
+    }
+   ]
+  },
+  {
+   "id": 134,
+   "title": "A Passage to India",
+   "authors": [
+    "E. M. Forster"
+   ],
+   "author_sort": "Forster, E. M.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1924-01-01",
+   "added": "2026-03-31T12:00:00+00:00",
+   "comments": "<p>An incident in the Marabar Caves divides the English and Indians of Chandrapore.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Passage+to+India+E.+M.+Forster"
+    }
+   ]
+  },
+  {
+   "id": 135,
+   "title": "Main Street",
+   "authors": [
+    "Sinclair Lewis"
+   ],
+   "author_sort": "Lewis, Sinclair",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1920-01-01",
+   "added": "2026-01-12T12:00:00+00:00",
+   "comments": "<p>A city-bred young woman marries a doctor and tries to reform a Minnesota town.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Main+Street+Sinclair+Lewis"
+    }
+   ]
+  },
+  {
+   "id": 136,
+   "title": "Babbitt",
+   "authors": [
+    "Sinclair Lewis"
+   ],
+   "author_sort": "Lewis, Sinclair",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1922-01-01",
+   "added": "2026-07-15T12:00:00+00:00",
+   "comments": "<p>A prosperous real-estate agent in Zenith begins to doubt his life.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Babbitt+Sinclair+Lewis"
+    }
+   ]
+  },
+  {
+   "id": 137,
+   "title": "Red Harvest",
+   "authors": [
+    "Dashiell Hammett"
+   ],
+   "author_sort": "Hammett, Dashiell",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1929-01-01",
+   "added": "2026-09-23T12:00:00+00:00",
+   "comments": "<p>The Continental Op sets a corrupt mining town&#x27;s gangs against each other.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Red+Harvest+Dashiell+Hammett"
+    }
+   ]
+  },
+  {
+   "id": 138,
+   "title": "The Maltese Falcon",
+   "authors": [
+    "Dashiell Hammett"
+   ],
+   "author_sort": "Hammett, Dashiell",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1930-01-01",
+   "added": "2026-08-06T12:00:00+00:00",
+   "comments": "<p>Sam Spade&#x27;s partner is shot, and everyone wants a black statuette.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Maltese+Falcon+Dashiell+Hammett"
+    }
+   ]
+  },
+  {
+   "id": 139,
+   "title": "The Jungle Book",
+   "authors": [
+    "Rudyard Kipling"
+   ],
+   "author_sort": "Kipling, Rudyard",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1894-01-01",
+   "added": "2026-04-07T12:00:00+00:00",
+   "comments": "<p>Mowgli is raised by wolves; with Rikki-Tikki-Tavi and other stories.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Jungle+Book+Rudyard+Kipling"
+    }
+   ]
+  },
+  {
+   "id": 140,
+   "title": "Kim",
+   "authors": [
+    "Rudyard Kipling"
+   ],
+   "author_sort": "Kipling, Rudyard",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1901-01-01",
+   "added": "2026-07-22T12:00:00+00:00",
+   "comments": "<p>An Irish orphan in Lahore becomes a lama&#x27;s disciple and a spy.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Kim+Rudyard+Kipling"
+    }
+   ]
+  },
+  {
+   "id": 141,
+   "title": "The Secret Garden",
+   "authors": [
+    "Frances Hodgson Burnett"
+   ],
+   "author_sort": "Burnett, Frances Hodgson",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1911-01-01",
+   "added": "2026-02-01T12:00:00+00:00",
+   "comments": "<p>Mary Lennox, sent to a Yorkshire manor, finds a locked garden.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Secret+Garden+Frances+Hodgson+Burnett"
+    }
+   ]
+  },
+  {
+   "id": 142,
+   "title": "A Little Princess",
+   "authors": [
+    "Frances Hodgson Burnett"
+   ],
+   "author_sort": "Burnett, Frances Hodgson",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1905-01-01",
+   "added": "2026-05-25T12:00:00+00:00",
+   "comments": "<p>A rich pupil at a London boarding school loses everything.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=A+Little+Princess+Frances+Hodgson+Burnett"
+    }
+   ]
+  },
+  {
+   "id": 143,
+   "title": "Peter and Wendy",
+   "authors": [
+    "J. M. Barrie"
+   ],
+   "author_sort": "Barrie, J. M.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1911-01-01",
+   "added": "2026-01-29T12:00:00+00:00",
+   "comments": "<p>Peter Pan takes the Darling children to Neverland.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Peter+and+Wendy+J.+M.+Barrie"
+    }
+   ]
+  },
+  {
+   "id": 144,
+   "title": "The Wind in the Willows",
+   "authors": [
+    "Kenneth Grahame"
+   ],
+   "author_sort": "Grahame, Kenneth",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1908-01-01",
+   "added": "2026-02-25T12:00:00+00:00",
+   "comments": "<p>Mole, Rat, Badger and the reckless Mr. Toad.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Wind+in+the+Willows+Kenneth+Grahame"
+    }
+   ]
+  },
+  {
+   "id": 145,
+   "title": "The Railway Children",
+   "authors": [
+    "E. Nesbit"
+   ],
+   "author_sort": "Nesbit, E.",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1906-01-01",
+   "added": "2026-07-05T12:00:00+00:00",
+   "comments": "<p>Three children move to the country after their father is taken away.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Railway+Children+E.+Nesbit"
+    }
+   ]
+  },
+  {
+   "id": 146,
+   "title": "The Call of the Wild",
+   "authors": [
+    "Jack London"
+   ],
+   "author_sort": "London, Jack",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1903-01-01",
+   "added": "2026-04-26T12:00:00+00:00",
+   "comments": "<p>Buck, a stolen dog, is put to work in the Klondike.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Call+of+the+Wild+Jack+London"
+    }
+   ]
+  },
+  {
+   "id": 147,
+   "title": "White Fang",
+   "authors": [
+    "Jack London"
+   ],
+   "author_sort": "London, Jack",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1906-01-01",
+   "added": "2026-05-23T12:00:00+00:00",
+   "comments": "<p>A wolf-dog&#x27;s journey from the wild to domestication.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=White+Fang+Jack+London"
+    }
+   ]
+  },
+  {
+   "id": 148,
+   "title": "Captain Blood",
+   "authors": [
+    "Rafael Sabatini"
+   ],
+   "author_sort": "Sabatini, Rafael",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1922-01-01",
+   "added": "2026-03-24T12:00:00+00:00",
+   "comments": "<p>An Irish doctor transported to Barbados becomes a pirate.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Captain+Blood+Rafael+Sabatini"
+    }
+   ]
+  },
+  {
+   "id": 149,
+   "title": "Scaramouche",
+   "authors": [
+    "Rafael Sabatini"
+   ],
+   "author_sort": "Sabatini, Rafael",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1921-01-01",
+   "added": "2025-10-25T12:00:00+00:00",
+   "comments": "<p>A lawyer turned actor and swordsman in the French Revolution.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=Scaramouche+Rafael+Sabatini"
+    }
+   ]
+  },
+  {
+   "id": 150,
+   "title": "The Phantom of the Opera",
+   "authors": [
+    "Gaston Leroux"
+   ],
+   "author_sort": "Leroux, Gaston",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1910-01-01",
+   "added": "2026-04-24T12:00:00+00:00",
+   "comments": "<p>A masked figure haunts the Paris Opera and a young soprano.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Phantom+of+the+Opera+Gaston+Leroux"
+    }
+   ]
+  },
+  {
+   "id": 151,
+   "title": "The Sound and the Fury",
+   "authors": [
+    "William Faulkner"
+   ],
+   "author_sort": "Faulkner, William",
+   "series": null,
+   "series_index": null,
+   "pubdate": "1929-01-01",
+   "added": "2025-11-15T12:00:00+00:00",
+   "comments": "<p>The decline of the Compson family, told by four narrators.</p>",
+   "links": [
+    {
+     "text": "Find it at Project Gutenberg",
+     "href": "https://www.gutenberg.org/ebooks/search/?query=The+Sound+and+the+Fury+William+Faulkner"
+    }
+   ]
+  }
+ ]
+}
