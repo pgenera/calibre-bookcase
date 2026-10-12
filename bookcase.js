@@ -127,6 +127,7 @@
   let refreshing = false;
   let selected = null;           // index of the opened book
   let selT = 0;                  // pull-out animation 0..1
+  let prevSel = null, prevT = 0; // the previously open book, sliding back in
   let hits = null, hitAt = 0;    // search results (indices) and the current one
   let dirty = true;
 
@@ -544,6 +545,7 @@
       const th = theta(i);
       let out = 0;
       if (i === selected) out = selT * (0.6 + 0.6 * m);
+      else if (i === prevSel) out = prevT * (0.6 + 0.6 * m);
       const r = R - dim.d / 2 + out;
       // A book that just arrived grows up from the shelf.
       let g = 1;
@@ -551,7 +553,8 @@
         const t = (performance.now() - born.get(id)) / GROW_MS;
         if (t >= 1 || reduceMotion) born.delete(id); else g = 1 - Math.pow(1 - t, 3);
       }
-      mesh.position.set(Math.sin(th) * r, shelfY(i) + (dim.h * g) / 2 + selT * 0.15 * (i === selected), Math.cos(th) * r);
+      const raise = i === selected ? selT * 0.15 : i === prevSel ? prevT * 0.15 : 0;
+      mesh.position.set(Math.sin(th) * r, shelfY(i) + (dim.h * g) / 2 + raise, Math.cos(th) * r);
       mesh.rotation.set(0, th, 0);
       mesh.scale.set(dim.w * Math.max(0.001, g), dim.h * Math.max(0.001, g), dim.d);
 
@@ -611,52 +614,51 @@
   // card's real position, so they move with its slide and with a swipe.
   const view = { x: 0, y: 0, need: 0 };
   const headerEl = document.querySelector('header');
-  const probe3 = new THREE.Vector3();
   // Where a world point lands on screen, in CSS px, ignoring the current view shift.
   function screenPoint(v, W, H) {
     v.project(camera);
     return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H];
   }
-  function followCard(force) {
+  // Targets come from where the open book will rest (front and centre, fully pulled
+  // out), not from where it is mid-animation, and the view eases toward them.
+  function followCard(force, dt = 1) {
     if (!force && selected === null && !view.x && !view.y && !view.need) return;
     const W = stage.clientWidth, H = stage.clientHeight;
     const r = detail.getBoundingClientRect();
     const bottomSheet = sheetLayout.matches;
     const coverY = bottomSheet ? clamp(H - r.top, 0, H) : 0;
     const coverX = bottomSheet ? 0 : clamp(W - r.left, 0, W);
-    const mesh = selected !== null ? active.get(selected) : null;
-    let x = 0, y = 0, need = 0;
-    if ((coverY || coverX) && mesh) {
+    let tx = 0, ty = 0, tneed = 0;
+    if ((coverY || coverX) && selected !== null) {
       // The free area: below the header and above the card (phone), or left of it (desktop).
       const top = coverY ? Math.max(0, headerEl.getBoundingClientRect().bottom - 24) : 0;
       const bottom = H - coverY, right = W - coverX;
-      // Measure the open book as drawn, without the current shift.
+      const dim = bookDims(ids[selected]);
+      const out = 0.6 + 0.6 * m;
+      const c = new THREE.Vector3(0, -0.75 + dim.h / 2 + 0.15, R - dim.d / 2 + out);
       camera.clearViewOffset();
       camera.updateMatrixWorld();
-      mesh.updateMatrixWorld();
-      const half = mesh.scale.y / 2, halfW = mesh.scale.x / 2;
-      const c = mesh.getWorldPosition(probe3.set(0, 0, 0)).clone();
-      const [, yTop] = screenPoint(c.clone().add(new THREE.Vector3(0, half, 0)), W, H);
-      const [, yBot] = screenPoint(c.clone().add(new THREE.Vector3(0, -half, 0)), W, H);
-      const [xL] = screenPoint(c.clone().add(new THREE.Vector3(-halfW, 0, 0)), W, H);
-      const [xR] = screenPoint(c.clone().add(new THREE.Vector3(halfW, 0, 0)), W, H);
+      const [, yTop] = screenPoint(c.clone().setY(c.y + dim.h / 2), W, H);
+      const [, yBot] = screenPoint(c.clone().setY(c.y - dim.h / 2), W, H);
+      const [xL] = screenPoint(c.clone().setX(-dim.w / 2), W, H);
+      const [xR] = screenPoint(c.clone().setX(dim.w / 2), W, H);
       // Back off until it fills at most 85% of the free height and 70% of the free width.
       const ratio = Math.max((yBot - yTop) / (0.85 * (bottom - top)), (xR - xL) / (0.7 * right));
-      const camDist = camera.position.z - c.z;
-      need = c.z + camDist * ratio - R;
-      // Then centre it: shift by how far its centre is from the middle of the free area.
+      tneed = c.z + (camera.position.z - c.z) * ratio - R;
       const [cx, cy] = screenPoint(c.clone(), W, H);
-      x = Math.round(cx - right / 2);
-      y = Math.round(cy - (top + bottom) / 2);
+      tx = cx - right / 2;
+      ty = cy - (top + bottom) / 2;
     }
-    if (!force && x === view.x && y === view.y && Math.abs(need - view.need) < 0.005) {
-      if (view.x || view.y) camera.setViewOffset(W, H, view.x, view.y, W, H);
-      return;
-    }
-    view.x = x; view.y = y; view.need = need;
-    placeCamera();
-    if (x || y) camera.setViewOffset(W, H, x, y, W, H); else camera.clearViewOffset();
-    dirty = true;
+    const k = force || reduceMotion ? 1 : 1 - Math.exp(-dt * 9);
+    const nx = view.x + (tx - view.x) * k, ny = view.y + (ty - view.y) * k;
+    const nneed = view.need + (tneed - view.need) * k;
+    const before = [view.x, view.y, view.need];
+    view.x = Math.abs(tx - nx) < 0.5 ? tx : nx;
+    view.y = Math.abs(ty - ny) < 0.5 ? ty : ny;
+    view.need = Math.abs(tneed - nneed) < 0.005 ? tneed : nneed;
+    const moved = force || view.x !== before[0] || view.y !== before[1] || view.need !== before[2];
+    if (moved) placeCamera();      // (marks the frame for redrawing)
+    if (view.x || view.y) camera.setViewOffset(W, H, view.x, view.y, W, H); else camera.clearViewOffset();
   }
 
   function setZoom(z) {
@@ -687,7 +689,7 @@
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    followCard(false);
+    followCard(false, dt);
     if (ids.length) {
       if (target !== null) {
         const d = target - pos;
@@ -726,6 +728,11 @@
       const mt = mode === 'spines' ? 1 : 0;
       if (m !== mt) {
         m = reduceMotion ? mt : clamp(m + Math.sign(mt - m) * dt * 2.2, 0, 1);
+        dirty = true;
+      }
+      if (prevT > 0) {
+        prevT = reduceMotion ? 0 : Math.max(0, prevT - dt * 4);
+        if (!prevT) prevSel = null;
         dirty = true;
       }
       const st = selected !== null ? 1 : 0;
@@ -848,6 +855,7 @@
   addEventListener('keydown', (e) => {
     if (e.target.matches && e.target.matches('input, select')) return;
     const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (step && selected !== null) { e.preventDefault(); stepSelection(step); return; }
     if (step) { e.preventDefault(); goTo(Math.round(target ?? pos) + step); return; }
     const turns = { ArrowDown: 1, ArrowUp: -1, PageDown: 3, PageUp: -3 }[e.key];
     if (turns) {
@@ -886,12 +894,14 @@
   async function open(i) {
     const id = ids[i];
     if (id === undefined) return;
+    if (selected !== null && selected !== i) { prevSel = selected; prevT = selT; selT = 0; }
     selected = i;
     goTo(i);
     setHash();
     const token = ++detailToken;
     const mt = meta.get(id) || {};
     fillDetail(id, { title: mt.title || '', authors: mt.authors || [], series: mt.series, series_index: mt.series_index });
+    updateCardNav();
     detail.classList.add('open');
     detail.setAttribute('aria-hidden', 'false');
     try {
@@ -911,35 +921,77 @@
   }
   $('#close').addEventListener('click', close);
 
-  // On phones the card is a bottom sheet: pull it down from the top of its content to close.
+  // Step to the next or previous book without closing the card: through the current
+  // matches (a series in reading order) when the open book is one of them, otherwise
+  // along the shelf.
+  function inList() { return hits && selected !== null && hits.set.has(selected); }
+  function stepSelection(dir) {
+    if (selected === null) return;
+    if (inList()) {
+      const k = hits.list.indexOf(selected);
+      const next = k + dir;
+      if (next < 0 || next >= hits.list.length) return;
+      hitAt = next;
+      showHits(`${hitAt + 1} of ${hits.list.length}`);
+      open(hits.list[next]);
+    } else {
+      const next = selected + dir;
+      if (next >= 0 && next < ids.length) open(next);
+    }
+  }
+  const cardNav = $('#cardnav');
+  function updateCardNav() {
+    const list = inList();
+    cardNav.hidden = !list;
+    if (!list) return;
+    const k = hits.list.indexOf(selected);
+    cardNav.querySelector('.where').textContent = `${k + 1} of ${hits.list.length}`;
+    cardNav.querySelector('.prev').disabled = k <= 0;
+    cardNav.querySelector('.next').disabled = k >= hits.list.length - 1;
+  }
+  cardNav.querySelector('.prev').addEventListener('click', () => stepSelection(-1));
+  cardNav.querySelector('.next').addEventListener('click', () => stepSelection(1));
+
+  // Touching the card: swipe sideways for the next or previous book; on phones (where
+  // it's a bottom sheet) pull it down from the top of its content to close it.
   const sheetLayout = matchMedia('(max-width: 640px)');
   let sheet = null;
   detail.addEventListener('touchstart', (e) => {
-    if (!sheetLayout.matches || e.touches.length !== 1) { sheet = null; return; }
-    sheet = { y: e.touches[0].clientY, dy: 0, pulling: false, samples: [[performance.now(), 0]] };
+    if (e.touches.length !== 1) { sheet = null; return; }
+    const t = e.touches[0];
+    sheet = { x: t.clientX, y: t.clientY, dx: 0, dy: 0, mode: null, samples: [[performance.now(), 0, 0]] };
   }, { passive: true });
   detail.addEventListener('touchmove', (e) => {
     if (!sheet) return;
-    const dy = e.touches[0].clientY - sheet.y;
-    if (!sheet.pulling) {
-      if (dy > 8 && detail.scrollTop <= 0) { sheet.pulling = true; sheet.y += dy; detail.classList.add('dragging'); }
-      else { if (dy < -8) sheet = null; return; }   // scrolling the description instead
+    const t = e.touches[0];
+    let dx = t.clientX - sheet.x, dy = t.clientY - sheet.y;
+    if (!sheet.mode) {
+      if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.3) sheet.mode = 'swipe';
+      else if (sheetLayout.matches && dy > 8 && detail.scrollTop <= 0) { sheet.mode = 'pull'; sheet.y += dy; dy = 0; }
+      else { if (Math.abs(dy) > 8) sheet = null; return; }   // scrolling the description instead
+      detail.classList.add('dragging');
     }
     e.preventDefault();
-    sheet.dy = Math.max(0, e.touches[0].clientY - sheet.y);
-    detail.style.transform = `translateY(${sheet.dy}px)`;
-    sheet.samples.push([performance.now(), sheet.dy]);
+    if (sheet.mode === 'pull') {
+      sheet.dy = Math.max(0, t.clientY - sheet.y);
+      detail.style.transform = `translateY(${sheet.dy}px)`;
+    } else {
+      sheet.dx = dx;
+      detail.style.transform = `translateX(${dx * 0.35}px)`;   // a little give, as a hint
+    }
+    sheet.samples.push([performance.now(), sheet.dx, sheet.dy]);
     if (sheet.samples.length > 5) sheet.samples.shift();
   }, { passive: false });
   function endSheet() {
-    if (!sheet || !sheet.pulling) { sheet = null; return; }
-    const [t0, y0] = sheet.samples[0], [t1, y1] = sheet.samples[sheet.samples.length - 1];
-    const speed = t1 > t0 ? (y1 - y0) / (t1 - t0) : 0;            // px per ms, downward
-    const shut = sheet.dy > detail.offsetHeight * 0.25 || speed > 0.6;
+    if (!sheet || !sheet.mode) { sheet = null; return; }
+    const [t0, x0, y0] = sheet.samples[0], [t1, x1, y1] = sheet.samples[sheet.samples.length - 1];
+    const vx = t1 > t0 ? (x1 - x0) / (t1 - t0) : 0, vy = t1 > t0 ? (y1 - y0) / (t1 - t0) : 0;   // px/ms
     detail.classList.remove('dragging');
     detail.style.transform = '';   // the CSS transition carries it home, or off screen
+    const { mode, dx, dy } = sheet;
     sheet = null;
-    if (shut) close();
+    if (mode === 'pull' && (dy > detail.offsetHeight * 0.25 || vy > 0.6)) close();
+    if (mode === 'swipe' && (Math.abs(dx) > 60 || Math.abs(vx) > 0.5)) stepSelection(dx < 0 ? 1 : -1);
   }
   detail.addEventListener('touchend', endSheet);
   detail.addEventListener('touchcancel', endSheet);

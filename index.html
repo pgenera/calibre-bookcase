@@ -116,6 +116,9 @@
   }
   #detail.open { transform: none; }
   #detail .close { float: right; font-size: 17px; }
+  #detail .cardnav { display: flex; gap: 14px; align-items: baseline; color: var(--muted); margin-bottom: 4px; }
+  #detail .cardnav .textbtn { font-size: 22px; line-height: 1; padding: 0 4px; }
+  #detail .cardnav .textbtn:disabled { opacity: 0.3; cursor: default; }
   #detail .cover {
     display: block; width: 168px; max-width: 48%; aspect-ratio: 2 / 3; object-fit: cover;
     margin: 6px 0 22px; background: var(--wall);
@@ -184,6 +187,11 @@
 
 <aside id="detail" aria-label="Book details" aria-hidden="true">
   <button type="button" class="textbtn close" id="close">Close</button>
+  <div class="cardnav" id="cardnav" hidden>
+    <button type="button" class="textbtn prev" aria-label="Previous in this list">‹</button>
+    <span class="where"></span>
+    <button type="button" class="textbtn next" aria-label="Next in this list">›</button>
+  </div>
   <img class="cover" alt="">
   <h2></h2>
   <p class="sub"></p>
