@@ -1170,6 +1170,7 @@
     };
     const main = b.main_format || (meta.get(id) || {}).main || {};
     for (const link of source.links(id, Object.assign({}, b, { main_format: main }))) add(link.text, link.href, link.download);
+    links.append(shareButton(id, b));
     detail.querySelector('.desc').replaceChildren(...sanitize(b.comments || ''));
     // Where the cover image came from, when the source says (the demo's scans).
     const credit = detail.querySelector('.credit');
@@ -1195,6 +1196,39 @@
       close(false);
       replaceLayer('hits');
       search(query, { fromId, seriesOrder });
+    });
+    return btn;
+  }
+
+  // Share a direct link to the book: the system share sheet on phones, the
+  // clipboard elsewhere (desktop share dialogs are less useful than a copied link).
+  function bookLink(id) { return `${location.origin}${location.pathname}#book=${id}`; }
+  function shareButton(id, b) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sharebtn';
+    btn.textContent = 'Share';
+    btn.addEventListener('click', async () => {
+      const url = bookLink(id);
+      const phone = (navigator.userAgentData && navigator.userAgentData.mobile) || matchMedia('(pointer: coarse)').matches;
+      if (phone && navigator.share) {
+        try {
+          await navigator.share({ title: b.title, text: [b.title, authorsText(b)].filter(Boolean).join(' '), url });
+          return;
+        } catch (e) {
+          if (e && e.name === 'AbortError') return;      // closed the share sheet
+        }
+      }
+      let copied = false;
+      try { await navigator.clipboard.writeText(url); copied = true; } catch (e) {
+        const t = document.createElement('textarea');    // older or non-secure contexts
+        t.value = url; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+        document.body.append(t); t.select();
+        try { copied = document.execCommand('copy'); } catch (e2) { /* nothing else to try */ }
+        t.remove();
+      }
+      btn.textContent = copied ? 'Link copied' : 'Couldn’t copy the link';
+      setTimeout(() => { btn.textContent = 'Share'; }, 2000);
     });
     return btn;
   }
