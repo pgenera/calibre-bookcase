@@ -1273,6 +1273,7 @@
     try {
       if (!source) {
         source = await chooseSource();
+        if (source.demo) useWebFont();
         $('.mark a').href = source.home;
         if (source.demo) $('.mark a').title = 'About this demo';
         loadMeta();
@@ -1394,11 +1395,21 @@
   addEventListener('online', checkForChanges);
 
   // Spines are drawn on canvases; redraw them once the book face has loaded.
-  if (document.fonts) {
+  function redrawSpinesWhenFontLoads() {
+    if (!document.fonts) return;
     document.fonts.load(`italic 28px ${SERIF}`).then(() => {
       for (const k of [...textures.keys()]) if (k[0] === 's') { textures.get(k).tex.dispose(); textures.delete(k); }
       dirty = true;
     }).catch(() => {});
+  }
+  redrawSpinesWhenFontLoads();
+  // The demo has no font files of its own; it borrows EB Garamond from Google Fonts.
+  function useWebFont() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&display=swap';
+    link.onload = redrawSpinesWhenFontLoads;
+    document.head.append(link);
   }
 
   // Installable, quick to reopen, and browsable offline (see sw.js).

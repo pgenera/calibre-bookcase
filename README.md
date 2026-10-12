@@ -60,15 +60,16 @@ bookcase/
   sw.js               service worker (offline cache)
   manifest.webmanifest
   icons/
-  three.min.js        three.js, r111 or later
-  fonts/              EBGaramond12-Regular.otf and EBGaramond12-Italic.otf
+  three.min.js        three.js, r111 or later (not in this repo)
+  fonts/              optional: EBGaramond12-Regular.otf and EBGaramond12-Italic.otf (not in this repo)
   demo/               optional: only used when there's no calibre server
 ```
 
-- **three.js:** a copy of r111 is included. Debian and Ubuntu also ship it as `libjs-three`
-  (`/usr/share/javascript/three/three.min.js`), and any build that defines the global `THREE` works.
-- **Fonts:** EB Garamond is included, and also in Debian as `fonts-ebgaramond`. Without it the page
-  falls back to Georgia.
+- **three.js:** Debian and Ubuntu ship it as `libjs-three` (`/usr/share/javascript/three/three.min.js`);
+  any build that defines the global `THREE` works. Without a local copy the page loads r111 from
+  jsDelivr, checked against a known hash.
+- **Fonts:** EB Garamond is in Debian as `fonts-ebgaramond`. Without it the page falls back to Georgia.
+  The demo loads it from Google Fonts.
 - **Service worker:** it keeps covers until calibre reports the book changed (at most 6,000, about
   35 MB). It needs HTTPS, as all service workers do. Bump `VERSION` in `sw.js` to discard every
   cached copy.
@@ -81,8 +82,6 @@ The page's "Library" link and "Open in the library" links go to calibre's own in
 
 MIT, for the page, its scripts and the demo library.
 
-Included third-party files keep their own licences:
-- `three.min.js`: three.js r111, MIT; see `three.min.js.COPYRIGHT`.
-- `fonts/`: EB Garamond by Georg Duffner, SIL Open Font License 1.1; see `fonts/COPYRIGHT`.
-
-The books in the demo are in the public domain in the United States.
+The demo uses [three.js](https://threejs.org) (MIT) from jsDelivr and
+[EB Garamond](https://fonts.google.com/specimen/EB+Garamond) (SIL Open Font License) from Google
+Fonts. The books in the demo are in the public domain in the United States.

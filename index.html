@@ -15,7 +15,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Bookcase">
 <style>
-  /* EB Garamond, if served next to the page (Debian: fonts-ebgaramond). Georgia otherwise. */
+  /* EB Garamond, if served next to the page (Debian: fonts-ebgaramond); the demo loads it from
+     Google Fonts instead. Georgia otherwise. */
   @font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap;
                src: url("fonts/EBGaramond12-Regular.otf") format("opentype"); }
   @font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap;
@@ -204,6 +205,11 @@
 </aside>
 
 <script src="three.min.js"></script>
+<script>
+  // No three.js beside the page (the GitHub Pages demo): the same release from jsDelivr.
+  if (!window.THREE) document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.111.0/build/three.min.js" ' +
+    'integrity="sha384-cS+5MkdlISaLe4BmfmAUPzh/zcCwJN7CmA3Kgfoq9r7XVk+eorupsCLhjAj2n4+N" crossorigin="anonymous"><\/script>');
+</script>
 <script src="bookcase.js"></script>
 </body>
 </html>
