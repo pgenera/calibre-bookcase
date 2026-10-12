@@ -14,6 +14,11 @@
    "pubdate": "1887-01-01",
    "added": "2026-06-11T12:00:00+00:00",
    "comments": "<p>Dr. Watson takes rooms at 221B Baker Street with a consulting detective, and a body in an empty house in Brixton leads back to the American West.</p>",
+   "cover": "demo/covers/1.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:ArthurConanDoyle_AStudyInScarlet_annual.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -33,6 +38,11 @@
    "pubdate": "1890-01-01",
    "added": "2025-11-06T12:00:00+00:00",
    "comments": "<p>A young woman receives a pearl every year from an unknown sender; Holmes follows the trail to a stolen Indian treasure.</p>",
+   "cover": "demo/covers/2.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:%22The_Sign_of_the_Four%22_in_Lippincott%E2%80%99s_Monthly_Magazine_(1890).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -52,6 +62,11 @@
    "pubdate": "1892-01-01",
    "added": "2026-03-26T12:00:00+00:00",
    "comments": "<p>Twelve stories, among them A Scandal in Bohemia, The Red-Headed League and The Speckled Band.</p>",
+   "cover": "demo/covers/3.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Adventures_of_sherlock_holmes.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -71,6 +86,11 @@
    "pubdate": "1894-01-01",
    "added": "2026-06-16T12:00:00+00:00",
    "comments": "<p>Eleven more cases, ending at the Reichenbach Falls with Professor Moriarty.</p>",
+   "cover": "demo/covers/4.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Memoirs_of_sherlock_holmes.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -90,6 +110,11 @@
    "pubdate": "1902-01-01",
    "added": "2026-03-11T12:00:00+00:00",
    "comments": "<p>A family legend of a spectral hound, a death on Dartmoor, and an heir who may be next.</p>",
+   "cover": "demo/covers/5.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Cover_(Hound_of_Baskervilles,_1902).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -109,6 +134,8 @@
    "pubdate": "1905-01-01",
    "added": "2026-02-06T12:00:00+00:00",
    "comments": "<p>Holmes comes back from the dead in The Empty House, followed by twelve new cases.</p>",
+   "cover": "demo/covers/6.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -128,6 +155,11 @@
    "pubdate": "1915-01-01",
    "added": "2026-05-08T12:00:00+00:00",
    "comments": "<p>A coded warning, a murder at a moated manor house, and a long story of a secret society in Pennsylvania coal country.</p>",
+   "cover": "demo/covers/7.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Valley_of_fear.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -147,6 +179,11 @@
    "pubdate": "1917-01-01",
    "added": "2025-12-31T12:00:00+00:00",
    "comments": "<p>Later cases, closing with Holmes out of retirement on the eve of the First World War.</p>",
+   "cover": "demo/covers/8.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:His_Last_Bow_1917_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -166,6 +203,11 @@
    "pubdate": "1927-01-01",
    "added": "2026-09-04T12:00:00+00:00",
    "comments": "<p>The final twelve stories.</p>",
+   "cover": "demo/covers/9.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Case-book_of_sherlock_holmes.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -185,6 +227,11 @@
    "pubdate": "1900-01-01",
    "added": "2026-09-09T12:00:00+00:00",
    "comments": "<p>A cyclone carries Dorothy from Kansas to Oz, where she travels the yellow brick road to the Emerald City.</p>",
+   "cover": "demo/covers/10.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Wonderful_Wizard_of_Oz,_006.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -204,6 +251,8 @@
    "pubdate": "1904-01-01",
    "added": "2026-07-20T12:00:00+00:00",
    "comments": "<p>Tip and a pumpkin-headed man he brought to life escape to the Emerald City, just as General Jinjur&#x27;s army seizes it.</p>",
+   "cover": "demo/covers/11.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -223,6 +272,11 @@
    "pubdate": "1907-01-01",
    "added": "2026-07-08T12:00:00+00:00",
    "comments": "<p>Shipwrecked with a talking hen, Dorothy lands in Ev and helps rescue its royal family from the Nome King.</p>",
+   "cover": "demo/covers/12.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Ozbook03cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -242,6 +296,11 @@
    "pubdate": "1908-01-01",
    "added": "2025-11-20T12:00:00+00:00",
    "comments": "<p>An earthquake drops Dorothy and the Wizard into a land of glass people beneath California.</p>",
+   "cover": "demo/covers/13.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Ozbook04cover.jpeg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -261,6 +320,11 @@
    "pubdate": "1909-01-01",
    "added": "2026-03-16T12:00:00+00:00",
    "comments": "<p>Dorothy and the Shaggy Man wander the roads toward Ozma&#x27;s birthday party.</p>",
+   "cover": "demo/covers/14.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:TheRoadToOz.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -280,6 +344,11 @@
    "pubdate": "1910-01-01",
    "added": "2025-10-01T12:00:00+00:00",
    "comments": "<p>Dorothy brings Aunt Em and Uncle Henry to live in Oz while the Nome King plots an invasion.</p>",
+   "cover": "demo/covers/15.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:TheEmeraldCityOfOz.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -299,6 +368,11 @@
    "pubdate": "1913-01-01",
    "added": "2026-06-09T12:00:00+00:00",
    "comments": "<p>Ojo searches Oz for the ingredients of a charm to restore his uncle, with Scraps the patchwork girl.</p>",
+   "cover": "demo/covers/16.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:ThePatchworkGirlOfOz.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -318,6 +392,11 @@
    "pubdate": "1914-01-01",
    "added": "2026-05-16T12:00:00+00:00",
    "comments": "<p>Betsy Bobbin and the clockwork Tik-Tok join a queen&#x27;s march against the Nome King.</p>",
+   "cover": "demo/covers/17.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Tik-Tok_of_Oz_(1914)_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -337,6 +416,11 @@
    "pubdate": "1915-01-01",
    "added": "2025-12-02T12:00:00+00:00",
    "comments": "<p>Trot and Cap&#x27;n Bill are swept into Jinxland, where the Scarecrow comes to their aid.</p>",
+   "cover": "demo/covers/18.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Scarecrow_of_Oz_(1915)_Cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -356,6 +440,11 @@
    "pubdate": "1916-01-01",
    "added": "2026-06-21T12:00:00+00:00",
    "comments": "<p>Prince Inga sets out with three magic pearls to free his parents and people.</p>",
+   "cover": "demo/covers/19.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Rinkitink_in_Oz_Cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -375,6 +464,11 @@
    "pubdate": "1917-01-01",
    "added": "2026-05-04T12:00:00+00:00",
    "comments": "<p>Ozma disappears along with every magic tool in Oz, and search parties set out.</p>",
+   "cover": "demo/covers/20.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Cover_~_The_Lost_Princess_of_Oz.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -394,6 +488,11 @@
    "pubdate": "1918-01-01",
    "added": "2026-07-30T12:00:00+00:00",
    "comments": "<p>The Tin Woodman goes looking for the Munchkin girl he once meant to marry.</p>",
+   "cover": "demo/covers/21.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:NeillTinMan.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -413,6 +512,11 @@
    "pubdate": "1919-01-01",
    "added": "2025-10-30T12:00:00+00:00",
    "comments": "<p>A boy who knows a transformation word plots with the Nome King against Oz.</p>",
+   "cover": "demo/covers/22.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Magic_of_Oz_(1919_Cover).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -432,6 +536,11 @@
    "pubdate": "1920-01-01",
    "added": "2026-07-25T12:00:00+00:00",
    "comments": "<p>Ozma and Dorothy try to stop a war between the Flatheads and the Skeezers.</p>",
+   "cover": "demo/covers/23.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Glinda_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -451,6 +560,11 @@
    "pubdate": "1908-01-01",
    "added": "2026-08-20T12:00:00+00:00",
    "comments": "<p>The Cuthberts ask for an orphan boy to help on their Prince Edward Island farm and are sent Anne Shirley instead.</p>",
+   "cover": "demo/covers/24.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Montgomery_Anne_of_Green_Gables.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -470,6 +584,11 @@
    "pubdate": "1909-01-01",
    "added": "2026-01-08T12:00:00+00:00",
    "comments": "<p>Anne, now sixteen, teaches at the Avonlea school.</p>",
+   "cover": "demo/covers/25.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Anne_of_Avonlea--cover_page.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -489,6 +608,8 @@
    "pubdate": "1915-01-01",
    "added": "2026-03-07T12:00:00+00:00",
    "comments": "<p>Anne goes to college in Kingsport.</p>",
+   "cover": "demo/covers/26.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -508,6 +629,11 @@
    "pubdate": "1917-01-01",
    "added": "2026-08-30T12:00:00+00:00",
    "comments": "<p>Anne and Gilbert begin married life in a small house at Four Winds Harbour.</p>",
+   "cover": "demo/covers/27.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:AnnesHouseOfDreamsCover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -527,6 +653,8 @@
    "pubdate": "1919-01-01",
    "added": "2026-07-10T12:00:00+00:00",
    "comments": "<p>Anne&#x27;s children and the motherless children of the new minister share a hollow they call Rainbow Valley.</p>",
+   "cover": "demo/covers/28.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -546,6 +674,8 @@
    "pubdate": "1921-01-01",
    "added": "2025-11-08T12:00:00+00:00",
    "comments": "<p>Anne&#x27;s youngest daughter comes of age on the home front during the First World War.</p>",
+   "cover": "demo/covers/29.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -565,6 +695,11 @@
    "pubdate": "1868-01-01",
    "added": "2026-05-28T12:00:00+00:00",
    "comments": "<p>The four March sisters grow up in Massachusetts while their father serves in the Civil War.</p>",
+   "cover": "demo/covers/30.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Houghton_AC85.A%E2%84%93194L.1869_pt.2aa_-_Little_Women,_title.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -584,6 +719,11 @@
    "pubdate": "1871-01-01",
    "added": "2026-02-18T12:00:00+00:00",
    "comments": "<p>Jo and her husband run Plumfield, a school for boys.</p>",
+   "cover": "demo/covers/31.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Little_Men_1st_ed.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -603,6 +743,11 @@
    "pubdate": "1886-01-01",
    "added": "2026-03-28T12:00:00+00:00",
    "comments": "<p>The Plumfield boys, grown up and scattered.</p>",
+   "cover": "demo/covers/32.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:JosBoysOrig.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -622,6 +767,11 @@
    "pubdate": "1865-01-01",
    "added": "2026-04-19T12:00:00+00:00",
    "comments": "<p>Alice follows a White Rabbit down a rabbit hole.</p>",
+   "cover": "demo/covers/33.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Alice%27s_Adventures_in_Wonderland_cover_(1865).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -641,6 +791,8 @@
    "pubdate": "1871-01-01",
    "added": "2026-02-23T12:00:00+00:00",
    "comments": "<p>Alice steps through a mirror into a world laid out like a chessboard.</p>",
+   "cover": "demo/covers/34.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -660,6 +812,8 @@
    "pubdate": "1876-01-01",
    "added": "2026-05-06T12:00:00+00:00",
    "comments": "<p>A boyhood on the Mississippi: fence-painting, a buried treasure, and a murder witnessed in a graveyard.</p>",
+   "cover": "demo/covers/35.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -679,6 +833,11 @@
    "pubdate": "1884-01-01",
    "added": "2025-10-08T12:00:00+00:00",
    "comments": "<p>Huck escapes his father and travels down the Mississippi on a raft with Jim, who is fleeing slavery.</p>",
+   "cover": "demo/covers/36.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Huckleberry_Finn_book.JPG"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -698,6 +857,11 @@
    "pubdate": "1841-01-01",
    "added": "2026-06-26T12:00:00+00:00",
    "comments": "<p>Natty Bumppo&#x27;s first adventure, on a New York lake during the French and Indian War.</p>",
+   "cover": "demo/covers/37.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Deerslayer.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -717,6 +881,11 @@
    "pubdate": "1826-01-01",
    "added": "2025-11-23T12:00:00+00:00",
    "comments": "<p>Hawkeye and his Mohican friends guide two sisters through the wilderness around Fort William Henry.</p>",
+   "cover": "demo/covers/38.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Last_of_the_Mohicans_title_page_(1826).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -736,6 +905,8 @@
    "pubdate": "1840-01-01",
    "added": "2026-09-28T12:00:00+00:00",
    "comments": "<p>Natty Bumppo on Lake Ontario, and in love.</p>",
+   "cover": "demo/covers/39.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -755,6 +926,8 @@
    "pubdate": "1823-01-01",
    "added": "2025-11-11T12:00:00+00:00",
    "comments": "<p>An older Natty Bumppo clashes with the settlers of Templeton.</p>",
+   "cover": "demo/covers/40.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -774,6 +947,11 @@
    "pubdate": "1827-01-01",
    "added": "2026-04-02T12:00:00+00:00",
    "comments": "<p>Natty Bumppo&#x27;s last days, on the Great Plains.</p>",
+   "cover": "demo/covers/41.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Prairie_1st.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -793,6 +971,8 @@
    "pubdate": "1844-01-01",
    "added": "2026-01-05T12:00:00+00:00",
    "comments": "<p>D&#x27;Artagnan comes to Paris and falls in with Athos, Porthos and Aramis against Cardinal Richelieu.</p>",
+   "cover": "demo/covers/42.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -812,6 +992,8 @@
    "pubdate": "1845-01-01",
    "added": "2026-04-12T12:00:00+00:00",
    "comments": "<p>The musketeers reunite during the Fronde and the English Civil War.</p>",
+   "cover": "demo/covers/43.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -831,6 +1013,8 @@
    "pubdate": "1847-01-01",
    "added": "2026-07-01T12:00:00+00:00",
    "comments": "<p>The last of the romances, including the story of the Man in the Iron Mask.</p>",
+   "cover": "demo/covers/44.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -850,6 +1034,11 @@
    "pubdate": "1917-01-01",
    "added": "2026-07-03T12:00:00+00:00",
    "comments": "<p>Confederate veteran John Carter wakes on Mars and fights for the princess Dejah Thoris.</p>",
+   "cover": "demo/covers/45.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Princess_of_Mars_large.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -869,6 +1058,11 @@
    "pubdate": "1918-01-01",
    "added": "2026-09-26T12:00:00+00:00",
    "comments": "<p>John Carter returns to Mars and exposes the religion of the River Iss.</p>",
+   "cover": "demo/covers/46.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Gods_of_Mars-1918.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -888,6 +1082,11 @@
    "pubdate": "1919-01-01",
    "added": "2026-06-19T12:00:00+00:00",
    "comments": "<p>John Carter pursues Dejah Thoris&#x27;s kidnappers to the north pole of Mars.</p>",
+   "cover": "demo/covers/47.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Warlord_of_Mars-1919.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -907,6 +1106,11 @@
    "pubdate": "1920-01-01",
    "added": "2026-05-30T12:00:00+00:00",
    "comments": "<p>John Carter&#x27;s son Carthoris and the princess Thuvia.</p>",
+   "cover": "demo/covers/48.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Thuvia_Maid_of_Mars-1920.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -926,6 +1130,11 @@
    "pubdate": "1922-01-01",
    "added": "2025-12-07T12:00:00+00:00",
    "comments": "<p>Tara of Helium is captured, and played for, in a game of living chess.</p>",
+   "cover": "demo/covers/49.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Chessmen_of_Mars-1922.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -945,6 +1154,11 @@
    "pubdate": "1928-01-01",
    "added": "2026-04-05T12:00:00+00:00",
    "comments": "<p>An Earthman apprenticed to a Martian surgeon who transplants brains.</p>",
+   "cover": "demo/covers/50.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Master_Mind_of_Mars.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -964,6 +1178,11 @@
    "pubdate": "1914-01-01",
    "added": "2026-03-21T12:00:00+00:00",
    "comments": "<p>An English lord&#x27;s orphaned son is raised by apes in the African jungle.</p>",
+   "cover": "demo/covers/51.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Tarzan_of_the_Apes_in_color.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -983,6 +1202,11 @@
    "pubdate": "1915-01-01",
    "added": "2026-02-13T12:00:00+00:00",
    "comments": "<p>Tarzan tries civilization in Paris and North Africa, then returns to the jungle.</p>",
+   "cover": "demo/covers/52.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Return_of_Tarzan.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1002,6 +1226,11 @@
    "pubdate": "1916-01-01",
    "added": "2025-10-20T12:00:00+00:00",
    "comments": "<p>Tarzan raises a band of animals to rescue his wife and son.</p>",
+   "cover": "demo/covers/53.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Beasts_of_tarzan.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1021,6 +1250,11 @@
    "pubdate": "1917-01-01",
    "added": "2025-10-13T12:00:00+00:00",
    "comments": "<p>Tarzan&#x27;s son runs away to Africa.</p>",
+   "cover": "demo/covers/54.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Son_of_tarzan.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1040,6 +1274,11 @@
    "pubdate": "1918-01-01",
    "added": "2026-03-02T12:00:00+00:00",
    "comments": "<p>A blow to the head leaves Tarzan without his memory in the lost city of Opar.</p>",
+   "cover": "demo/covers/55.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Tarzan_and_the_jewels_of_opar.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1059,6 +1298,11 @@
    "pubdate": "1920-01-01",
    "added": "2026-04-14T12:00:00+00:00",
    "comments": "<p>A wealthy widow is poisoned in an Essex country house, and a Belgian refugee detective investigates.</p>",
+   "cover": "demo/covers/56.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:American_cover_of_%C2%ABThe_Mysterious_Affair_at_Styles%C2%BB.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1078,6 +1322,8 @@
    "pubdate": "1923-01-01",
    "added": "2026-03-19T12:00:00+00:00",
    "comments": "<p>Poirot answers a call for help and finds the man who sent it dead on a French golf course.</p>",
+   "cover": "demo/covers/57.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1097,6 +1343,8 @@
    "pubdate": "1924-01-01",
    "added": "2025-10-05T12:00:00+00:00",
    "comments": "<p>Eleven short cases.</p>",
+   "cover": "demo/covers/58.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1116,6 +1364,8 @@
    "pubdate": "1926-01-01",
    "added": "2026-02-08T12:00:00+00:00",
    "comments": "<p>Poirot, retired to grow marrows, is drawn into a village murder.</p>",
+   "cover": "demo/covers/59.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1135,6 +1385,8 @@
    "pubdate": "1927-01-01",
    "added": "2026-05-11T12:00:00+00:00",
    "comments": "<p>Poirot against an international criminal organization.</p>",
+   "cover": "demo/covers/60.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1154,6 +1406,8 @@
    "pubdate": "1928-01-01",
    "added": "2026-08-13T12:00:00+00:00",
    "comments": "<p>An heiress is murdered on the train to the Riviera.</p>",
+   "cover": "demo/covers/61.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1173,6 +1427,8 @@
    "pubdate": "1922-01-01",
    "added": "2026-01-27T12:00:00+00:00",
    "comments": "<p>Two young friends start a business as adventurers and are soon hunting for a missing treaty.</p>",
+   "cover": "demo/covers/62.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1192,6 +1448,8 @@
    "pubdate": "1930-01-01",
    "added": "2026-02-10T12:00:00+00:00",
    "comments": "<p>A disliked colonel is shot in the vicar&#x27;s study at St. Mary Mead.</p>",
+   "cover": "demo/covers/63.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1211,6 +1469,8 @@
    "pubdate": "1911-01-01",
    "added": "2026-02-03T12:00:00+00:00",
    "comments": "<p>The first stories of the unassuming priest who solves crimes by understanding sin.</p>",
+   "cover": "demo/covers/64.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1230,6 +1490,8 @@
    "pubdate": "1914-01-01",
    "added": "2025-11-18T12:00:00+00:00",
    "comments": "<p>Twelve more stories.</p>",
+   "cover": "demo/covers/65.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1249,6 +1511,8 @@
    "pubdate": "1926-01-01",
    "added": "2026-09-11T12:00:00+00:00",
    "comments": "<p>Father Brown faces crimes that seem to have supernatural causes.</p>",
+   "cover": "demo/covers/66.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1268,6 +1532,8 @@
    "pubdate": "1927-01-01",
    "added": "2025-12-22T12:00:00+00:00",
    "comments": "<p>Father Brown explains his method.</p>",
+   "cover": "demo/covers/67.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1287,6 +1553,11 @@
    "pubdate": "1915-01-01",
    "added": "2025-12-10T12:00:00+00:00",
    "comments": "<p>Richard Hannay is framed for murder and flees across Scotland with a dead man&#x27;s notebook.</p>",
+   "cover": "demo/covers/68.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:ThirtyNineSteps.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1306,6 +1577,11 @@
    "pubdate": "1916-01-01",
    "added": "2026-04-22T12:00:00+00:00",
    "comments": "<p>Hannay crosses wartime Europe to Constantinople.</p>",
+   "cover": "demo/covers/69.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Greenmantle_1928_edition_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1325,6 +1601,11 @@
    "pubdate": "1919-01-01",
    "added": "2026-01-03T12:00:00+00:00",
    "comments": "<p>Hannay goes undercover among pacifists to find a German spy.</p>",
+   "cover": "demo/covers/70.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Mr_Standfast_(1919)_first_edition_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1344,6 +1625,8 @@
    "pubdate": "1924-01-01",
    "added": "2026-09-16T12:00:00+00:00",
    "comments": "<p>Hannay searches for three hostages held by a criminal mastermind.</p>",
+   "cover": "demo/covers/71.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1363,6 +1646,8 @@
    "pubdate": "1919-01-01",
    "added": "2025-11-03T12:00:00+00:00",
    "comments": "<p>The first stories of Bertie Wooster and his valet.</p>",
+   "cover": "demo/covers/72.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1382,6 +1667,11 @@
    "pubdate": "1923-01-01",
    "added": "2025-12-19T12:00:00+00:00",
    "comments": "<p>Bertie&#x27;s friend Bingo Little falls in love, repeatedly.</p>",
+   "cover": "demo/covers/73.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:TheInimitableJeeves.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1401,6 +1691,8 @@
    "pubdate": "1925-01-01",
    "added": "2025-11-25T12:00:00+00:00",
    "comments": "<p>Ten stories, including how Jeeves came to work for Bertie.</p>",
+   "cover": "demo/covers/74.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1420,6 +1712,8 @@
    "pubdate": "1930-01-01",
    "added": "2026-04-29T12:00:00+00:00",
    "comments": "<p>Eleven more stories.</p>",
+   "cover": "demo/covers/75.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1439,6 +1733,11 @@
    "pubdate": "1926-01-01",
    "added": "2026-01-25T12:00:00+00:00",
    "comments": "<p>Christopher Robin&#x27;s bear and his friends in the Hundred Acre Wood.</p>",
+   "cover": "demo/covers/76.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Winnie-the-Pooh_(book).png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1458,6 +1757,11 @@
    "pubdate": "1928-01-01",
    "added": "2026-06-23T12:00:00+00:00",
    "comments": "<p>Tigger arrives, and Christopher Robin prepares to go away.</p>",
+   "cover": "demo/covers/77.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_House_at_Pooh_Corner_US_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1477,6 +1781,11 @@
    "pubdate": "1813-01-01",
    "added": "2025-10-17T12:00:00+00:00",
    "comments": "<p>Elizabeth Bennet and Mr. Darcy get off on the wrong foot.</p>",
+   "cover": "demo/covers/78.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:PrideAndPrejudiceTitlePage.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1496,6 +1805,11 @@
    "pubdate": "1811-01-01",
    "added": "2026-02-20T12:00:00+00:00",
    "comments": "<p>The Dashwood sisters, one prudent and one passionate, in love and short of money.</p>",
+   "cover": "demo/covers/79.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:SenseAndSensibilityTitlePage.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1515,6 +1829,11 @@
    "pubdate": "1815-01-01",
    "added": "2026-08-01T12:00:00+00:00",
    "comments": "<p>A young woman who considers herself a fine matchmaker.</p>",
+   "cover": "demo/covers/80.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:EmmaTitlePage.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1534,6 +1853,8 @@
    "pubdate": "1817-01-01",
    "added": "2025-11-13T12:00:00+00:00",
    "comments": "<p>Anne Elliot meets again the naval officer she was persuaded not to marry.</p>",
+   "cover": "demo/covers/81.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1553,6 +1874,11 @@
    "pubdate": "1817-01-01",
    "added": "2026-09-14T12:00:00+00:00",
    "comments": "<p>A reader of Gothic novels visits an abbey and imagines the worst.</p>",
+   "cover": "demo/covers/82.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:NorthangerPersuasionTitlePage.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1572,6 +1898,11 @@
    "pubdate": "1814-01-01",
    "added": "2026-08-03T12:00:00+00:00",
    "comments": "<p>Fanny Price grows up as the poor relation in her uncle&#x27;s house.</p>",
+   "cover": "demo/covers/83.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:MansfieldParkTitlePage.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1591,6 +1922,11 @@
    "pubdate": "1818-01-01",
    "added": "2026-07-13T12:00:00+00:00",
    "comments": "<p>A young scientist creates a living being and abandons it.</p>",
+   "cover": "demo/covers/84.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Christie%27s_auction_scan_of_Frankenstein_1818.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1610,6 +1946,11 @@
    "pubdate": "1897-01-01",
    "added": "2025-10-10T12:00:00+00:00",
    "comments": "<p>Told in letters and diaries: a Transylvanian count comes to England.</p>",
+   "cover": "demo/covers/85.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Dracula-First-Edition-1897.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1629,6 +1970,11 @@
    "pubdate": "1851-01-01",
    "added": "2025-12-14T12:00:00+00:00",
    "comments": "<p>Ishmael ships aboard the Pequod, whose captain is hunting one white whale.</p>",
+   "cover": "demo/covers/86.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Moby-Dick_FE_title_page.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1648,6 +1994,8 @@
    "pubdate": "1847-01-01",
    "added": "2026-01-15T12:00:00+00:00",
    "comments": "<p>An orphaned governess and her employer, Mr. Rochester, who has a secret.</p>",
+   "cover": "demo/covers/87.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1667,6 +2015,11 @@
    "pubdate": "1847-01-01",
    "added": "2026-01-10T12:00:00+00:00",
    "comments": "<p>Catherine Earnshaw and Heathcliff on the Yorkshire moors, and the wreckage they leave.</p>",
+   "cover": "demo/covers/88.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Houghton_Lowell_1238.5_(A)_-_Wuthering_Heights,_1847.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1686,6 +2039,11 @@
    "pubdate": "1861-01-01",
    "added": "2025-12-12T12:00:00+00:00",
    "comments": "<p>Pip, an orphan, is raised to be a gentleman by an unknown benefactor.</p>",
+   "cover": "demo/covers/89.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Greatexpectations_vol1.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1705,6 +2063,11 @@
    "pubdate": "1859-01-01",
    "added": "2025-10-22T12:00:00+00:00",
    "comments": "<p>London and Paris before and during the French Revolution.</p>",
+   "cover": "demo/covers/90.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Tales_serial.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1724,6 +2087,11 @@
    "pubdate": "1853-01-01",
    "added": "2026-02-27T12:00:00+00:00",
    "comments": "<p>An endless lawsuit in Chancery, and the lives tangled in it.</p>",
+   "cover": "demo/covers/91.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Cover,_Bleak_House_(1852-3).png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1743,6 +2111,8 @@
    "pubdate": "1838-01-01",
    "added": "2025-11-28T12:00:00+00:00",
    "comments": "<p>A workhouse orphan falls in with Fagin&#x27;s gang of London pickpockets.</p>",
+   "cover": "demo/covers/92.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1762,6 +2132,11 @@
    "pubdate": "1850-01-01",
    "added": "2026-06-14T12:00:00+00:00",
    "comments": "<p>A life told from childhood, with Mr. Micawber, Uriah Heep and Betsey Trotwood.</p>",
+   "cover": "demo/covers/93.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Copperfield_cover_serial.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1781,6 +2156,11 @@
    "pubdate": "1843-01-01",
    "added": "2026-08-11T12:00:00+00:00",
    "comments": "<p>Three spirits visit Ebenezer Scrooge on Christmas Eve.</p>",
+   "cover": "demo/covers/94.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Charles_Dickens-A_Christmas_Carol-Cloth-First_Edition_1843.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1800,6 +2180,11 @@
    "pubdate": "1895-01-01",
    "added": "2026-05-18T12:00:00+00:00",
    "comments": "<p>A Victorian inventor travels to the year 802,701.</p>",
+   "cover": "demo/covers/95.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Timemachinebook.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1819,6 +2204,11 @@
    "pubdate": "1898-01-01",
    "added": "2025-12-27T12:00:00+00:00",
    "comments": "<p>Martians land in Surrey.</p>",
+   "cover": "demo/covers/96.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_War_of_the_Worlds_first_edition.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1838,6 +2228,11 @@
    "pubdate": "1897-01-01",
    "added": "2025-12-05T12:00:00+00:00",
    "comments": "<p>A scientist makes himself invisible and cannot undo it.</p>",
+   "cover": "demo/covers/97.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Wells_-_The_Invisible_Man_-_Pearson_cover_1897.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1857,6 +2252,11 @@
    "pubdate": "1896-01-01",
    "added": "2025-10-03T12:00:00+00:00",
    "comments": "<p>A shipwrecked man reaches an island where a vivisectionist works on animals.</p>",
+   "cover": "demo/covers/98.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:IslandOfDrMoreau.JPG"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1876,6 +2276,11 @@
    "pubdate": "1870-01-01",
    "added": "2025-10-15T12:00:00+00:00",
    "comments": "<p>A naturalist becomes a captive aboard Captain Nemo&#x27;s submarine, the Nautilus.</p>",
+   "cover": "demo/covers/99.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Houghton_FC8_V5946_869ve_-_Verne,_frontispiece.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1895,6 +2300,11 @@
    "pubdate": "1872-01-01",
    "added": "2026-08-16T12:00:00+00:00",
    "comments": "<p>Phileas Fogg wagers that he can circle the globe in eighty days.</p>",
+   "cover": "demo/covers/100.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Verne_Tour_du_Monde.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1914,6 +2324,8 @@
    "pubdate": "1864-01-01",
    "added": "2026-06-06T12:00:00+00:00",
    "comments": "<p>A professor and his nephew descend through an Icelandic volcano.</p>",
+   "cover": "demo/covers/101.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1933,6 +2345,8 @@
    "pubdate": "1883-01-01",
    "added": "2026-08-08T12:00:00+00:00",
    "comments": "<p>Jim Hawkins, a treasure map, and Long John Silver.</p>",
+   "cover": "demo/covers/102.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1952,6 +2366,11 @@
    "pubdate": "1886-01-01",
    "added": "2026-09-01T12:00:00+00:00",
    "comments": "<p>A London lawyer looks into his friend&#x27;s connection to a violent man.</p>",
+   "cover": "demo/covers/103.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Jekyll_and_Hyde_Title.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1971,6 +2390,11 @@
    "pubdate": "1886-01-01",
    "added": "2026-08-25T12:00:00+00:00",
    "comments": "<p>David Balfour is sold onto a ship by his uncle and escapes across the Highlands with Alan Breck.</p>",
+   "cover": "demo/covers/104.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:RLS_Kidnapped_1886_US.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1990,6 +2414,11 @@
    "pubdate": "1890-01-01",
    "added": "2026-08-28T12:00:00+00:00",
    "comments": "<p>A portrait ages while the young man it depicts does not.</p>",
+   "cover": "demo/covers/105.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Lippincott_doriangray.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2009,6 +2438,11 @@
    "pubdate": "1891-01-01",
    "added": "2026-07-18T12:00:00+00:00",
    "comments": "<p>A poor girl learns her family descends from nobility.</p>",
+   "cover": "demo/covers/106.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Hardy_-_Tess_d%27Urbervilles,_1891_-_3657925F.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2028,6 +2462,11 @@
    "pubdate": "1874-01-01",
    "added": "2026-05-13T12:00:00+00:00",
    "comments": "<p>Bathsheba Everdene, a farmer, and three very different suitors.</p>",
+   "cover": "demo/covers/107.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Far-From-The-Madding-Crowd-1874-Title-Page.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2047,6 +2486,11 @@
    "pubdate": "1895-01-01",
    "added": "2026-02-15T12:00:00+00:00",
    "comments": "<p>A stonemason dreams of the university at Christminster.</p>",
+   "cover": "demo/covers/108.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Jude_the_Obscure_title_page.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2066,6 +2510,11 @@
    "pubdate": "1871-01-01",
    "added": "2026-01-22T12:00:00+00:00",
    "comments": "<p>A study of provincial life, centred on Dorothea Brooke and the doctor Tertius Lydgate.</p>",
+   "cover": "demo/covers/109.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Middlemarch_1.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2085,6 +2534,8 @@
    "pubdate": "1869-01-01",
    "added": "2026-01-17T12:00:00+00:00",
    "comments": "<p>Russian families through the Napoleonic Wars.</p>",
+   "cover": "demo/covers/110.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2104,6 +2555,8 @@
    "pubdate": "1878-01-01",
    "added": "2026-03-04T12:00:00+00:00",
    "comments": "<p>A married woman&#x27;s affair with an officer, alongside Levin&#x27;s search for meaning on his estate.</p>",
+   "cover": "demo/covers/111.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2123,6 +2576,8 @@
    "pubdate": "1866-01-01",
    "added": "2026-01-20T12:00:00+00:00",
    "comments": "<p>A former student in St. Petersburg commits a murder and lives with it.</p>",
+   "cover": "demo/covers/112.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2142,6 +2597,8 @@
    "pubdate": "1880-01-01",
    "added": "2025-12-17T12:00:00+00:00",
    "comments": "<p>Three brothers and the murder of their father.</p>",
+   "cover": "demo/covers/113.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2161,6 +2618,11 @@
    "pubdate": "1857-01-01",
    "added": "2026-09-18T12:00:00+00:00",
    "comments": "<p>A doctor&#x27;s wife in provincial Normandy longs for the life in her novels.</p>",
+   "cover": "demo/covers/114.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Madame_Bovary_1857_(hi-res).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2180,6 +2642,8 @@
    "pubdate": "1862-01-01",
    "added": "2026-09-21T12:00:00+00:00",
    "comments": "<p>Jean Valjean, a released convict, is pursued for decades by the inspector Javert.</p>",
+   "cover": "demo/covers/115.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2199,6 +2663,11 @@
    "pubdate": "1925-01-01",
    "added": "2026-03-14T12:00:00+00:00",
    "comments": "<p>Nick Carraway&#x27;s neighbour on Long Island throws parties for one guest who never comes.</p>",
+   "cover": "demo/covers/116.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Great_Gatsby_Cover_1925_Retouched.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2218,6 +2687,11 @@
    "pubdate": "1920-01-01",
    "added": "2026-06-02T12:00:00+00:00",
    "comments": "<p>Amory Blaine at Princeton and after.</p>",
+   "cover": "demo/covers/117.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:This_Side_of_Paradise_Cover_1920_Retouched.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2237,6 +2711,11 @@
    "pubdate": "1926-01-01",
    "added": "2026-05-21T12:00:00+00:00",
    "comments": "<p>Expatriates travel from Paris to the bullfights at Pamplona.</p>",
+   "cover": "demo/covers/118.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Sun_Also_Rises_(1st_ed._cover).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2256,6 +2735,11 @@
    "pubdate": "1929-01-01",
    "added": "2025-11-01T12:00:00+00:00",
    "comments": "<p>An American ambulance driver on the Italian front and an English nurse.</p>",
+   "cover": "demo/covers/119.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:A_Farewell_to_Arms_(1929)_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2275,6 +2759,8 @@
    "pubdate": "1925-01-01",
    "added": "2025-12-29T12:00:00+00:00",
    "comments": "<p>One June day in London as Clarissa Dalloway prepares for a party.</p>",
+   "cover": "demo/covers/120.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2294,6 +2780,8 @@
    "pubdate": "1927-01-01",
    "added": "2026-08-18T12:00:00+00:00",
    "comments": "<p>The Ramsay family&#x27;s summers on the Isle of Skye, before and after the war.</p>",
+   "cover": "demo/covers/121.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2313,6 +2801,11 @@
    "pubdate": "1928-01-01",
    "added": "2025-10-27T12:00:00+00:00",
    "comments": "<p>A biography of a poet who lives for centuries and changes sex.</p>",
+   "cover": "demo/covers/122.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Portadaorlando.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2332,6 +2825,11 @@
    "pubdate": "1914-01-01",
    "added": "2026-04-09T12:00:00+00:00",
    "comments": "<p>Fifteen stories of Dublin life, ending with The Dead.</p>",
+   "cover": "demo/covers/123.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Joyce_-_Dubliners,_1914_-_3690390_F.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2351,6 +2849,11 @@
    "pubdate": "1922-01-01",
    "added": "2025-12-24T12:00:00+00:00",
    "comments": "<p>One day in Dublin, 16 June 1904, following Leopold Bloom.</p>",
+   "cover": "demo/covers/124.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:JoyceUlysses2.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2370,6 +2873,11 @@
    "pubdate": "1920-01-01",
    "added": "2026-06-28T12:00:00+00:00",
    "comments": "<p>A New York lawyer engaged to a suitable bride falls for her unconventional cousin.</p>",
+   "cover": "demo/covers/125.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Age_of_Innocence_(1st_ed_dust_jacket).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2389,6 +2897,11 @@
    "pubdate": "1905-01-01",
    "added": "2026-05-01T12:00:00+00:00",
    "comments": "<p>Lily Bart, beautiful and unmarried, in New York society.</p>",
+   "cover": "demo/covers/126.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_House_of_Mirth-FirstEdition.JPG"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2408,6 +2921,11 @@
    "pubdate": "1911-01-01",
    "added": "2026-07-27T12:00:00+00:00",
    "comments": "<p>A Massachusetts farmer, his ailing wife, and her young cousin.</p>",
+   "cover": "demo/covers/127.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Ethan_Frome_first_edition_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2427,6 +2945,11 @@
    "pubdate": "1918-01-01",
    "added": "2026-08-23T12:00:00+00:00",
    "comments": "<p>A Bohemian immigrant girl on the Nebraska prairie, remembered by a friend.</p>",
+   "cover": "demo/covers/128.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:My_antonia.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2446,6 +2969,11 @@
    "pubdate": "1913-01-01",
    "added": "2026-06-04T12:00:00+00:00",
    "comments": "<p>Alexandra Bergson holds her family&#x27;s Nebraska farm together.</p>",
+   "cover": "demo/covers/129.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:OPioneers.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2465,6 +2993,11 @@
    "pubdate": "1899-01-01",
    "added": "2025-11-30T12:00:00+00:00",
    "comments": "<p>Marlow travels up the Congo River in search of the ivory trader Kurtz.</p>",
+   "cover": "demo/covers/130.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Blackwood%27s_Magazine_-_1899_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2484,6 +3017,11 @@
    "pubdate": "1900-01-01",
    "added": "2026-03-09T12:00:00+00:00",
    "comments": "<p>A young mate abandons his ship and spends his life trying to make up for it.</p>",
+   "cover": "demo/covers/131.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:LordJimCover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2503,6 +3041,8 @@
    "pubdate": "1908-01-01",
    "added": "2026-09-06T12:00:00+00:00",
    "comments": "<p>Lucy Honeychurch in Florence, and the choice that follows her home.</p>",
+   "cover": "demo/covers/132.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2522,6 +3062,11 @@
    "pubdate": "1910-01-01",
    "added": "2026-04-17T12:00:00+00:00",
    "comments": "<p>The Schlegel sisters, the Wilcoxes, and who will inherit a house.</p>",
+   "cover": "demo/covers/133.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Howards-End_1st-ed_cvr.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2541,6 +3086,8 @@
    "pubdate": "1924-01-01",
    "added": "2026-03-31T12:00:00+00:00",
    "comments": "<p>An incident in the Marabar Caves divides the English and Indians of Chandrapore.</p>",
+   "cover": "demo/covers/134.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2560,6 +3107,11 @@
    "pubdate": "1920-01-01",
    "added": "2026-01-12T12:00:00+00:00",
    "comments": "<p>A city-bred young woman marries a doctor and tries to reform a Minnesota town.</p>",
+   "cover": "demo/covers/135.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:MainStreetNovel.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2579,6 +3131,11 @@
    "pubdate": "1922-01-01",
    "added": "2026-07-15T12:00:00+00:00",
    "comments": "<p>A prosperous real-estate agent in Zenith begins to doubt his life.</p>",
+   "cover": "demo/covers/136.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Babbit_cover_(scan).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2598,6 +3155,11 @@
    "pubdate": "1929-01-01",
    "added": "2026-09-23T12:00:00+00:00",
    "comments": "<p>The Continental Op sets a corrupt mining town&#x27;s gangs against each other.</p>",
+   "cover": "demo/covers/137.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Red_Harvest_(1st_ed_cover).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2617,6 +3179,11 @@
    "pubdate": "1930-01-01",
    "added": "2026-08-06T12:00:00+00:00",
    "comments": "<p>Sam Spade&#x27;s partner is shot, and everyone wants a black statuette.</p>",
+   "cover": "demo/covers/138.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Maltese_Falcon_(1st_ed_cover).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2636,6 +3203,11 @@
    "pubdate": "1894-01-01",
    "added": "2026-04-07T12:00:00+00:00",
    "comments": "<p>Mowgli is raised by wolves; with Rikki-Tikki-Tavi and other stories.</p>",
+   "cover": "demo/covers/139.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:JunglebookCover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2655,6 +3227,11 @@
    "pubdate": "1901-01-01",
    "added": "2026-07-22T12:00:00+00:00",
    "comments": "<p>An Irish orphan in Lahore becomes a lama&#x27;s disciple and a spy.</p>",
+   "cover": "demo/covers/140.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Kim_Kipling_0011.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2674,6 +3251,11 @@
    "pubdate": "1911-01-01",
    "added": "2026-02-01T12:00:00+00:00",
    "comments": "<p>Mary Lennox, sent to a Yorkshire manor, finds a locked garden.</p>",
+   "cover": "demo/covers/141.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Houghton_AC85_B9345_911s_-_Secret_Garden,_1911_-_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2693,6 +3275,11 @@
    "pubdate": "1905-01-01",
    "added": "2026-05-25T12:00:00+00:00",
    "comments": "<p>A rich pupil at a London boarding school loses everything.</p>",
+   "cover": "demo/covers/142.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:A_Little_Princess_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2712,6 +3299,8 @@
    "pubdate": "1911-01-01",
    "added": "2026-01-29T12:00:00+00:00",
    "comments": "<p>Peter Pan takes the Darling children to Neverland.</p>",
+   "cover": "demo/covers/143.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2731,6 +3320,11 @@
    "pubdate": "1908-01-01",
    "added": "2026-02-25T12:00:00+00:00",
    "comments": "<p>Mole, Rat, Badger and the reckless Mr. Toad.</p>",
+   "cover": "demo/covers/144.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Wind_in_the_Willows_cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2750,6 +3344,8 @@
    "pubdate": "1906-01-01",
    "added": "2026-07-05T12:00:00+00:00",
    "comments": "<p>Three children move to the country after their father is taken away.</p>",
+   "cover": "demo/covers/145.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2769,6 +3365,11 @@
    "pubdate": "1903-01-01",
    "added": "2026-04-26T12:00:00+00:00",
    "comments": "<p>Buck, a stolen dog, is put to work in the Klondike.</p>",
+   "cover": "demo/covers/146.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:JackLondoncallwild.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2788,6 +3389,11 @@
    "pubdate": "1906-01-01",
    "added": "2026-05-23T12:00:00+00:00",
    "comments": "<p>A wolf-dog&#x27;s journey from the wild to domestication.</p>",
+   "cover": "demo/covers/147.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:JackLondonwhitefang1.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2807,6 +3413,11 @@
    "pubdate": "1922-01-01",
    "added": "2026-03-24T12:00:00+00:00",
    "comments": "<p>An Irish doctor transported to Barbados becomes a pirate.</p>",
+   "cover": "demo/covers/148.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:1922-captainblood-cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2826,6 +3437,8 @@
    "pubdate": "1921-01-01",
    "added": "2025-10-25T12:00:00+00:00",
    "comments": "<p>A lawyer turned actor and swordsman in the French Revolution.</p>",
+   "cover": "demo/covers/149.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2845,6 +3458,8 @@
    "pubdate": "1910-01-01",
    "added": "2026-04-24T12:00:00+00:00",
    "comments": "<p>A masked figure haunts the Paris Opera and a young soprano.</p>",
+   "cover": "demo/covers/150.svg",
+   "credit": null,
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2864,6 +3479,11 @@
    "pubdate": "1929-01-01",
    "added": "2025-11-15T12:00:00+00:00",
    "comments": "<p>The decline of the Compson family, told by four narrators.</p>",
+   "cover": "demo/covers/151.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Sound_and_the_Fury_(1929_1st_ed_dust_jacket).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",

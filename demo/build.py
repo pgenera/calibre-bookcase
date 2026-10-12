@@ -2,8 +2,10 @@
 """Build the demo library: demo/library.json and a generated cover per book.
 
 Every book here was published in 1930 or earlier, so it is in the public domain
-in the United States. Covers are drawn here (no scans or modern cover art) in a
-few old-binding styles; books in a series share a binding. Descriptions are
+in the United States. Where Wikimedia Commons has a public-domain scan of the
+book's original cover or title page (found by find_covers.py, shrunk by
+shrink_covers.sh) that is the cover; otherwise one is drawn here in an
+old-binding style, shared across a series. Descriptions are
 short summaries written for this demo. Each book links to a Project Gutenberg
 search rather than a download.
 
@@ -442,6 +444,7 @@ def main():
     covers.mkdir(exist_ok=True)
     for old in covers.glob('*.svg'):
         old.unlink()
+    scans = json.loads((HERE / 'covers.json').read_text()) if (HERE / 'covers.json').exists() else {}
     books = []
     # "Date added": spread over the past year in a fixed shuffled order, so the
     # newest-first view has something to show.
@@ -451,7 +454,13 @@ def main():
     for k, book in enumerate(BOOKS):
         bid = k + 1
         title, authors, year, series, idx, desc = book
-        (covers / f'{bid}.svg').write_text(cover(book))
+        scan = scans.get(str(bid))
+        if scan and (covers / f'{bid}.jpg').exists():
+            image = f'demo/covers/{bid}.jpg'
+            credit = {'text': 'Cover: Wikimedia Commons, public domain', 'href': scan['page']}
+        else:
+            (covers / f'{bid}.svg').write_text(cover(book))
+            image, credit = f'demo/covers/{bid}.svg', None
         query = urllib.parse.quote_plus(f'{title} {authors[0]}')
         books.append({
             'id': bid, 'title': title, 'authors': authors,
@@ -459,6 +468,7 @@ def main():
             'series': series, 'series_index': idx, 'pubdate': f'{year}-01-01',
             'added': f'{added[k].isoformat()}T12:00:00+00:00',
             'comments': f'<p>{html.escape(desc)}</p>',
+            'cover': image, 'credit': credit,
             'links': [{'text': 'Find it at Project Gutenberg',
                        'href': f'https://www.gutenberg.org/ebooks/search/?query={query}'}],
         })
@@ -468,7 +478,8 @@ def main():
         'books': books,
     }
     (HERE / 'library.json').write_text(json.dumps(library, ensure_ascii=False, indent=1) + '\n')
-    print(f'{len(books)} books, {len(list(covers.glob("*.svg")))} covers')
+    print(f'{len(books)} books: {sum(1 for b in books if b["credit"])} scanned covers, '
+          f'{len(list(covers.glob("*.svg")))} drawn')
 
 
 if __name__ == '__main__':

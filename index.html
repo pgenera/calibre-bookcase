@@ -141,6 +141,9 @@
   #detail .links a:hover { color: var(--brass); }
   #detail .desc { border-top: 1px solid var(--rule); padding-top: 16px; max-width: 34em; }
   #detail .desc p { margin: 0 0 0.75em; }
+  #detail .credit { font-size: 14px; color: var(--muted); margin: 18px 0 0; }
+  #detail .credit a { color: inherit; text-underline-offset: 3px; }
+  #detail .credit:empty { display: none; }
 
   @media (max-width: 640px) {
     header { padding-left: 16px; padding-right: 16px; gap: 6px 16px; }
@@ -202,6 +205,7 @@
   <p class="pub"></p>
   <div class="links"></div>
   <div class="desc"></div>
+  <p class="credit"></p>
 </aside>
 
 <script src="three.min.js"></script>

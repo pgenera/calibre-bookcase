@@ -113,6 +113,7 @@
       book: (id) => q(`/ajax/book/${id}/${library}?category_urls=false`),
       thumb: (id) => `/get/thumb/${id}/${library}?sz=${THUMB}`,
       cover: (id) => `/get/cover/${id}/${library}`,
+      credit: () => null,
       links: (id, b) => [
         { text: 'Open in the library', href: `/#book_id=${id}&library_id=${encodeURIComponent(library)}&panel=book_details` },
         ...Object.entries(b.main_format || {}).map(([fmt, href]) => ({ text: `Download ${fmt.toUpperCase()}`, href, download: true })),
@@ -162,9 +163,10 @@
         const b = byId.get(id);
         return Object.assign(brief(b), { comments: b.comments, pubdate: b.pubdate, links: b.links });
       },
-      thumb: (id) => `demo/covers/${id}.svg`,
-      cover: (id) => `demo/covers/${id}.svg`,
+      thumb: (id) => (byId.get(id) || {}).cover || `demo/covers/${id}.svg`,
+      cover: (id) => (byId.get(id) || {}).cover || `demo/covers/${id}.svg`,
       links: (id, b) => b.links || (byId.get(id) || {}).links || [],
+      credit: (id) => (byId.get(id) || {}).credit || null,
     };
   }
 
@@ -282,6 +284,7 @@
   const thumbPending = new Set();
   let thumbLoads = 0;
   const avgColor = new Map();    // id -> css color from the cover
+  const coverAspect = new Map(); // id -> width / height of the cover image
 
   const thumbUrl = (id) => source.thumb(id);
   function wantThumb(id, request = true) {
@@ -320,6 +323,7 @@
         tex.needsUpdate = true;
         remember('t' + id, { tex, img });
         avgColor.set(id, averageColor(img));
+        if (img.naturalWidth && img.naturalHeight) coverAspect.set(id, img.naturalWidth / img.naturalHeight);
         textures.delete('s' + id);    // redraw the spine in the cover's colour
         dirty = true; pumpThumbs();
       };
@@ -567,8 +571,11 @@
 
   function bookDims(id) {
     const h = hash(id);
+    // Covers keep their own proportions (within what fits a slot), once the image is in.
+    const aspect = coverAspect.get(id);
+    const coverW = aspect ? clamp(COVER.h * aspect, 0.75, COVER.slot - 0.06) : COVER.w;
     return {
-      w: lerp(COVER.w, 0.18 + 0.1 * h, m),
+      w: lerp(coverW, 0.18 + 0.1 * h, m),
       h: lerp(COVER.h, 1.32 + 0.22 * hash(id + 7), m),
       d: lerp(COVER.depth, SPINE.depth, m),
     };
@@ -1143,6 +1150,15 @@
     const main = b.main_format || (meta.get(id) || {}).main || {};
     for (const link of source.links(id, Object.assign({}, b, { main_format: main }))) add(link.text, link.href, link.download);
     detail.querySelector('.desc').replaceChildren(...sanitize(b.comments || ''));
+    // Where the cover image came from, when the source says (the demo's scans).
+    const credit = detail.querySelector('.credit');
+    const c = source.credit(id);
+    credit.replaceChildren();
+    if (c) {
+      const a = document.createElement('a');
+      a.href = c.href; a.textContent = c.text; a.rel = 'noopener';
+      credit.append(a);
+    }
   }
 
   function quoteQuery(s) { return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"'); }

@@ -43,10 +43,14 @@ It only ever reads from calibre, using these endpoints:
 With no calibre server answering (as on GitHub Pages), or with `?demo` in the URL, the page shows
 the library in `demo/` instead: 151 books published in 1930 or earlier, so public domain in the
 United States, including several series (Sherlock Holmes, Oz, Anne of Green Gables, Poirot, Barsoom,
-Father Brown and more). The covers are drawn by `demo/build.py` in an old cloth-binding style; there
-are no scans or modern cover art. The descriptions are short summaries written for the demo, and each
-book links to a Project Gutenberg search rather than a download. Edit the list in `demo/build.py`
-and run it to rebuild `demo/library.json` and `demo/covers/`.
+Father Brown and more). Most covers are scans of the original covers or title pages from
+[Wikimedia Commons](https://commons.wikimedia.org), all marked public domain there; each book's card
+links to its file. The rest are drawn by `demo/build.py` in an old cloth-binding style. The
+descriptions are short summaries written for the demo, and each book links to a Project Gutenberg
+search rather than a download.
+
+To change the list, edit `demo/build.py`, then run `demo/find_covers.py` (looks up covers on
+Commons), `demo/shrink_covers.sh` (needs ImageMagick) and `demo/build.py`.
 
 ## Setup
 
@@ -84,4 +88,4 @@ MIT, for the page, its scripts and the demo library.
 
 The demo uses [three.js](https://threejs.org) (MIT) from jsDelivr and
 [EB Garamond](https://fonts.google.com/specimen/EB+Garamond) (SIL Open Font License) from Google
-Fonts. The books in the demo are in the public domain in the United States.
+Fonts. The books in the demo, and the scanned covers, are in the public domain in the United States.
