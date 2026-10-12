@@ -853,6 +853,39 @@
   }
   $('#close').addEventListener('click', close);
 
+  // On phones the card is a bottom sheet: pull it down from the top of its content to close.
+  const sheetLayout = matchMedia('(max-width: 640px)');
+  let sheet = null;
+  detail.addEventListener('touchstart', (e) => {
+    if (!sheetLayout.matches || e.touches.length !== 1) { sheet = null; return; }
+    sheet = { y: e.touches[0].clientY, dy: 0, pulling: false, samples: [[performance.now(), 0]] };
+  }, { passive: true });
+  detail.addEventListener('touchmove', (e) => {
+    if (!sheet) return;
+    const dy = e.touches[0].clientY - sheet.y;
+    if (!sheet.pulling) {
+      if (dy > 8 && detail.scrollTop <= 0) { sheet.pulling = true; sheet.y += dy; detail.classList.add('dragging'); }
+      else { if (dy < -8) sheet = null; return; }   // scrolling the description instead
+    }
+    e.preventDefault();
+    sheet.dy = Math.max(0, e.touches[0].clientY - sheet.y);
+    detail.style.transform = `translateY(${sheet.dy}px)`;
+    sheet.samples.push([performance.now(), sheet.dy]);
+    if (sheet.samples.length > 5) sheet.samples.shift();
+  }, { passive: false });
+  function endSheet() {
+    if (!sheet || !sheet.pulling) { sheet = null; return; }
+    const [t0, y0] = sheet.samples[0], [t1, y1] = sheet.samples[sheet.samples.length - 1];
+    const speed = t1 > t0 ? (y1 - y0) / (t1 - t0) : 0;            // px per ms, downward
+    const shut = sheet.dy > detail.offsetHeight * 0.25 || speed > 0.6;
+    detail.classList.remove('dragging');
+    detail.style.transform = '';   // the CSS transition carries it home, or off screen
+    sheet = null;
+    if (shut) close();
+  }
+  detail.addEventListener('touchend', endSheet);
+  detail.addEventListener('touchcancel', endSheet);
+
   function fillDetail(id, b) {
     const img = detail.querySelector('.cover');
     const src = `/get/cover/${id}/${library}`;

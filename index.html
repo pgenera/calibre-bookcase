@@ -144,7 +144,11 @@
     .mark { margin-right: auto; }
     .search { order: 3; flex-basis: 100%; }
     #detail { top: auto; height: 74%; width: 100%; border-left: 0; border-top: 1px solid var(--rule);
-              transform: translateY(102%); padding: 18px 20px 28px; }
+              transform: translateY(102%); padding: 26px 20px 28px; overscroll-behavior: contain; }
+    #detail.dragging { transition: none; }
+    /* Grab bar: the sheet can be pulled down to close. */
+    #detail::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px;
+                      margin-left: -20px; border-radius: 2px; background: var(--rule); }
     #facing .t { font-size: 19px; }
   }
   @media (prefers-reduced-motion: reduce) { #detail { transition: none; } }
