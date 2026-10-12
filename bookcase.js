@@ -611,6 +611,12 @@
   // card's real position, so they move with its slide and with a swipe.
   const view = { x: 0, y: 0, need: 0 };
   const headerEl = document.querySelector('header');
+  const probe3 = new THREE.Vector3();
+  // Where a world point lands on screen, in CSS px, ignoring the current view shift.
+  function screenPoint(v, W, H) {
+    v.project(camera);
+    return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H];
+  }
   function followCard(force) {
     if (!force && selected === null && !view.x && !view.y && !view.need) return;
     const W = stage.clientWidth, H = stage.clientHeight;
@@ -618,18 +624,39 @@
     const bottomSheet = sheetLayout.matches;
     const coverY = bottomSheet ? clamp(H - r.top, 0, H) : 0;
     const coverX = bottomSheet ? 0 : clamp(W - r.left, 0, W);
-    const top = coverY ? Math.max(0, headerEl.getBoundingClientRect().bottom - 24) : 0;
-    const availH = Math.max(80, H - coverY - top), availW = Math.max(80, W - coverX);
-    const k = 2 * Math.tan((camera.fov * Math.PI) / 360);   // visible height per unit of distance
-    // Distance at which the pulled-out book (about 1.5 tall, 1 wide, 1 unit nearer) fits.
-    const need = coverY || coverX
-      ? Math.max(1 + (1.5 * H) / (k * 0.8 * availH), 1 + (1.0 * H) / (k * 0.7 * availW)) : 0;
-    const x = Math.round(coverX / 2);
-    const y = coverY ? Math.round(H / 2 - (top + availH / 2)) : 0;
-    if (!force && x === view.x && y === view.y && Math.abs(need - view.need) < 0.01) return;
+    const mesh = selected !== null ? active.get(selected) : null;
+    let x = 0, y = 0, need = 0;
+    if ((coverY || coverX) && mesh) {
+      // The free area: below the header and above the card (phone), or left of it (desktop).
+      const top = coverY ? Math.max(0, headerEl.getBoundingClientRect().bottom - 24) : 0;
+      const bottom = H - coverY, right = W - coverX;
+      // Measure the open book as drawn, without the current shift.
+      camera.clearViewOffset();
+      camera.updateMatrixWorld();
+      mesh.updateMatrixWorld();
+      const half = mesh.scale.y / 2, halfW = mesh.scale.x / 2;
+      const c = mesh.getWorldPosition(probe3.set(0, 0, 0)).clone();
+      const [, yTop] = screenPoint(c.clone().add(new THREE.Vector3(0, half, 0)), W, H);
+      const [, yBot] = screenPoint(c.clone().add(new THREE.Vector3(0, -half, 0)), W, H);
+      const [xL] = screenPoint(c.clone().add(new THREE.Vector3(-halfW, 0, 0)), W, H);
+      const [xR] = screenPoint(c.clone().add(new THREE.Vector3(halfW, 0, 0)), W, H);
+      // Back off until it fills at most 85% of the free height and 70% of the free width.
+      const ratio = Math.max((yBot - yTop) / (0.85 * (bottom - top)), (xR - xL) / (0.7 * right));
+      const camDist = camera.position.z - c.z;
+      need = c.z + camDist * ratio - R;
+      // Then centre it: shift by how far its centre is from the middle of the free area.
+      const [cx, cy] = screenPoint(c.clone(), W, H);
+      x = Math.round(cx - right / 2);
+      y = Math.round(cy - (top + bottom) / 2);
+    }
+    if (!force && x === view.x && y === view.y && Math.abs(need - view.need) < 0.005) {
+      if (view.x || view.y) camera.setViewOffset(W, H, view.x, view.y, W, H);
+      return;
+    }
     view.x = x; view.y = y; view.need = need;
-    if (x || y) camera.setViewOffset(W, H, x, y, W, H); else camera.clearViewOffset();
     placeCamera();
+    if (x || y) camera.setViewOffset(W, H, x, y, W, H); else camera.clearViewOffset();
+    dirty = true;
   }
 
   function setZoom(z) {
