@@ -871,7 +871,7 @@
     if (e.key === 'Home') goTo(0);
     else if (e.key === 'End') goTo(ids.length - 1);
     else if (e.key === 'Enter' && document.activeElement === stage) open(Math.round(front()));
-    else if (e.key === 'Escape') close();
+    else if (e.key === 'Escape') { if (selected !== null) close(); else if (hits) clearSearch(); }
     else if (e.key === '/') { e.preventDefault(); $('#q').focus(); }
   });
 
@@ -1108,12 +1108,17 @@
     el.textContent = text; el.hidden = false;
     const many = hits && hits.list.length > 1;
     $('#prev').hidden = !many; $('#next').hidden = !many;
+    $('#clear').hidden = false;
   }
+  // Back to the whole shelf: no highlights, empty search box.
   function clearSearch() {
     hits = null;
-    $('#hits').hidden = $('#prev').hidden = $('#next').hidden = true;
+    q.value = '';
+    $('#hits').hidden = $('#prev').hidden = $('#next').hidden = $('#clear').hidden = true;
+    updateCardNav();
     dirty = true;
   }
+  $('#clear').addEventListener('click', () => { clearSearch(); stage.focus({ preventScroll: true }); });
   $('#search').addEventListener('submit', (e) => { e.preventDefault(); search(q.value); q.blur(); });
   q.addEventListener('input', () => { if (!q.value) clearSearch(); });
   $('#prev').addEventListener('click', () => jumpHit(-1));
