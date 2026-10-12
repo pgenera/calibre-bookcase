@@ -8,6 +8,8 @@ Inspired by Google's [WebGL Bookcase](https://developers.googleblog.com/designin
 
 **[Try the demo](https://pgenera.github.io/calibre-bookcase/)**: 151 public-domain books, no calibre needed.
 
+[![Covers of public-domain books on the curved shelves of the bookcase](demo/preview.png)](https://pgenera.github.io/calibre-bookcase/)
+
 ## What it does
 
 - Shows every book as a cover on a helical shelf, or as a spine drawn in the colour of its cover.
@@ -50,7 +52,8 @@ descriptions are short summaries written for the demo, and each book links to a 
 search rather than a download.
 
 To change the list, edit `demo/build.py`, then run `demo/find_covers.py` (looks up covers on
-Commons), `demo/shrink_covers.sh` (needs ImageMagick) and `demo/build.py`.
+Commons), `demo/shrink_covers.sh` (needs ImageMagick) and `demo/build.py`. `demo/preview.py`
+redraws `demo/preview.png`, the picture shown when a link to the demo is shared.
 
 ## Setup
 

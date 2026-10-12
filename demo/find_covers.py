@@ -24,12 +24,32 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build import BOOKS  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
-# Lead images that turned out not to be covers or title pages, on review: author
-# portraits, illustrations and paintings, a comic strip, a stamp, a film still, a
-# play poster, and Russian first-edition title pages that don't match the English
-# titles in the demo.
-NOT_COVERS = {11, 34, 35, 39, 40, 42, 43, 44, 65, 67, 81, 92, 110, 111, 113, 115, 143, 149, 150}
+# Images that turned out, on review, not to be covers or title pages of the book:
+# author portraits, illustrations and paintings, a comic strip, a stamp, a film
+# still, posters, a building plan, and Russian first-edition title pages that
+# don't match the English titles in the demo. Names are compared ignoring _ vs space.
+REJECTED = {
+    'How Uncle Eli Laughed Too Soon.jpg', 'Alice-entering-looking-glass-house-vertical-alignment.png',
+    'Tom Sawyer 1876 frontispiece.jpg', '1989 CPA 6130.jpg', 'Cooper-Offterdinger.jpg',
+    'Dartagnan-musketeers.jpg', 'Myladys son 1925 David Ljungdahl 021.jpg', 'Vicomte de Bragelonne Gravure1.jpg',
+    'G. K. Chesterton at the age of 31.jpg', 'CassandraAusten-JaneAusten(c.1810) hires.jpg',
+    'Olivertwist front.jpg', 'Tolstoy - War and Peace - first edition, 1869.jpg', 'AnnaKareninaTitle.jpg',
+    'Dostoevsky-Brothers Karamazov.jpg', 'Monsieur Madeleine par Gustave Brion.jpg',
+    'Peter-pan-play-announcement.jpg', 'Portrait of Rafael Sabatini.jpg', 'André Castaigne Fantôme Opéra1.jpg',
+    'The Marvelous Land of Oz (1904) - The End.jpg', 'The Adventures of Tom Sawyer. Mark Twain. 1876.jpg',
+    'The Secret of Father Brown (1927) - frontispiece.png', 'Oliver Twist Pavilion Theatre 1838.jpg',
+    'Tolstoy - War and Peace - third edition, 1873.png', 'Cover of the first edition of Crime and Punishment.jpg',
+    'The Brothers Karamazov first edition cover page.JPG', 'Peter pan 1911 pipes.jpg',
+    'Cover Sheet and Site Plan - Cape Arago Lighthouse, Gregory Point, Charleston, Coos County, OR HABS OR-189 (sheet 1 of 7).png',
+}
 OUT = HERE / 'covers.json'
+TRIED = HERE / '.covers-searched.json'   # books already searched on Commons (not published)
+
+
+def rejected(name):
+    return name.replace('_', ' ') in REJECTED
+
+
 UA = 'calibre-bookcase demo cover finder (https://github.com/pgenera/calibre-bookcase)'
 WIKI = 'https://en.wikipedia.org/w/api.php'
 COMMONS = 'https://commons.wikimedia.org/w/api.php'
@@ -86,6 +106,28 @@ def commons_info(name):
             'licence': text('LicenseShortName'), 'artist': text('Artist')[:120], 'mime': info.get('mime', '')}
 
 
+COVERISH = ('cover', 'jacket', 'title', 'first', 'edition', '1st')
+
+
+def commons_search(title, authors, year):
+    """Second chance for books whose article had no usable image: search Commons
+    files by title, keeping names that look like a cover of this book."""
+    words = [w for w in re.findall(r"[A-Za-z']+", title) if len(w) >= 4 and w.lower() not in ('with', 'from', 'that')]
+    key = max(words, key=len).lower() if words else title.lower()
+    surname = authors[0].split()[-1].lower()
+    for query in (f'"{title}" {year}', f'"{title}" cover', f'{title} {surname}'):
+        hits = api(COMMONS, action='query', list='search', srsearch=query, srnamespace=6, srlimit=10)
+        for h in hits['query']['search']:
+            name = h['title'].split(':', 1)[1]
+            low = name.lower()
+            if rejected(name) or key not in low.replace('_', ' ') or not any(c in low for c in COVERISH + (str(year),)):
+                continue
+            info = commons_info(name)
+            if info and 'public domain' in info['licence'].lower() and info['mime'] in ('image/jpeg', 'image/png'):
+                return info
+    return None
+
+
 def main():
     found = {} if '--refresh' in sys.argv or not OUT.exists() else json.loads(OUT.read_text())
     for k, (title, authors, year, *_rest) in enumerate(BOOKS):
@@ -97,7 +139,8 @@ def main():
             page = article(title, authors[0], year)
             name = lead_image(page) if page else None
             info = commons_info(name) if name else None
-            if info and 'public domain' in info['licence'].lower() and info['mime'] in ('image/jpeg', 'image/png'):
+            if (info and not rejected(name) and 'public domain' in info['licence'].lower()
+                    and info['mime'] in ('image/jpeg', 'image/png')):
                 info['article'] = page
                 entry = info
             print(f'{bid:>3} {title[:40]:40} {page or "-":40} {name or "-"} {info and info["licence"]}', flush=True)
@@ -106,8 +149,27 @@ def main():
             continue
         found[bid] = entry
         OUT.write_text(json.dumps(found, indent=1, ensure_ascii=False) + '\n')
-    for bid in list(found):
-        if int(bid) in NOT_COVERS:
+    # A second pass over books still without a cover (including ones whose
+    # Wikipedia image wasn't a cover), searching Commons itself.
+    tried = json.loads(TRIED.read_text()) if TRIED.exists() else []
+    for k, (title, authors, year, *_rest) in enumerate(BOOKS):
+        bid = str(k + 1)
+        if found.get(bid) or bid in tried:
+            continue
+        try:
+            info = commons_search(title, authors, year)
+        except Exception as e:
+            print(f'{bid:>3} {title[:40]:40} search error: {e}', flush=True)
+            continue
+        tried.append(bid)
+        TRIED.write_text(json.dumps(tried) + '\n')
+        print(f'{bid:>3} {title[:40]:40} search: {info["file"] if info else "-"}', flush=True)
+        if info:
+            info['article'] = None
+            found[bid] = info
+        OUT.write_text(json.dumps(found, indent=1, ensure_ascii=False) + '\n')
+    for bid, info in list(found.items()):
+        if info and rejected(info['file']):
             found[bid] = None
     OUT.write_text(json.dumps(found, indent=1, ensure_ascii=False) + '\n')
     covers = HERE / 'covers'

@@ -44,7 +44,15 @@
   "mime": "image/jpeg",
   "article": "The Hound of the Baskervilles"
  },
- "6": null,
+ "6": {
+  "file": "The Return of Sherlock Holmes cover 1905.jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/The_Return_of_Sherlock_Holmes_cover_1905.jpg/330px-The_Return_of_Sherlock_Holmes_cover_1905.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Return_of_Sherlock_Holmes_cover_1905.jpg",
+  "licence": "Public domain",
+  "artist": "New York, McClure, Phillips and Co. 1905., FIRST EDITION",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "7": {
   "file": "Valley_of_fear.jpg",
   "url": "https://upload.wikimedia.org/wikipedia/commons/8/84/Valley_of_fear.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
@@ -218,8 +226,24 @@
   "mime": "image/jpeg",
   "article": "Anne's House of Dreams"
  },
- "28": null,
- "29": null,
+ "28": {
+  "file": "The cover photograph of \"Rainbow Valley\".jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/The_cover_photograph_of_%22Rainbow_Valley%22.jpg/330px-The_cover_photograph_of_%22Rainbow_Valley%22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:The_cover_photograph_of_%22Rainbow_Valley%22.jpg",
+  "licence": "Public domain",
+  "artist": "Maria Louise Kirk",
+  "mime": "image/jpeg",
+  "article": null
+ },
+ "29": {
+  "file": "Rilla of Ingleside - Cover.jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Rilla_of_Ingleside_-_Cover.jpg/330px-Rilla_of_Ingleside_-_Cover.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Rilla_of_Ingleside_-_Cover.jpg",
+  "licence": "Public domain",
+  "artist": "Lucy Maud Montgomery\n\nIllustration by M. L. Kirk",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "30": {
   "file": "Houghton_AC85.Aℓ194L.1869_pt.2aa_-_Little_Women,_title.jpg",
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Houghton_AC85.A%E2%84%93194L.1869_pt.2aa_-_Little_Women%2C_title.jpg/330px-Houghton_AC85.A%E2%84%93194L.1869_pt.2aa_-_Little_Women%2C_title.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -286,7 +310,15 @@
   "article": "The Last of the Mohicans"
  },
  "39": null,
- "40": null,
+ "40": {
+  "file": "The Pioneers 1823.jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/The_Pioneers_1823.jpg/330px-The_Pioneers_1823.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Pioneers_1823.jpg",
+  "licence": "Public domain",
+  "artist": "Published by Wiley, NY, 1823",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "41": {
   "file": "The_Prairie_1st.jpg",
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/The_Prairie_1st.jpg/330px-The_Prairie_1st.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -407,12 +439,28 @@
   "mime": "image/png",
   "article": "The Mysterious Affair at Styles"
  },
- "57": null,
+ "57": {
+  "file": "American cover of «The Murder on the Links» by Dodd, Mead & Co, 1923.png",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/American_cover_of_%C2%ABThe_Murder_on_the_Links%C2%BB_by_Dodd%2C_Mead_%26_Co%2C_1923.png/330px-American_cover_of_%C2%ABThe_Murder_on_the_Links%C2%BB_by_Dodd%2C_Mead_%26_Co%2C_1923.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:American_cover_of_%C2%ABThe_Murder_on_the_Links%C2%BB_by_Dodd,_Mead_%26_Co,_1923.png",
+  "licence": "Public domain",
+  "artist": "Dodd, Mead &amp; Co",
+  "mime": "image/png",
+  "article": null
+ },
  "58": null,
  "59": null,
  "60": null,
  "61": null,
- "62": null,
+ "62": {
+  "file": "American cover of «The Secret Adversary» by Dodd, Mead & Co, 1922.png",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/American_cover_of_%C2%ABThe_Secret_Adversary%C2%BB_by_Dodd%2C_Mead_%26_Co%2C_1922.png/330px-American_cover_of_%C2%ABThe_Secret_Adversary%C2%BB_by_Dodd%2C_Mead_%26_Co%2C_1922.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:American_cover_of_%C2%ABThe_Secret_Adversary%C2%BB_by_Dodd,_Mead_%26_Co,_1922.png",
+  "licence": "Public domain",
+  "artist": "Dodd, Mead &amp; Co",
+  "mime": "image/png",
+  "article": null
+ },
  "63": null,
  "64": null,
  "65": null,
@@ -445,7 +493,15 @@
   "mime": "image/jpeg",
   "article": "Mr Standfast"
  },
- "71": null,
+ "71": {
+  "file": "Three Hostages 1924 1st edition.png",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Three_Hostages_1924_1st_edition.png/330px-Three_Hostages_1924_1st_edition.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Three_Hostages_1924_1st_edition.png",
+  "licence": "Public domain",
+  "artist": "Houghton Mifflin Company",
+  "mime": "image/png",
+  "article": null
+ },
  "72": null,
  "73": {
   "file": "TheInimitableJeeves.png",
@@ -503,7 +559,15 @@
   "mime": "image/jpeg",
   "article": "Emma (novel)"
  },
- "81": null,
+ "81": {
+  "file": "NorthangerPersuasionTitlePage.jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/NorthangerPersuasionTitlePage.jpg/330px-NorthangerPersuasionTitlePage.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:NorthangerPersuasionTitlePage.jpg",
+  "licence": "Public domain",
+  "artist": "Unknown authorUnknown author",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "82": {
   "file": "NorthangerPersuasionTitlePage.jpg",
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/NorthangerPersuasionTitlePage.jpg/330px-NorthangerPersuasionTitlePage.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -549,7 +613,15 @@
   "mime": "image/jpeg",
   "article": "Moby-Dick"
  },
- "87": null,
+ "87": {
+  "file": "Jane Eyre title page.jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Jane_Eyre_title_page.jpg/330px-Jane_Eyre_title_page.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Jane_Eyre_title_page.jpg",
+  "licence": "Public domain",
+  "artist": "Unknown authorUnknown author",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "88": {
   "file": "Houghton_Lowell_1238.5_(A)_-_Wuthering_Heights,_1847.jpg",
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Houghton_Lowell_1238.5_%28A%29_-_Wuthering_Heights%2C_1847.jpg/330px-Houghton_Lowell_1238.5_%28A%29_-_Wuthering_Heights%2C_1847.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -660,7 +732,15 @@
   "article": "Around the World in Eighty Days"
  },
  "101": null,
- "102": null,
+ "102": {
+  "file": "Treasure Island book title page (1911).jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Treasure_Island_book_title_page_%281911%29.jpg/330px-Treasure_Island_book_title_page_%281911%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Treasure_Island_book_title_page_(1911).jpg",
+  "licence": "Public domain",
+  "artist": "Robert Louis Stevenson",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "103": {
   "file": "Jekyll_and_Hyde_Title.jpg",
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Jekyll_and_Hyde_Title.jpg/330px-Jekyll_and_Hyde_Title.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -737,7 +817,15 @@
   "mime": "image/jpeg",
   "article": "Madame Bovary"
  },
- "115": null,
+ "115": {
+  "file": "Cover of the book Les Miserables (db53b829-1fcf-42be-b3a0-01004e685d45).jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Cover_of_the_book_Les_Miserables_%28db53b829-1fcf-42be-b3a0-01004e685d45%29.jpg/330px-Cover_of_the_book_Les_Miserables_%28db53b829-1fcf-42be-b3a0-01004e685d45%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Cover_of_the_book_Les_Miserables_(db53b829-1fcf-42be-b3a0-01004e685d45).jpg",
+  "licence": "Public domain",
+  "artist": "NPS",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "116": {
   "file": "The_Great_Gatsby_Cover_1925_Retouched.jpg",
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg/330px-The_Great_Gatsby_Cover_1925_Retouched.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -774,7 +862,15 @@
   "mime": "image/jpeg",
   "article": "A Farewell to Arms"
  },
- "120": null,
+ "120": {
+  "file": "Mrs Dalloway 1925.jpg",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Mrs_Dalloway_1925.jpg/330px-Mrs_Dalloway_1925.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Mrs_Dalloway_1925.jpg",
+  "licence": "Public domain",
+  "artist": "Virginia Woolf / Hogarth Press",
+  "mime": "image/jpeg",
+  "article": null
+ },
  "121": null,
  "122": {
   "file": "Portadaorlando.jpg",
@@ -959,7 +1055,15 @@
   "mime": "image/jpeg",
   "article": "The Wind in the Willows"
  },
- "145": null,
+ "145": {
+  "file": "Titlepage-The railway Children.png",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Titlepage-The_railway_Children.png/330px-Titlepage-The_railway_Children.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Titlepage-The_railway_Children.png",
+  "licence": "Public domain",
+  "artist": "C. E. Brock,",
+  "mime": "image/png",
+  "article": null
+ },
  "146": {
   "file": "JackLondoncallwild.jpg",
   "url": "https://upload.wikimedia.org/wikipedia/commons/2/26/JackLondoncallwild.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",

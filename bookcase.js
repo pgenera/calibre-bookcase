@@ -194,8 +194,12 @@
   const params = new URLSearchParams(location.hash.slice(1));
   let mode = params.get('mode') || store.get('bookcase.mode') || 'covers';
   if (mode !== 'covers' && mode !== 'spines') mode = 'covers';
-  let sortKey = params.get('sort') || store.get('bookcase.sort') || 'added';
+  const sortChosen = params.get('sort') || store.get('bookcase.sort');
+  let sortKey = sortChosen || 'added';
   if (!SORTS[sortKey]) sortKey = 'added';
+  // A real library opens newest first; the demo (whose "date added" is made up) by
+  // author, which keeps each series together.
+  const defaultSort = () => (source && source.demo ? 'author' : 'added');
   let m = mode === 'spines' ? 1 : 0;   // animated 0 (covers) .. 1 (spines)
 
   let pos = 0;                   // continuous position along the helix, in books
@@ -206,6 +210,7 @@
   let lift = 0, liftVel = 0, liftTarget = null;
   let liftDir = 0;               // direction of the last slide, so small nudges carry on to the next turn
   let zoom = 1;
+  let introT = 1;                // 0..1 while the opening plays
   const born = new Map();        // id -> time it appeared, for the grow-in animation
   let pull = 0;                  // px dragged down past the top of the shelf
   let refreshing = false;
@@ -599,8 +604,10 @@
     const theta = (i) => (i * s) / R;
     const shelfY = (i) => -(theta(i) / (2 * Math.PI)) * PITCH;
     // Rotate and lift the helix so book `pos` is front and centre.
-    helix.rotation.y = -theta(pos);
-    helix.position.y = -shelfY(pos) + lift * PITCH - 0.75 - pull * 0.45 * worldPerPixel();
+    // The opening: the helix rises and turns into place.
+    const rise = 1 - Math.pow(1 - introT, 3);
+    helix.rotation.y = -theta(pos) + (1 - rise) * 1.1;
+    helix.position.y = -shelfY(pos) + lift * PITCH - 0.75 - pull * 0.45 * worldPerPixel() - (1 - rise) * 3.5;
 
     const span = Math.ceil(perTurn * turnsShown());
     const mid = Math.round(front());
@@ -657,7 +664,16 @@
         if (frameBudget.uploads > 0) { frameBudget.uploads--; onGpu.add(tex); } else tex = blank;
       }
       if (face.map !== tex) face.map = tex;
-      face.color.setScalar(hits && !hits.set.has(i) ? 0.28 : 1);   // dim non-matches
+      // Lit as if by a lamp in front: darker round the curve and further up or down.
+      let phiI = (th - theta(pos)) % (2 * Math.PI);
+      if (phiI > Math.PI) phiI -= 2 * Math.PI;
+      if (phiI < -Math.PI) phiI += 2 * Math.PI;
+      const side = Math.min(1, Math.abs(phiI) / VISIBLE_ARC);
+      const turnsAway = Math.min(1, Math.abs(i - front()) / perTurn / 2.5);
+      let light = i === selected ? 1 : (1 - 0.5 * side * side) * (1 - 0.35 * turnsAway);
+      light *= 0.25 + 0.75 * rise;
+      if (hits && !hits.set.has(i)) light *= 0.28;                 // dim non-matches
+      face.color.setScalar(light);
 
       // Shelf plank under the book.
       tmpP.set(Math.sin(th) * (R - 0.55), shelfY(i) - 0.03, Math.cos(th) * (R - 0.55));
@@ -834,6 +850,11 @@
       pull = pull < 1 ? 0 : pull * Math.exp(-dt * 12);
       showPull();
       dirty = true;
+    }
+    if (introT < 1) {
+      introT = Math.min(1, introT + dt / 1.4);
+      dirty = true;
+      if (introT === 1) maybeWelcome();
     }
     if (born.size) dirty = true;
     if (dirty) {
@@ -1274,12 +1295,30 @@
     const p = new URLSearchParams();
     if (selected !== null) p.set('book', ids[selected]);
     if (mode !== 'covers') p.set('mode', mode);
-    if (sortKey !== 'added') p.set('sort', sortKey);
+    if (sortKey !== defaultSort()) p.set('sort', sortKey);
     const h = p.toString();
     history.replaceState(history.state, '', h ? '#' + h : location.pathname);
   }
 
   // --- start ---------------------------------------------------------------------------
+  // The demo's first visit: what this is and how to get around. Shown once.
+  const welcome = $('#welcome');
+  function maybeWelcome() {
+    if (!source || !source.demo || store.get('bookcase.welcomed') || selected !== null) return;
+    $('#welcome-count').textContent = ids.length.toLocaleString();
+    welcome.hidden = false;
+    $('#welcome-go').focus({ preventScroll: true });
+  }
+  function dismissWelcome() {
+    if (welcome.hidden) return;
+    welcome.hidden = true;
+    store.set('bookcase.welcomed', '1');
+    stage.focus({ preventScroll: true });
+  }
+  $('#welcome-go').addEventListener('click', dismissWelcome);
+  stage.addEventListener('pointerdown', dismissWelcome);
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') dismissWelcome(); });
+
   function countText() {
     const n = `${ids.length.toLocaleString()} ${source && source.demo ? 'public-domain ' : ''}${ids.length === 1 ? 'book' : 'books'}`;
     return n;
@@ -1294,6 +1333,7 @@
         if (source.demo) $('.mark a').title = 'About this demo';
         loadMeta();
         if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+        if (!sortChosen || !SORTS[sortChosen]) { sortKey = defaultSort(); sortSel.value = sortKey; }
       }
       ids = await source.order(sortKey);
     } catch (e) {
@@ -1305,7 +1345,10 @@
     prefetchQueue = null;
     clearSearch(true);
     $('#count').textContent = countText();
-    statusEl.hidden = true;
+    if (!statusEl.hidden) {        // first load: play the opening
+      statusEl.hidden = true;
+      if (reduceMotion) maybeWelcome(); else introT = 0;
+    }
     const i = indexOf.has(focusId) ? indexOf.get(focusId) : 0;
     goTo(i, true);
     if (selected !== null) selected = indexOf.has(focusId) ? i : null;

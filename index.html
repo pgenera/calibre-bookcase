@@ -6,6 +6,13 @@
 <title>Bookcase</title>
 <meta name="description" content="A calibre library as an endless helical bookcase.">
 <meta name="theme-color" content="#14211b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bookcase">
+<meta property="og:description" content="A calibre library as an endless helix of books.">
+<meta property="og:image" content="https://pgenera.github.io/calibre-bookcase/demo/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -102,6 +109,26 @@
     transform: translateX(-50%); color: var(--muted); font-style: italic;
     pointer-events: none; text-shadow: 0 1px 6px var(--wall);
   }
+  /* Lamp light: a faint warm glow in the middle, the edges falling into shadow. */
+  #vignette {
+    position: fixed; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 45%, rgba(255, 214, 150, 0.07), transparent 70%),
+      radial-gradient(ellipse 85% 75% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+  }
+  #welcome {
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: min(25em, calc(100% - 32px)); padding: 24px 28px;
+    background: var(--wall-raised); border: 1px solid var(--rule);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+  }
+  #welcome h2 { font-style: italic; font-weight: 400; font-size: 26px; line-height: 1.2; margin: 0 0 10px; }
+  #welcome p { margin: 0 0 12px; }
+  #welcome ul { margin: 0 0 16px; padding-left: 1.1em; color: var(--muted); }
+  #welcome li { margin: 0 0 4px; }
+  #welcome .actions { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: baseline; margin: 0; }
+  #welcome .actions .textbtn { color: var(--paper); border-bottom-color: var(--brass); font-size: inherit; }
+  #welcome .actions a { color: var(--muted); text-underline-offset: 3px; }
   #status {
     position: fixed; inset: 0; display: grid; place-items: center;
     color: var(--muted); font-style: italic; text-align: center; padding: 24px; pointer-events: none;
@@ -163,6 +190,7 @@
 </head>
 <body>
 <div id="stage" tabindex="0" aria-label="Bookcase. Drag sideways to turn it, up and down to slide; pinch or plus and minus to zoom; Enter opens the book in front."></div>
+<div id="vignette" aria-hidden="true"></div>
 
 <header>
   <p class="mark"><a href="/" title="Back to the library">Library</a></p>
@@ -188,6 +216,20 @@
 
 <div id="facing" aria-live="polite"><div class="t"></div><div class="a"></div><div class="s"></div></div>
 <div id="status">Opening the bookcase…</div>
+<div id="welcome" role="dialog" aria-labelledby="welcome-title" hidden>
+  <h2 id="welcome-title">A bookcase for a calibre library</h2>
+  <p>This is a demo with <span id="welcome-count">151</span> books old enough to be in the public domain.
+     Pointed at a calibre server, it shows that library the same way.</p>
+  <ul>
+    <li>Drag sideways to turn the shelves, and up or down to move along them.</li>
+    <li>Pinch, or hold Ctrl and scroll, to zoom.</li>
+    <li>Tap a book to take it off the shelf.</li>
+  </ul>
+  <p class="actions">
+    <button type="button" class="textbtn" id="welcome-go">Browse the shelves</button>
+    <a href="https://github.com/pgenera/calibre-bookcase">Use it with your own library</a>
+  </p>
+</div>
 <div id="pull" aria-live="polite" hidden></div>
 
 <aside id="detail" aria-label="Book details" aria-hidden="true">

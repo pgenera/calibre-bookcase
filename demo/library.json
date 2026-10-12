@@ -134,8 +134,11 @@
    "pubdate": "1905-01-01",
    "added": "2026-02-06T12:00:00+00:00",
    "comments": "<p>Holmes comes back from the dead in The Empty House, followed by twelve new cases.</p>",
-   "cover": "demo/covers/6.svg",
-   "credit": null,
+   "cover": "demo/covers/6.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Return_of_Sherlock_Holmes_cover_1905.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -653,8 +656,11 @@
    "pubdate": "1919-01-01",
    "added": "2026-07-10T12:00:00+00:00",
    "comments": "<p>Anne&#x27;s children and the motherless children of the new minister share a hollow they call Rainbow Valley.</p>",
-   "cover": "demo/covers/28.svg",
-   "credit": null,
+   "cover": "demo/covers/28.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_cover_photograph_of_%22Rainbow_Valley%22.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -674,8 +680,11 @@
    "pubdate": "1921-01-01",
    "added": "2025-11-08T12:00:00+00:00",
    "comments": "<p>Anne&#x27;s youngest daughter comes of age on the home front during the First World War.</p>",
-   "cover": "demo/covers/29.svg",
-   "credit": null,
+   "cover": "demo/covers/29.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Rilla_of_Ingleside_-_Cover.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -926,8 +935,11 @@
    "pubdate": "1823-01-01",
    "added": "2025-11-11T12:00:00+00:00",
    "comments": "<p>An older Natty Bumppo clashes with the settlers of Templeton.</p>",
-   "cover": "demo/covers/40.svg",
-   "credit": null,
+   "cover": "demo/covers/40.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:The_Pioneers_1823.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1322,8 +1334,11 @@
    "pubdate": "1923-01-01",
    "added": "2026-03-19T12:00:00+00:00",
    "comments": "<p>Poirot answers a call for help and finds the man who sent it dead on a French golf course.</p>",
-   "cover": "demo/covers/57.svg",
-   "credit": null,
+   "cover": "demo/covers/57.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:American_cover_of_%C2%ABThe_Murder_on_the_Links%C2%BB_by_Dodd,_Mead_%26_Co,_1923.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1427,8 +1442,11 @@
    "pubdate": "1922-01-01",
    "added": "2026-01-27T12:00:00+00:00",
    "comments": "<p>Two young friends start a business as adventurers and are soon hunting for a missing treaty.</p>",
-   "cover": "demo/covers/62.svg",
-   "credit": null,
+   "cover": "demo/covers/62.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:American_cover_of_%C2%ABThe_Secret_Adversary%C2%BB_by_Dodd,_Mead_%26_Co,_1922.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1625,8 +1643,11 @@
    "pubdate": "1924-01-01",
    "added": "2026-09-16T12:00:00+00:00",
    "comments": "<p>Hannay searches for three hostages held by a criminal mastermind.</p>",
-   "cover": "demo/covers/71.svg",
-   "credit": null,
+   "cover": "demo/covers/71.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Three_Hostages_1924_1st_edition.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1853,8 +1874,11 @@
    "pubdate": "1817-01-01",
    "added": "2025-11-13T12:00:00+00:00",
    "comments": "<p>Anne Elliot meets again the naval officer she was persuaded not to marry.</p>",
-   "cover": "demo/covers/81.svg",
-   "credit": null,
+   "cover": "demo/covers/81.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:NorthangerPersuasionTitlePage.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -1994,8 +2018,11 @@
    "pubdate": "1847-01-01",
    "added": "2026-01-15T12:00:00+00:00",
    "comments": "<p>An orphaned governess and her employer, Mr. Rochester, who has a secret.</p>",
-   "cover": "demo/covers/87.svg",
-   "credit": null,
+   "cover": "demo/covers/87.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Jane_Eyre_title_page.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2345,8 +2372,11 @@
    "pubdate": "1883-01-01",
    "added": "2026-08-08T12:00:00+00:00",
    "comments": "<p>Jim Hawkins, a treasure map, and Long John Silver.</p>",
-   "cover": "demo/covers/102.svg",
-   "credit": null,
+   "cover": "demo/covers/102.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Treasure_Island_book_title_page_(1911).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2642,8 +2672,11 @@
    "pubdate": "1862-01-01",
    "added": "2026-09-21T12:00:00+00:00",
    "comments": "<p>Jean Valjean, a released convict, is pursued for decades by the inspector Javert.</p>",
-   "cover": "demo/covers/115.svg",
-   "credit": null,
+   "cover": "demo/covers/115.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Cover_of_the_book_Les_Miserables_(db53b829-1fcf-42be-b3a0-01004e685d45).jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -2759,8 +2792,11 @@
    "pubdate": "1925-01-01",
    "added": "2025-12-29T12:00:00+00:00",
    "comments": "<p>One June day in London as Clarissa Dalloway prepares for a party.</p>",
-   "cover": "demo/covers/120.svg",
-   "credit": null,
+   "cover": "demo/covers/120.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Mrs_Dalloway_1925.jpg"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
@@ -3344,8 +3380,11 @@
    "pubdate": "1906-01-01",
    "added": "2026-07-05T12:00:00+00:00",
    "comments": "<p>Three children move to the country after their father is taken away.</p>",
-   "cover": "demo/covers/145.svg",
-   "credit": null,
+   "cover": "demo/covers/145.jpg",
+   "credit": {
+    "text": "Cover: Wikimedia Commons, public domain",
+    "href": "https://commons.wikimedia.org/wiki/File:Titlepage-The_railway_Children.png"
+   },
    "links": [
     {
      "text": "Find it at Project Gutenberg",
