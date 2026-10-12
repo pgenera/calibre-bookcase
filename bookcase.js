@@ -1394,13 +1394,32 @@
   }
 
   const pullEl = $('#pull');
+  const pullArc = pullEl.querySelector('circle');
+  const pullSvg = pullEl.querySelector('svg');
+  const pullLabel = pullEl.querySelector('.sr-only');
+  const ARC = 2 * Math.PI * 9;
   function showPull() {
     const shown = pull > 4 || refreshing;
     pullEl.hidden = !shown;
     if (!shown) return;
-    pullEl.textContent = refreshing ? 'Refreshing…' : pull >= PULL_REFRESH ? 'Release to refresh' : 'Pull to refresh';
-    pullEl.style.opacity = refreshing ? 1 : Math.min(1, pull / PULL_REFRESH);
+    const p = refreshing ? 1 : Math.min(1, pull / PULL_REFRESH);
+    // Drops in from under the header as you pull; the arc fills and turns with it.
+    pullEl.style.transform = `translateY(${(Math.min(pull, PULL_REFRESH * 1.4) - PULL_REFRESH) * 0.45}px)`;
+    pullEl.style.opacity = Math.min(1, p * 1.6);
+    pullEl.classList.toggle('spinning', refreshing);
+    if (!refreshing) {
+      pullArc.style.strokeDasharray = `${(0.08 + 0.72 * p) * ARC} ${ARC}`;
+      pullSvg.style.transform = `rotate(${-90 + p * 270}deg)`;
+      pullArc.style.opacity = p >= 1 ? 1 : 0.65;
+    } else {
+      pullArc.style.strokeDasharray = '';
+      pullSvg.style.transform = '';
+      pullArc.style.opacity = 1;
+    }
+    const label = refreshing ? 'Refreshing' : p >= 1 ? 'Release to refresh' : 'Pull to refresh';
+    if (pullLabel.textContent !== label) pullLabel.textContent = label;
   }
+
 
   // A full refresh: newest copy of the app itself, fresh titles and details (covers
   // stay cached), then reload.

@@ -104,11 +104,25 @@
   #facing .t { font-style: italic; font-size: 22px; line-height: 1.2; }
   #facing .a, #facing .s { color: var(--muted); }
 
+  /* Pull-to-refresh: a round badge whose arc fills as you pull, then spins. */
   #pull {
-    position: fixed; left: 50%; top: calc(max(14px, env(safe-area-inset-top)) + 64px);
-    transform: translateX(-50%); color: var(--muted); font-style: italic;
-    pointer-events: none; text-shadow: 0 1px 6px var(--wall);
+    position: fixed; left: 50%; top: calc(max(14px, env(safe-area-inset-top)) + 50px);
+    width: 42px; height: 42px; margin-left: -21px; border-radius: 50%;
+    display: grid; place-items: center; pointer-events: none;
+    background: var(--wall-raised); border: 1px solid var(--rule);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
   }
+  #pull svg { width: 24px; height: 24px; overflow: visible; }
+  #pull circle { fill: none; stroke: var(--brass); stroke-width: 3; stroke-linecap: round; }
+  #pull.spinning svg { animation: pull-spin 0.9s linear infinite; }
+  #pull.spinning circle { animation: pull-dash 1.4s ease-in-out infinite; }
+  @keyframes pull-spin { to { transform: rotate(360deg); } }
+  @keyframes pull-dash {
+    0% { stroke-dasharray: 2 57; stroke-dashoffset: 0; }
+    50% { stroke-dasharray: 40 57; stroke-dashoffset: -12; }
+    100% { stroke-dasharray: 40 57; stroke-dashoffset: -56; }
+  }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   /* Lamp light: a faint warm glow in the middle, the edges falling into shadow. */
   #vignette {
     position: fixed; inset: 0; pointer-events: none;
@@ -190,7 +204,10 @@
                       margin-left: -20px; border-radius: 2px; background: var(--rule); }
     #facing .t { font-size: 19px; }
   }
-  @media (prefers-reduced-motion: reduce) { #detail { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    #detail { transition: none; }
+    #pull.spinning svg, #pull.spinning circle { animation: none; stroke-dasharray: 44 57; }
+  }
 </style>
 </head>
 <body>
@@ -235,7 +252,10 @@
     <a href="https://github.com/pgenera/calibre-bookcase">Use it with your own library</a>
   </p>
 </div>
-<div id="pull" aria-live="polite" hidden></div>
+<div id="pull" hidden>
+  <svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="9"/></svg>
+  <span class="sr-only" aria-live="polite"></span>
+</div>
 
 <aside id="detail" aria-label="Book details" aria-hidden="true">
   <button type="button" class="textbtn close" id="close">Close</button>
