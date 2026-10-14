@@ -892,7 +892,10 @@
         liftVel = 0;
         // Settle on a whole turn, carrying on in the direction of travel past 15% of one,
         // or at the top of the shelf.
-        const k = clampLift(liftDir > 0 ? Math.ceil(lift - 0.15) : liftDir < 0 ? Math.floor(lift + 0.15) : Math.round(lift));
+        // The top of the shelf is a resting place too, though usually not a whole turn.
+        let k = liftDir > 0 ? Math.ceil(lift - 0.15) : liftDir < 0 ? Math.floor(lift + 0.15) : Math.round(lift);
+        if (!liftDir && Math.abs(lift - topLift()) < Math.abs(lift - k)) k = topLift();
+        k = clampLift(k);
         const kk = Math.abs(k - Math.round(k)) < 1e-9 || Math.abs(k - topLift()) < 1e-6 ? k : Math.round(lift);
         if (Math.abs(lift - kk) > 0.001) lift += (kk - lift) * Math.min(1, dt * 8);
         else foldLift();
