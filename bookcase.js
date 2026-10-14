@@ -214,6 +214,9 @@
   // turns, and it only settles on whole turns, which look exactly like no offset.
   let lift = 0, liftVel = 0, liftTarget = null;
   let liftDir = 0;               // direction of the last slide, so small nudges carry on to the next turn
+  // At the top of the shelf the camera rests this many turns down, so the newest
+  // books start just under the header instead of mid-screen below empty space.
+  let headTurns = 0;
   let zoom = 1;
   let introT = 1;                // 0..1 while the opening plays
   const born = new Map();        // id -> time it appeared, for the grow-in animation
@@ -512,7 +515,7 @@
     const net = navigator.connection;
     if (net && (net.saveData || /2g/.test(net.effectiveType || ''))) return false;
     return !document.hidden && !dragging && !pinch && target === null && liftTarget === null &&
-           Math.abs(vel) < 0.02 && Math.abs(liftVel) < 0.01 && lift === 0 &&
+           Math.abs(vel) < 0.02 && Math.abs(liftVel) < 0.01 && (Math.abs(lift - Math.round(lift)) < 1e-3 || atTop()) &&
            performance.now() - lastInput > PREFETCH.idleMs && thumbLoads === 0 && metaInFlight === 0;
   }
   function prefetchOrder() {
@@ -570,13 +573,26 @@
     const seen = (Math.tan((camera.fov * Math.PI) / 360) * camera.position.z) / PITCH + 1;
     return Math.max(TURNS_VISIBLE[mode], seen);
   }
+  // The least lift with book i in front: the top of the shelf. An open book comes
+  // all the way to the camera, so the top rows can be pulled out too.
+  function topLift(i = pos) {
+    const n = booksPerTurn();
+    return Math.min((selected === null ? headTurns : 0) - i / n, (Math.max(0, ids.length - 1) - i) / n);
+  }
   function clampLift(l) {
     const n = booksPerTurn();
-    return clamp(l, -pos / n, (Math.max(0, ids.length - 1) - pos) / n);
+    return clamp(l, topLift(), Math.max(topLift(), (Math.max(0, ids.length - 1) - pos) / n));
   }
+  const atTop = () => selected === null && Math.abs(lift - topLift()) < 1e-3;
   function foldLift() {           // turn a whole-turn lift into a position, invisibly
-    pos = clamp(pos + Math.round(lift) * booksPerTurn(), 0, Math.max(0, ids.length - 1));
-    lift = 0; liftVel = 0; liftTarget = null; liftDir = 0;
+    const n = booksPerTurn(), turns = Math.round(lift), p = pos + turns * n;
+    // Not near the top, where the lift is what keeps the newest book front and centre.
+    if (turns && p >= (headTurns + 1) * n) {
+      pos = clamp(p, 0, Math.max(0, ids.length - 1));
+      lift -= turns;
+      if (Math.abs(lift) < 1e-3) lift = 0;
+    }
+    liftVel = 0; liftTarget = null; liftDir = 0;
   }
   function slide(newLift) {
     newLift = clampLift(newLift);
@@ -621,6 +637,8 @@
 
     const span = Math.ceil(perTurn * turnsShown());
     const mid = Math.round(front());
+    // The lamp hangs at the camera, except at the top, where it moves up to light the newest rows.
+    const lampAt = front() - (headTurns * perTurn / 2) * clamp(2 - front() / (Math.max(1, headTurns) * perTurn), 0, 1);
     const want = new Set();
     // Nearest the camera first, so the pool runs out at the edges, not mid-screen.
     for (let d = 0; d <= span && want.size < MAX_BOOKS; d++) {
@@ -679,7 +697,7 @@
       if (phiI > Math.PI) phiI -= 2 * Math.PI;
       if (phiI < -Math.PI) phiI += 2 * Math.PI;
       const side = Math.min(1, Math.abs(phiI) / VISIBLE_ARC);
-      const turnsAway = Math.min(1, Math.abs(i - front()) / perTurn / 2.5);
+      const turnsAway = Math.min(1, Math.abs(i - lampAt) / perTurn / 2.5);
       let light = i === selected ? 1 : (1 - 0.5 * side * side) * (1 - 0.35 * turnsAway);
       light *= 0.25 + 0.75 * rise;
       if (hits && !hits.set.has(i)) light *= 0.28;                 // dim non-matches
@@ -716,7 +734,8 @@
     zoomMax = Math.max(ZOOM.max, (fit - extra) / CAM_DIST);
     zoom = clamp(zoom, ZOOM.min, zoomMax);
     // While the book card is open the camera may back off so the open book fits beside it.
-    const dist = Math.max(CAM_DIST * zoom + extra, view.need);
+    restDist = CAM_DIST * zoom + extra;
+    const dist = Math.max(restDist, view.need);
     camera.position.z = R + dist;
     scene.fog.near = dist + 2;
     scene.fog.far = dist + R * 1.6;
@@ -776,9 +795,35 @@
     if (view.x || view.y) camera.setViewOffset(W, H, view.x, view.y, W, H); else camera.clearViewOffset();
   }
 
+  // How many turns fit above the camera's shelf with the camera at rest: the top row's
+  // books must clear the header.
+  let restDist = CAM_DIST;
+  const headPoint = new THREE.Vector3();
+  function measureHead() {
+    const H = stage.clientHeight;
+    if (!H) return;
+    const wasTop = atTop();
+    const cam = camera.clone();
+    cam.position.z = R + restDist;
+    cam.clearViewOffset();
+    cam.updateProjectionMatrix();
+    cam.updateMatrixWorld();
+    const limit = Math.max(0, headerEl.getBoundingClientRect().bottom - stage.getBoundingClientRect().top) + 8;
+    let k = 0;
+    while (k < 8) {
+      headPoint.set(0, -0.75 + (k + 1) * PITCH + COVER.h, R).project(cam);
+      if ((1 - headPoint.y) / 2 * H < limit) break;
+      k++;
+    }
+    headTurns = k;
+    if (wasTop) lift = topLift();
+    dirty = true;
+  }
+
   function setZoom(z) {
     zoom = clamp(z, ZOOM.min, zoomMax);
     placeCamera();
+    measureHead();
   }
   function resize() {
     const w = stage.clientWidth, h = stage.clientHeight;
@@ -786,6 +831,7 @@
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     placeCamera();
+    measureHead();
     if (selected !== null || view.x || view.y) followCard(true);
   }
   addEventListener('resize', resize);
@@ -795,7 +841,8 @@
     i = clamp(i, 0, Math.max(0, ids.length - 1));
     foldLift();
     vel = 0;
-    if (instant || reduceMotion) { pos = i; target = null; } else { target = i; }
+    const l = Math.max(0, topLift(i));     // near the top, stay at the top
+    if (instant || reduceMotion) { pos = i; target = null; lift = l; } else { target = i; liftTarget = l; }
     dirty = true;
   }
 
@@ -831,11 +878,12 @@
         lift = l;
         liftVel *= Math.exp(-dt * LIFT.friction);
         dirty = true;
-      } else if (!dragging && lift !== 0) {
+      } else if (!dragging && lift !== 0 && target === null) {
         liftVel = 0;
-        // Settle on a whole turn, carrying on in the direction of travel past 15% of one.
+        // Settle on a whole turn, carrying on in the direction of travel past 15% of one,
+        // or at the top of the shelf.
         const k = clampLift(liftDir > 0 ? Math.ceil(lift - 0.15) : liftDir < 0 ? Math.floor(lift + 0.15) : Math.round(lift));
-        const kk = Math.abs(k - Math.round(k)) < 1e-9 ? k : Math.round(lift);
+        const kk = Math.abs(k - Math.round(k)) < 1e-9 || k === topLift() ? k : Math.round(lift);
         if (Math.abs(lift - kk) > 0.001) lift += (kk - lift) * Math.min(1, dt * 8);
         else foldLift();
         dirty = true;
@@ -921,7 +969,7 @@
     pos = clamp(down.pos - (dx * wpp) / slot(), 0, ids.length - 1);
     // Dragging down past the top of the shelf is pull-to-refresh.
     const wanted = down.lift - (dy * wpp) / PITCH;
-    const top = -pos / booksPerTurn();
+    const top = topLift();
     pull = !refreshing && wanted < top ? ((top - wanted) * PITCH) / wpp : refreshing ? pull : 0;
     showPull();
     slide(wanted);
@@ -1057,6 +1105,7 @@
     if (selected === null) return;
     if (fromPage) dropLayer('card');
     selected = null;
+    if (lift < topLift() && target === null) { liftTarget = topLift(); liftDir = 0; }   // back to the top
     detailToken++;
     detail.classList.remove('open');
     detail.setAttribute('aria-hidden', 'true');
@@ -1283,7 +1332,7 @@
     if (!list.length) { showHits('Nothing found'); dirty = true; return; }
     const from = fromId !== null && indexOf.has(fromId) ? list.indexOf(indexOf.get(fromId)) : -1;
     // Otherwise start at the first match at or after where we are.
-    hitAt = from >= 0 ? from : Math.max(0, list.findIndex((i) => i >= Math.round(front())));
+    hitAt = from >= 0 ? from : Math.max(0, list.findIndex((i) => i >= (atTop() ? 0 : Math.round(front()))));
     jumpHit(0);
   }
   function jumpHit(step) {
@@ -1493,7 +1542,7 @@
     if (next.length === old.length && next.every((id, k) => id === old[k])) return;
     const frontIndex = clamp(Math.round(front()), 0, old.length - 1);
     const frontId = old[frontIndex];
-    const atTop = frontIndex === 0 && selected === null && !hits && Math.abs(lift) < 0.001;
+    const wasTop = atTop() && Math.round(pos) === 0 && !hits;
     const selId = selected !== null ? old[selected] : null;
     const added = next.filter((id) => !indexOf.has(id));
 
@@ -1524,7 +1573,7 @@
     const now = performance.now();
     for (const id of added) born.set(id, now);
     $('#count').textContent = countText();
-    if (atTop && added.length && indexOf.get(added[0]) === 0) goTo(0);
+    if (wasTop && added.length && indexOf.get(added[0]) === 0) goTo(0);
     dirty = true;
   }
 
