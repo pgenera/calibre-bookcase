@@ -25,7 +25,7 @@
   const THUMB = '150x225';
   const CHUNK = 100;             // ids per /ajax/books request
   const CHECK_EVERY = 60e3;      // look for new or removed books this often while visible
-  const RECENT_EVERY = 864e5;    // once a day, fetch the covers of recent additions again...
+  const RECENT_EVERY = 864e5;    // once a day, check whether recent additions were edited...
   const RECENT_DAYS = 30;        // ...added this many days ago or less
   const GROW_MS = 900;           // a new book grows onto the shelf over this long
   // Vertical flicks, in turns/s. A flick's speed is multiplied by `boost`, and a flick
@@ -76,8 +76,9 @@
     x ^= x >>> 15; x = Math.imul(x, 2246822519); x ^= x >>> 13;
     return ((x >>> 0) % 10007) / 10007;
   }
-  async function getJSON(url) {
-    const r = await fetch(url, { credentials: 'same-origin' });
+  async function getJSON(url, fresh = false) {
+    // fresh: from calibre itself, not the service worker's saved copy.
+    const r = await fetch(url, { credentials: 'same-origin', cache: fresh ? 'no-cache' : 'default' });
     if (!r.ok) throw new Error(`${r.status} ${url}`);
     return r.json();
   }
@@ -104,7 +105,7 @@
   // --- where the books come from ---------------------------------------------------------
   // calibre's content server, or the static demo library. Both answer the same questions.
   function calibreSource(library) {
-    const q = (path) => getJSON(path);
+    const q = (path, fresh) => getJSON(path, fresh);
     const order = (sortKey, seriesOrder) => (seriesOrder ? 'sort=series_index&sort_order=asc' : SORTS[sortKey]);
     return {
       name: library, home: '/', live: true, demo: false,
@@ -113,7 +114,7 @@
         (await q(`/ajax/search/${library}?num=100000&${order(sortKey, seriesOrder)}&query=${encodeURIComponent(text)}`)).book_ids,
       recent: async (days) =>
         (await q(`/ajax/search/${library}?num=100000&${SORTS.added}&query=${encodeURIComponent(`date:>${days}daysago`)}`)).book_ids,
-      books: (list) => q(`/ajax/books/${library}?ids=${list.join(',')}&category_urls=false`),
+      books: (list, fresh) => q(`/ajax/books/${library}?ids=${list.join(',')}&category_urls=false`, fresh),
       book: (id) => q(`/ajax/book/${id}/${library}?category_urls=false`),
       thumb: (id) => `/get/thumb/${id}/${library}?sz=${THUMB}`,
       cover: (id) => `/get/cover/${id}/${library}`,
@@ -1472,28 +1473,19 @@
     checking = false;
   }
 
-  // Covers stay on the device until the page notices calibre changed the book,
-  // which it can miss. A new book's cover is the one most likely to be fixed
-  // after import, so once a day the worker fetches the last month's covers again
-  // and the page redraws any that came back different.
+  // Titles and last-modified times are saved on the device and served from the
+  // worker's cache first, so an edit made in calibre after import (a fixed cover,
+  // a corrected title) can go unnoticed. Once a day, ask calibre itself about the
+  // last month's additions; storeBooks refetches the covers of any that changed.
   async function refreshRecentCovers() {
-    const worker = navigator.serviceWorker && navigator.serviceWorker.controller;
-    if (!worker || !source.recent || !navigator.onLine) return;
-    const key = `bookcase.recentCovers.${source.name}`;
+    if (!source.recent || !navigator.onLine) return;
+    const key = `bookcase.recentCheck.${source.name}`;
     let last = 0;
     try { last = +localStorage.getItem(key) || 0; } catch (e) { /* no storage: check every launch */ }
     if (Date.now() - last < RECENT_EVERY) return;
-    const byUrl = new Map((await source.recent(RECENT_DAYS)).map((id) => [new URL(thumbUrl(id), location.href).href, id]));
-    const changed = await new Promise((resolve) => {
-      const ch = new MessageChannel();
-      ch.port1.onmessage = (e) => resolve(e.data);
-      worker.postMessage({ type: 'recheck', urls: [...byUrl.keys()] }, [ch.port2]);
-      setTimeout(() => resolve(null), 60e3);   // an older worker never answers
-    });
-    if (!Array.isArray(changed)) return;
+    const recent = await source.recent(RECENT_DAYS);
+    for (let k = 0; k < recent.length; k += CHUNK) storeBooks(await source.books(recent.slice(k, k + CHUNK), true));
     try { localStorage.setItem(key, String(Date.now())); } catch (e) { /* as above */ }
-    for (const url of changed) if (byUrl.has(url)) dropCover(byUrl.get(url));
-    if (changed.length) dirty = true;
   }
 
   function merge(next) {

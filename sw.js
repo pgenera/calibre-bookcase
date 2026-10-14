@@ -3,10 +3,10 @@
 
    The page, three.js and fonts   cached copy first, refreshed in the background
    /ajax/search (book order)      network first, cached copy when offline
-   /ajax/books, /ajax/book, info  cached copy first, refreshed in the background
+   /ajax/books, /ajax/book, info  cached copy first, refreshed in the background (network
+                                  first when the page asks for a fresh copy)
    /get/thumb (covers)            kept until the page says the book changed (covers rarely
-                                  do), at most THUMB_LIMIT of them; the page also has recent
-                                  books' covers checked again once a day
+                                  do), at most THUMB_LIMIT of them
    Downloads and anything else go straight to the network. */
 'use strict';
 
@@ -46,28 +46,6 @@ self.addEventListener('message', (event) => {
     event.waitUntil(caches.open(COVERS).then((c) => Promise.all(event.data.urls.map((u) => c.delete(u)))));
     return;
   }
-  // Fetch these covers again and keep any that changed; answer with their URLs.
-  // A cover that can't be fetched keeps its cached copy.
-  if (event.data && event.data.type === 'recheck' && Array.isArray(event.data.urls)) {
-    event.waitUntil((async () => {
-      const cache = await caches.open(COVERS);
-      const changed = [];
-      for (const url of event.data.urls) {
-        try {
-          const res = await fetch(url, { cache: 'no-cache' });
-          if (!res.ok || res.type !== 'basic') continue;
-          const cached = await cache.match(url);
-          const now = new Uint8Array(await res.clone().arrayBuffer());
-          const was = cached ? new Uint8Array(await cached.arrayBuffer()) : null;
-          if (was && was.length === now.length && was.every((b, k) => b === now[k])) continue;
-          await cache.put(url, res);
-          if (was) changed.push(url);
-        } catch (e) { /* offline or calibre restarting: keep what we have */ }
-      }
-      if (event.ports[0]) event.ports[0].postMessage(changed);
-    })());
-    return;
-  }
   if (!event.data || event.data.type !== 'refresh') return;
   event.waitUntil((async () => {
     await caches.delete(DATA);
@@ -94,7 +72,9 @@ self.addEventListener('fetch', (event) => {
   if (p.startsWith(scope)) event.respondWith(staleWhileRevalidate(req, SHELL, event));
   else if (/^\/get\/thumb\//.test(p)) event.respondWith(coverFirst(req, event));
   else if (/^\/ajax\/search(\/|$)/.test(p)) event.respondWith(networkFirst(req, DATA));
-  else if (/^\/ajax\/(books|book|library-info)(\/|$)/.test(p)) event.respondWith(staleWhileRevalidate(req, DATA, event, DATA_LIMIT));
+  else if (/^\/ajax\/(books|book|library-info)(\/|$)/.test(p)) {
+    event.respondWith(req.cache === 'no-cache' ? networkFirst(req, DATA) : staleWhileRevalidate(req, DATA, event, DATA_LIMIT));
+  }
 });
 
 async function put(cacheName, req, res, limit) {
