@@ -217,6 +217,7 @@
   // At the top of the shelf the camera rests this many turns down, so the newest
   // books start just under the header instead of mid-screen below empty space.
   let headTurns = 0;
+  let footTurns = 0;             // likewise at the bottom, so the oldest books end just above the caption
   let tween = null;              // a glide started by goTo: from/to pos and lift, start, duration
   let zoom = 1;
   let introT = 1;                // 0..1 while the opening plays
@@ -516,7 +517,7 @@
     const net = navigator.connection;
     if (net && (net.saveData || /2g/.test(net.effectiveType || ''))) return false;
     return !document.hidden && !dragging && !pinch && target === null && liftTarget === null &&
-           Math.abs(vel) < 0.02 && Math.abs(liftVel) < 0.01 && (Math.abs(lift - Math.round(lift)) < 1e-3 || atTop()) &&
+           Math.abs(vel) < 0.02 && Math.abs(liftVel) < 0.01 && (Math.abs(lift - Math.round(lift)) < 1e-3 || atEnd()) &&
            performance.now() - lastInput > PREFETCH.idleMs && thumbLoads === 0 && metaInFlight === 0;
   }
   function prefetchOrder() {
@@ -574,21 +575,23 @@
     const seen = (Math.tan((camera.fov * Math.PI) / 360) * camera.position.z) / PITCH + 1;
     return Math.max(TURNS_VISIBLE[mode], seen);
   }
-  // The least lift with book i in front: the top of the shelf. An open book comes
-  // all the way to the camera, so the top rows can be pulled out too.
+  // The least and greatest lift with book i in front: the top and bottom of the shelf.
+  // An open book comes all the way to the camera, so the end rows can be pulled out too.
+  // On a library too short to fill the screen, the top wins.
   function topLift(i = pos) {
-    const n = booksPerTurn();
-    return Math.min((selected === null ? headTurns : 0) - i / n, (Math.max(0, ids.length - 1) - i) / n);
+    return (selected === null ? headTurns : 0) - i / booksPerTurn();
   }
-  function clampLift(l) {
-    const n = booksPerTurn();
-    return clamp(l, topLift(), Math.max(topLift(), (Math.max(0, ids.length - 1) - pos) / n));
+  function bottomLift(i = pos) {
+    const end = (Math.max(0, ids.length - 1) - i) / booksPerTurn() - (selected === null ? footTurns : 0);
+    return Math.max(topLift(i), end);
   }
+  const clampLift = (l) => clamp(l, topLift(), bottomLift());
   const atTop = () => selected === null && Math.abs(lift - topLift()) < 1e-3;
+  const atEnd = () => atTop() || (selected === null && Math.abs(lift - bottomLift()) < 1e-3);
   function foldLift() {           // turn a whole-turn lift into a position, invisibly
     const n = booksPerTurn(), turns = Math.round(lift), p = pos + turns * n;
-    // Not near the top, where the lift is what keeps the newest book front and centre.
-    if (turns && p >= (headTurns + 1) * n) {
+    // Not near either end, where the lift is what keeps the end book front and centre.
+    if (turns && p >= (headTurns + 1) * n && p <= ids.length - 1 - (footTurns + 1) * n) {
       pos = clamp(p, 0, Math.max(0, ids.length - 1));
       lift -= turns;
       if (Math.abs(lift) < 1e-3) lift = 0;
@@ -639,7 +642,8 @@
     const span = Math.ceil(perTurn * turnsShown());
     const mid = Math.round(front());
     // The lamp hangs at the camera, except at the top, where it moves up to light the newest rows.
-    const lampAt = front() - (headTurns * perTurn / 2) * clamp(2 - front() / (Math.max(1, headTurns) * perTurn), 0, 1);
+    const lampAt = front() - (headTurns * perTurn / 2) * clamp(2 - front() / (Math.max(1, headTurns) * perTurn), 0, 1)
+      + (footTurns * perTurn / 2) * clamp(2 - (ids.length - 1 - front()) / (Math.max(1, footTurns) * perTurn), 0, 1);
     const want = new Set();
     // Nearest the camera first, so the pool runs out at the edges, not mid-screen.
     for (let d = 0; d <= span && want.size < MAX_BOOKS; d++) {
@@ -796,14 +800,14 @@
     if (view.x || view.y) camera.setViewOffset(W, H, view.x, view.y, W, H); else camera.clearViewOffset();
   }
 
-  // How many turns fit above the camera's shelf with the camera at rest: the top row's
-  // books just clear the header.
+  // How many turns fit above and below the camera's shelf with the camera at rest: the
+  // top row's books just clear the header, the bottom row's the caption.
   let restDist = CAM_DIST;
   const headPoint = new THREE.Vector3();
   function measureHead() {
     const H = stage.clientHeight;
     if (!H) return;
-    const wasTop = atTop();
+    const wasTop = atTop(), wasBottom = !wasTop && atEnd();
     const cam = camera.clone();
     cam.position.z = R + restDist;
     cam.clearViewOffset();
@@ -811,10 +815,16 @@
     cam.updateMatrixWorld();
     const limit = Math.max(0, headerEl.getBoundingClientRect().bottom - stage.getBoundingClientRect().top) + 4;
     // Where the line of sight just under the header meets the front of the shelf.
-    headPoint.set(0, 1 - (2 * limit) / H, 0.5).unproject(cam).sub(cam.position);
-    const y = cam.position.y + (headPoint.y * (R - cam.position.z)) / headPoint.z;
-    headTurns = Math.max(0, (y - (-0.75 + COVER.h)) / PITCH);
+    const shelfAt = (px) => {        // world height where the line of sight through px meets the shelf
+      headPoint.set(0, 1 - (2 * px) / H, 0.5).unproject(cam).sub(cam.position);
+      return cam.position.y + (headPoint.y * (R - cam.position.z)) / headPoint.z;
+    };
+    headTurns = Math.max(0, (shelfAt(limit) - (-0.75 + COVER.h)) / PITCH);
+    // The caption is up to three lines (about 76px) above its bottom edge.
+    const foot = $('#facing').getBoundingClientRect().bottom - stage.getBoundingClientRect().top - 76 - 8;
+    footTurns = Math.max(0, (-0.75 - shelfAt(foot)) / PITCH);
     if (wasTop) lift = topLift();
+    else if (wasBottom) lift = bottomLift();
     dirty = true;
   }
 
@@ -839,7 +849,7 @@
     i = clamp(i, 0, Math.max(0, ids.length - 1));
     foldLift();
     vel = 0;
-    const l = Math.max(0, topLift(i));     // near the top, stay at the top
+    const l = clamp(0, topLift(i), bottomLift(i));   // near an end, stay at the end
     dirty = true;
     if (instant || reduceMotion) { pos = i; lift = l; target = null; tween = null; return; }
     // Glide rather than spin: whole turns of the way become a straight slide up or down,
@@ -891,12 +901,14 @@
       } else if (!dragging && lift !== 0 && target === null) {
         liftVel = 0;
         // Settle on a whole turn, carrying on in the direction of travel past 15% of one,
-        // or at the top of the shelf.
-        // The top of the shelf is a resting place too, though usually not a whole turn.
+        // or at either end of the shelf.
         let k = liftDir > 0 ? Math.ceil(lift - 0.15) : liftDir < 0 ? Math.floor(lift + 0.15) : Math.round(lift);
+        // So are the top and bottom of the shelf, though they're usually not whole turns.
         if (!liftDir && Math.abs(lift - topLift()) < Math.abs(lift - k)) k = topLift();
+        if (!liftDir && Math.abs(lift - bottomLift()) < Math.abs(lift - k)) k = bottomLift();
         k = clampLift(k);
-        const kk = Math.abs(k - Math.round(k)) < 1e-9 || Math.abs(k - topLift()) < 1e-6 ? k : Math.round(lift);
+        const kk = Math.abs(k - Math.round(k)) < 1e-9 || Math.abs(k - topLift()) < 1e-6 ||
+          Math.abs(k - bottomLift()) < 1e-6 ? k : Math.round(lift);
         if (Math.abs(lift - kk) > 0.001) lift += (kk - lift) * Math.min(1, dt * 8);
         else foldLift();
         dirty = true;
