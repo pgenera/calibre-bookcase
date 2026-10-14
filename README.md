@@ -78,7 +78,8 @@ bookcase/
 - **Fonts:** EB Garamond is in Debian as `fonts-ebgaramond`. Without it the page falls back to Georgia.
   The demo loads it from Google Fonts.
 - **Service worker:** it keeps covers until calibre reports the book changed (at most 6,000, about
-  35 MB). It needs HTTPS, as all service workers do. Bump `VERSION` in `sw.js` to discard every
+  35 MB). Once a day it also fetches the covers of books added in the last 30 days again, since a new
+  book's cover is the one most likely to be fixed after import. It needs HTTPS, as all service workers do. Bump `VERSION` in `sw.js` to discard every
   cached copy.
 - **Proxy:** put a reverse proxy (nginx, Caddy, Envoy…) in front of `calibre-server`. Have it serve the
   `bookcase/` directory and pass everything else through to calibre.

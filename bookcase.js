@@ -25,6 +25,8 @@
   const THUMB = '150x225';
   const CHUNK = 100;             // ids per /ajax/books request
   const CHECK_EVERY = 60e3;      // look for new or removed books this often while visible
+  const RECENT_EVERY = 864e5;    // once a day, fetch the covers of recent additions again...
+  const RECENT_DAYS = 30;        // ...added this many days ago or less
   const GROW_MS = 900;           // a new book grows onto the shelf over this long
   // Vertical flicks, in turns/s. A flick's speed is multiplied by `boost`, and a flick
   // in the direction the helix is already sliding adds to it.
@@ -109,6 +111,8 @@
       order: async (sortKey) => (await q(`/ajax/search/${library}?num=100000&${order(sortKey)}`)).book_ids,
       search: async (text, sortKey, seriesOrder) =>
         (await q(`/ajax/search/${library}?num=100000&${order(sortKey, seriesOrder)}&query=${encodeURIComponent(text)}`)).book_ids,
+      recent: async (days) =>
+        (await q(`/ajax/search/${library}?num=100000&${SORTS.added}&query=${encodeURIComponent(`date:>${days}daysago`)}`)).book_ids,
       books: (list) => q(`/ajax/books/${library}?ids=${list.join(',')}&category_urls=false`),
       book: (id) => q(`/ajax/book/${id}/${library}?category_urls=false`),
       thumb: (id) => `/get/thumb/${id}/${library}?sz=${THUMB}`,
@@ -453,10 +457,7 @@
       // Covers are kept indefinitely; a book edited in calibre gets its cover fetched again.
       if (before && before.lm && b.last_modified && before.lm !== b.last_modified) {
         changed.push(thumbUrl(id));
-        for (const k of ['t' + id, 's' + id]) {
-          if (textures.has(k)) { textures.get(k).tex.dispose(); textures.delete(k); }
-        }
-        avgColor.delete(id);
+        dropCover(id);
       }
       meta.set(id, { title: b.title, authors: b.authors, series: b.series, series_index: b.series_index,
                      main: b.main_format || {}, lm: b.last_modified });
@@ -467,6 +468,14 @@
     }
     if (changed.length) dirty = true;
     saveMeta();
+  }
+
+  // Forget the drawn cover and spine, so they're made again from a fresh thumbnail.
+  function dropCover(id) {
+    for (const k of ['t' + id, 's' + id]) {
+      if (textures.has(k)) { textures.get(k).tex.dispose(); textures.delete(k); }
+    }
+    avgColor.delete(id);
   }
 
   // Titles, authors and series are kept on the device, so the whole shelf is
@@ -1458,8 +1467,33 @@
     checking = true;
     try {
       merge(await source.order(sortKey));
+      await refreshRecentCovers();
     } catch (e) { /* calibre restarts briefly during imports; try again next time */ }
     checking = false;
+  }
+
+  // Covers stay on the device until the page notices calibre changed the book,
+  // which it can miss. A new book's cover is the one most likely to be fixed
+  // after import, so once a day the worker fetches the last month's covers again
+  // and the page redraws any that came back different.
+  async function refreshRecentCovers() {
+    const worker = navigator.serviceWorker && navigator.serviceWorker.controller;
+    if (!worker || !source.recent || !navigator.onLine) return;
+    const key = `bookcase.recentCovers.${source.name}`;
+    let last = 0;
+    try { last = +localStorage.getItem(key) || 0; } catch (e) { /* no storage: check every launch */ }
+    if (Date.now() - last < RECENT_EVERY) return;
+    const byUrl = new Map((await source.recent(RECENT_DAYS)).map((id) => [new URL(thumbUrl(id), location.href).href, id]));
+    const changed = await new Promise((resolve) => {
+      const ch = new MessageChannel();
+      ch.port1.onmessage = (e) => resolve(e.data);
+      worker.postMessage({ type: 'recheck', urls: [...byUrl.keys()] }, [ch.port2]);
+      setTimeout(() => resolve(null), 60e3);   // an older worker never answers
+    });
+    if (!Array.isArray(changed)) return;
+    try { localStorage.setItem(key, String(Date.now())); } catch (e) { /* as above */ }
+    for (const url of changed) if (byUrl.has(url)) dropCover(byUrl.get(url));
+    if (changed.length) dirty = true;
   }
 
   function merge(next) {

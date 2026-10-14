@@ -5,7 +5,8 @@
    /ajax/search (book order)      network first, cached copy when offline
    /ajax/books, /ajax/book, info  cached copy first, refreshed in the background
    /get/thumb (covers)            kept until the page says the book changed (covers rarely
-                                  do), at most THUMB_LIMIT of them
+                                  do), at most THUMB_LIMIT of them; the page also has recent
+                                  books' covers checked again once a day
    Downloads and anything else go straight to the network. */
 'use strict';
 
@@ -43,6 +44,28 @@ self.addEventListener('message', (event) => {
   // The page saw a book's last-modified time change: drop its cover so it's fetched again.
   if (event.data && event.data.type === 'forget' && Array.isArray(event.data.urls)) {
     event.waitUntil(caches.open(COVERS).then((c) => Promise.all(event.data.urls.map((u) => c.delete(u)))));
+    return;
+  }
+  // Fetch these covers again and keep any that changed; answer with their URLs.
+  // A cover that can't be fetched keeps its cached copy.
+  if (event.data && event.data.type === 'recheck' && Array.isArray(event.data.urls)) {
+    event.waitUntil((async () => {
+      const cache = await caches.open(COVERS);
+      const changed = [];
+      for (const url of event.data.urls) {
+        try {
+          const res = await fetch(url, { cache: 'no-cache' });
+          if (!res.ok || res.type !== 'basic') continue;
+          const cached = await cache.match(url);
+          const now = new Uint8Array(await res.clone().arrayBuffer());
+          const was = cached ? new Uint8Array(await cached.arrayBuffer()) : null;
+          if (was && was.length === now.length && was.every((b, k) => b === now[k])) continue;
+          await cache.put(url, res);
+          if (was) changed.push(url);
+        } catch (e) { /* offline or calibre restarting: keep what we have */ }
+      }
+      if (event.ports[0]) event.ports[0].postMessage(changed);
+    })());
     return;
   }
   if (!event.data || event.data.type !== 'refresh') return;
