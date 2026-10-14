@@ -217,6 +217,7 @@
   // At the top of the shelf the camera rests this many turns down, so the newest
   // books start just under the header instead of mid-screen below empty space.
   let headTurns = 0;
+  let tween = null;              // a glide started by goTo: from/to pos and lift, start, duration
   let zoom = 1;
   let introT = 1;                // 0..1 while the opening plays
   const born = new Map();        // id -> time it appeared, for the grow-in animation
@@ -796,7 +797,7 @@
   }
 
   // How many turns fit above the camera's shelf with the camera at rest: the top row's
-  // books must clear the header.
+  // books just clear the header.
   let restDist = CAM_DIST;
   const headPoint = new THREE.Vector3();
   function measureHead() {
@@ -808,14 +809,11 @@
     cam.clearViewOffset();
     cam.updateProjectionMatrix();
     cam.updateMatrixWorld();
-    const limit = Math.max(0, headerEl.getBoundingClientRect().bottom - stage.getBoundingClientRect().top) + 8;
-    let k = 0;
-    while (k < 8) {
-      headPoint.set(0, -0.75 + (k + 1) * PITCH + COVER.h, R).project(cam);
-      if ((1 - headPoint.y) / 2 * H < limit) break;
-      k++;
-    }
-    headTurns = k;
+    const limit = Math.max(0, headerEl.getBoundingClientRect().bottom - stage.getBoundingClientRect().top) + 4;
+    // Where the line of sight just under the header meets the front of the shelf.
+    headPoint.set(0, 1 - (2 * limit) / H, 0.5).unproject(cam).sub(cam.position);
+    const y = cam.position.y + (headPoint.y * (R - cam.position.z)) / headPoint.z;
+    headTurns = Math.max(0, (y - (-0.75 + COVER.h)) / PITCH);
     if (wasTop) lift = topLift();
     dirty = true;
   }
@@ -842,8 +840,16 @@
     foldLift();
     vel = 0;
     const l = Math.max(0, topLift(i));     // near the top, stay at the top
-    if (instant || reduceMotion) { pos = i; target = null; lift = l; } else { target = i; liftTarget = l; }
     dirty = true;
+    if (instant || reduceMotion) { pos = i; lift = l; target = null; tween = null; return; }
+    // Glide rather than spin: whole turns of the way become a straight slide up or down,
+    // leaving at most half a turn of rotation, on an ease that starts and ends gently.
+    const n = booksPerTurn();
+    const turns = Math.round((i - pos) / n);
+    const p1 = i - turns * n;
+    const dur = Math.min(1.1, 0.45 + 0.12 * Math.sqrt(Math.abs(turns)) + 0.25 * Math.abs(p1 - pos) / n);
+    tween = { p0: pos, l0: lift, p1, l1: l + turns, l, t0: performance.now(), dur };
+    target = i; liftTarget = null;
   }
 
   let last = performance.now();
@@ -853,9 +859,13 @@
     last = now;
     followCard(false, dt);
     if (ids.length) {
-      if (target !== null) {
-        const d = target - pos;
-        if (Math.abs(d) < 0.002) { pos = target; target = null; } else { pos += d * Math.min(1, dt * 7); }
+      if (target !== null && tween) {
+        const t = clamp((now - tween.t0) / (tween.dur * 1000), 0, 1);
+        const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(2 - 2 * t, 3) / 2;
+        pos = lerp(tween.p0, tween.p1, e);
+        lift = lerp(tween.l0, tween.l1, e);
+        // Arrived: drop the whole turns slid through (invisibly), so the book is exactly in front.
+        if (t === 1) { pos = target; lift = tween.l; target = null; tween = null; }
         dirty = true;
       } else if (!dragging && Math.abs(vel) > 0.02) {
         pos += vel * dt;
@@ -883,7 +893,7 @@
         // Settle on a whole turn, carrying on in the direction of travel past 15% of one,
         // or at the top of the shelf.
         const k = clampLift(liftDir > 0 ? Math.ceil(lift - 0.15) : liftDir < 0 ? Math.floor(lift + 0.15) : Math.round(lift));
-        const kk = Math.abs(k - Math.round(k)) < 1e-9 || k === topLift() ? k : Math.round(lift);
+        const kk = Math.abs(k - Math.round(k)) < 1e-9 || Math.abs(k - topLift()) < 1e-6 ? k : Math.round(lift);
         if (Math.abs(lift - kk) > 0.001) lift += (kk - lift) * Math.min(1, dt * 8);
         else foldLift();
         dirty = true;
@@ -1543,6 +1553,7 @@
     const frontIndex = clamp(Math.round(front()), 0, old.length - 1);
     const frontId = old[frontIndex];
     const wasTop = atTop() && Math.round(pos) === 0 && !hits;
+    target = null; tween = null;   // a glide in progress was aimed at the old order
     const selId = selected !== null ? old[selected] : null;
     const added = next.filter((id) => !indexOf.has(id));
 
