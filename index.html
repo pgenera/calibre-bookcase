@@ -149,63 +149,64 @@
   }
   #status a { color: var(--paper); text-decoration-color: var(--brass); pointer-events: auto; }
 
-  #detail {
+  .card {
     position: fixed; top: 0; right: 0; bottom: 0; width: min(25em, 100%);
     background: var(--wall-raised); border-left: 1px solid var(--rule);
     padding: max(20px, env(safe-area-inset-top)) 28px 32px;
     overflow-y: auto; transform: translateX(102%); transition: transform 0.28s ease;
     box-shadow: -18px 0 40px rgba(0, 0, 0, 0.35);
   }
-  #detail.open { transform: none; }
-  #detail.dragging { transition: none; }
-  #detail .close { float: right; font-size: 17px; }
-  #detail .cardnav { display: flex; gap: 14px; align-items: baseline; color: var(--muted); margin-bottom: 4px; }
-  #detail .cardnav .textbtn { font-size: 22px; line-height: 1; padding: 0 4px; }
-  #detail .cardnav .textbtn:disabled { opacity: 0.3; cursor: default; }
-  #detail .cover {
+  .card.open { transform: none; }
+  .card.dragging { transition: none; }
+  .card.peek { transition: none; pointer-events: none; }
+  .card .close { float: right; font-size: 17px; }
+  .card .cardnav { display: flex; gap: 14px; align-items: baseline; color: var(--muted); margin-bottom: 4px; }
+  .card .cardnav .textbtn { font-size: 22px; line-height: 1; padding: 0 4px; }
+  .card .cardnav .textbtn:disabled { opacity: 0.3; cursor: default; }
+  .card .cover {
     display: block; width: 168px; max-width: 48%; aspect-ratio: 2 / 3; object-fit: cover;
     margin: 6px 0 22px; background: var(--wall);
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
   }
-  #detail h2 { font-style: italic; font-weight: 400; font-size: 28px; line-height: 1.15; margin: 0; }
-  #detail .sub { font-size: 19px; line-height: 1.3; color: var(--muted); margin: 6px 0 0; }
-  #detail .by { margin: 12px 0 0; }
-  #detail .series, #detail .pub { margin: 0; color: var(--muted); }
+  .card h2 { font-style: italic; font-weight: 400; font-size: 28px; line-height: 1.15; margin: 0; }
+  .card .sub { font-size: 19px; line-height: 1.3; color: var(--muted); margin: 6px 0 0; }
+  .card .by { margin: 12px 0 0; }
+  .card .series, .card .pub { margin: 0; color: var(--muted); }
   .shelflink {
     font: inherit; color: var(--paper); background: none; border: 0; padding: 0; cursor: pointer;
     text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 3px;
     text-align: left;
   }
   .shelflink:hover { color: var(--brass); }
-  #detail .links { display: flex; gap: 6px 20px; flex-wrap: wrap; margin: 18px 0 22px; }
-  #detail .links a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--brass);
+  .card .links { display: flex; gap: 6px 20px; flex-wrap: wrap; margin: 18px 0 22px; }
+  .card .links a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--brass);
                      text-underline-offset: 3px; }
-  #detail .links a:hover { color: var(--brass); }
-  #detail .links .sharebtn {
+  .card .links a:hover { color: var(--brass); }
+  .card .links .sharebtn {
     font: inherit; color: var(--paper); background: none; border: 0; padding: 0; cursor: pointer;
     text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 3px;
   }
-  #detail .links .sharebtn:hover { color: var(--brass); }
-  #detail .desc { border-top: 1px solid var(--rule); padding-top: 16px; max-width: 34em; }
-  #detail .desc p { margin: 0 0 0.75em; }
-  #detail .credit { font-size: 14px; color: var(--muted); margin: 18px 0 0; }
-  #detail .credit a { color: inherit; text-underline-offset: 3px; }
-  #detail .credit:empty { display: none; }
+  .card .links .sharebtn:hover { color: var(--brass); }
+  .card .desc { border-top: 1px solid var(--rule); padding-top: 16px; max-width: 34em; }
+  .card .desc p { margin: 0 0 0.75em; }
+  .card .credit { font-size: 14px; color: var(--muted); margin: 18px 0 0; }
+  .card .credit a { color: inherit; text-underline-offset: 3px; }
+  .card .credit:empty { display: none; }
 
   @media (max-width: 640px) {
     header { padding-left: 16px; padding-right: 16px; gap: 6px 16px; }
     .count { display: none; }
     .mark { margin-right: auto; }
     .search { order: 3; flex-basis: 100%; }
-    #detail { top: auto; height: 64%; width: 100%; border-left: 0; border-top: 1px solid var(--rule);
+    .card { top: auto; height: 64%; width: 100%; border-left: 0; border-top: 1px solid var(--rule);
               transform: translateY(102%); padding: 26px 20px 28px; overscroll-behavior: contain; }
     /* Grab bar: the sheet can be pulled down to close. */
-    #detail::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px;
+    .card::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px;
                       margin-left: -20px; border-radius: 2px; background: var(--rule); }
     #facing .t { font-size: 19px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    #detail { transition: none; }
+    .card { transition: none; }
     #pull.spinning svg, #pull.spinning circle { animation: none; stroke-dasharray: 44 57; }
   }
 </style>
@@ -257,7 +258,7 @@
   <span class="sr-only" aria-live="polite"></span>
 </div>
 
-<aside id="detail" aria-label="Book details" aria-hidden="true">
+<aside id="detail" class="card" aria-label="Book details" aria-hidden="true">
   <button type="button" class="textbtn close" id="close">Close</button>
   <div class="cardnav" id="cardnav" hidden>
     <button type="button" class="textbtn prev" aria-label="Previous in this list">‹</button>

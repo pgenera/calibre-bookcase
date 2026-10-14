@@ -576,13 +576,12 @@
     return Math.max(TURNS_VISIBLE[mode], seen);
   }
   // The least and greatest lift with book i in front: the top and bottom of the shelf.
-  // An open book comes all the way to the camera, so the end rows can be pulled out too.
   // On a library too short to fill the screen, the top wins.
   function topLift(i = pos) {
-    return (selected === null ? headTurns : 0) - i / booksPerTurn();
+    return headTurns - i / booksPerTurn();
   }
   function bottomLift(i = pos) {
-    const end = (Math.max(0, ids.length - 1) - i) / booksPerTurn() - (selected === null ? footTurns : 0);
+    const end = (Math.max(0, ids.length - 1) - i) / booksPerTurn() - footTurns;
     return Math.max(topLift(i), end);
   }
   const clampLift = (l) => clamp(l, topLift(), bottomLift());
@@ -774,7 +773,9 @@
       const bottom = H - coverY, right = W - coverX;
       const dim = bookDims(ids[selected]);
       const out = 0.6 + 0.6 * m;
-      const c = new THREE.Vector3(0, -0.75 + dim.h / 2 + 0.15, R - dim.d / 2 + out);
+      // An open book near either end rests above or below the camera's shelf.
+      const rest = (tween ? tween.l : lift) * PITCH;
+      const c = new THREE.Vector3(0, rest - 0.75 + dim.h / 2 + 0.15, R - dim.d / 2 + out);
       camera.clearViewOffset();
       camera.updateMatrixWorld();
       const [, yTop] = screenPoint(c.clone().setY(c.y + dim.h / 2), W, H);
@@ -1100,15 +1101,27 @@
     goTo(i);
     setHash();
     const token = ++detailToken;
-    const mt = meta.get(id) || {};
-    fillDetail(id, { title: mt.title || '', authors: mt.authors || [], series: mt.series, series_index: mt.series_index });
+    fillDetail(id, details.get(id) || stub(id));
     updateCardNav();
     detail.classList.add('open');
     detail.setAttribute('aria-hidden', 'false');
     try {
-      const b = await source.book(id);
+      const b = await bookDetails(id);
       if (token === detailToken) fillDetail(id, b);
     } catch (e) { /* keep what we have */ }
+  }
+  // Full details of the last few books shown, so a card swiped in is already complete.
+  const details = new Map();
+  async function bookDetails(id) {
+    const b = await source.book(id);
+    details.delete(id);
+    details.set(id, b);
+    if (details.size > 8) details.delete(details.keys().next().value);
+    return b;
+  }
+  function stub(id) {
+    const mt = meta.get(id) || {};
+    return { title: mt.title || '', authors: mt.authors || [], series: mt.series, series_index: mt.series_index };
   }
   // Back (Android's gesture, the browser button) closes the card, then clears the
   // highlighted matches, then leaves. Each is a history entry tagged with its layer.
@@ -1169,14 +1182,14 @@
     }
   }
   const cardNav = $('#cardnav');
-  function updateCardNav() {
+  function updateCardNav(nav = cardNav, at = selected) {
     const list = inList();
-    cardNav.hidden = !list;
+    nav.hidden = !list;
     if (!list) return;
-    const k = hits.list.indexOf(selected);
-    cardNav.querySelector('.where').textContent = `${k + 1} of ${hits.list.length}`;
-    cardNav.querySelector('.prev').disabled = k <= 0;
-    cardNav.querySelector('.next').disabled = k >= hits.list.length - 1;
+    const k = hits.list.indexOf(at);
+    nav.querySelector('.where').textContent = `${k + 1} of ${hits.list.length}`;
+    nav.querySelector('.prev').disabled = k <= 0;
+    nav.querySelector('.next').disabled = k >= hits.list.length - 1;
   }
   cardNav.querySelector('.prev').addEventListener('click', () => stepSelection(-1));
   cardNav.querySelector('.next').addEventListener('click', () => stepSelection(1));
@@ -1206,14 +1219,15 @@
       detail.style.transform = `translateY(${sheet.dy}px)`;
     } else {
       sheet.dx = dx;
-      // The card follows the finger when there's a book to bring in behind it; at the
-      // end of the list it only gives a little.
-      if (stepTo(dx < 0 ? 1 : -1) !== null) {
-        detail.style.transform = `translateX(${dx}px)`;
-        detail.style.opacity = String(1 - 0.6 * Math.min(1, Math.abs(dx) / detail.offsetWidth));
+      // The card follows the finger with the next book's card alongside; at the end of
+      // the list it only gives a little.
+      const dir = dx < 0 ? 1 : -1, next = stepTo(dir);
+      if (next !== null) {
+        showPeek(next, dir);
+        placeCards(dx, dir);
       } else {
+        hidePeek();
         detail.style.transform = `translateX(${dx * 0.35}px)`;
-        detail.style.opacity = '';
       }
     }
     sheet.samples.push([performance.now(), sheet.dx, sheet.dy]);
@@ -1226,58 +1240,86 @@
     const { mode, dx, dy } = sheet;
     sheet = null;
     const dir = dx < 0 ? 1 : -1;
-    if (mode === 'swipe' && (Math.abs(dx) > 60 || Math.abs(vx) > 0.5) && stepTo(dir) !== null) {
-      swapCard(dir);
+    if (mode === 'swipe' && peekDir === dir) {
+      slideCards(dir, Math.abs(dx) > 60 || Math.abs(vx) > 0.5);
       return;
     }
+    hidePeek();
     detail.classList.remove('dragging');
     detail.style.transform = '';   // the CSS transition carries it home, or off screen
-    detail.style.opacity = '';
     if (mode === 'pull' && (dy > detail.offsetHeight * 0.25 || vy > 0.6)) close();
   }
-  // Swiped away: the card carries on off that side, and the next book's card comes in
-  // from the other while the shelf glides to it.
+  // The neighbouring book's card, side by side with the open one while it's swiped.
+  const peek = detail.cloneNode(true);
+  peek.removeAttribute('id');
+  peek.querySelectorAll('[id]').forEach((e) => e.removeAttribute('id'));
+  peek.classList.add('peek', 'open');
+  peek.setAttribute('aria-hidden', 'true');
+  peek.inert = true;
+  peek.hidden = true;
+  detail.after(peek);
+  let peekIndex = null, peekDir = 0, peekToken = 0;
+  function showPeek(i, dir) {
+    peekDir = dir;
+    if (peekIndex === i && !peek.hidden) return;
+    peekIndex = i;
+    const id = ids[i], token = ++peekToken;
+    fillDetail(id, details.get(id) || stub(id), peek);
+    updateCardNav(peek.querySelector('.cardnav'), i);
+    peek.scrollTop = 0;
+    peek.hidden = false;
+    bookDetails(id).then((b) => { if (token === peekToken) fillDetail(id, b, peek); }).catch(() => {});
+  }
+  function hidePeek() {
+    peek.hidden = true;
+    peek.style.transition = peek.style.transform = '';
+    peekIndex = null; peekDir = 0; peekToken++;
+  }
+  function placeCards(dx, dir) {
+    detail.style.transform = `translateX(${dx}px)`;
+    peek.style.transform = `translateX(${dx + dir * detail.offsetWidth}px)`;
+  }
+  // Let go: both cards carry on together, the new one into place (or both back).
   let swapTimer = null;
-  function swapCard(dir) {
+  function slideCards(dir, commit) {
     clearTimeout(swapTimer);
     const w = detail.offsetWidth;
-    if (reduceMotion) {
+    const done = () => {
+      if (commit) {
+        // The open card becomes the one just swiped in, put in its place without moving.
+        detail.style.transition = 'none';
+        stepSelection(dir);
+        detail.scrollTop = 0;
+        detail.style.transform = '';
+        void detail.offsetWidth;
+      }
       detail.classList.remove('dragging');
-      detail.style.transform = detail.style.opacity = '';
-      stepSelection(dir);
-      return;
-    }
+      detail.style.transition = '';
+      hidePeek();
+    };
+    if (reduceMotion) { done(); return; }
+    const ease = 'transform 0.22s ease-out';
     detail.classList.remove('dragging');
-    detail.style.transition = 'transform 0.16s ease-in, opacity 0.16s ease-in';
-    detail.style.transform = `translateX(${-dir * w}px)`;
-    detail.style.opacity = '0';
-    swapTimer = setTimeout(() => {
-      stepSelection(dir);
-      if (selected === null) { detail.style.transition = detail.style.transform = detail.style.opacity = ''; return; }
-      detail.scrollTop = 0;
-      detail.style.transition = 'none';
-      detail.style.transform = `translateX(${dir * w}px)`;
-      void detail.offsetWidth;     // start the way in from the far side
-      detail.style.transition = 'transform 0.24s ease-out, opacity 0.24s ease-out';
-      detail.style.transform = '';
-      detail.style.opacity = '';
-      swapTimer = setTimeout(() => { detail.style.transition = ''; }, 260);
-    }, 160);
+    detail.style.transition = ease;
+    peek.style.transition = ease;
+    detail.style.transform = commit ? `translateX(${-dir * w}px)` : '';
+    peek.style.transform = `translateX(${commit ? 0 : dir * w}px)`;
+    swapTimer = setTimeout(done, 230);
   }
   detail.addEventListener('touchend', endSheet);
   detail.addEventListener('touchcancel', endSheet);
 
-  function fillDetail(id, b) {
-    const img = detail.querySelector('.cover');
+  function fillDetail(id, b, card = detail) {
+    const img = card.querySelector('.cover');
     const src = source.cover(id);
     if (img.getAttribute('src') !== src) img.src = src;
     img.alt = b.title ? `Cover of ${b.title}` : '';
-    detail.querySelector('h2').textContent = b.title || '';
+    card.querySelector('h2').textContent = b.title || '';
     const sub = (b.user_metadata && b.user_metadata['#subtitle'] && b.user_metadata['#subtitle']['#value#']) || '';
-    detail.querySelector('.sub').textContent = sub;
+    card.querySelector('.sub').textContent = sub;
     // Authors and series link to the rest of their books on the shelf.
     const authors = b.authors || [];
-    const by = detail.querySelector('.by');
+    const by = card.querySelector('.by');
     by.replaceChildren();
     if (authors.length) {
       by.append('by ');
@@ -1287,16 +1329,16 @@
       });
     }
     const year = b.pubdate && !String(b.pubdate).startsWith('0101') ? String(b.pubdate).slice(0, 4) : '';
-    const series = detail.querySelector('.series');
+    const series = card.querySelector('.series');
     series.replaceChildren();
     if (b.series) {
       const text = seriesText(b);
       series.append(text.slice(0, text.length - b.series.length),
                     shelfLink(b.series, `Show the whole ${b.series} series`, `series:"=${quoteQuery(b.series)}"`, id, true));
     }
-    detail.querySelector('.pub').textContent =
+    card.querySelector('.pub').textContent =
       b.publisher ? `Published by ${b.publisher}${year ? ', ' + year : ''}` : (year ? `Published ${year}` : '');
-    const links = detail.querySelector('.links');
+    const links = card.querySelector('.links');
     links.replaceChildren();
     const add = (text, href, download) => {
       const a = document.createElement('a');
@@ -1307,9 +1349,9 @@
     const main = b.main_format || (meta.get(id) || {}).main || {};
     for (const link of source.links(id, Object.assign({}, b, { main_format: main }))) add(link.text, link.href, link.download);
     links.append(shareButton(id, b));
-    detail.querySelector('.desc').replaceChildren(...sanitize(b.comments || ''));
+    card.querySelector('.desc').replaceChildren(...sanitize(b.comments || ''));
     // Where the cover image came from, when the source says (the demo's scans).
-    const credit = detail.querySelector('.credit');
+    const credit = card.querySelector('.credit');
     const c = source.credit(id);
     credit.replaceChildren();
     if (c) {
