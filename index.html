@@ -157,6 +157,7 @@
     box-shadow: -18px 0 40px rgba(0, 0, 0, 0.35);
   }
   #detail.open { transform: none; }
+  #detail.dragging { transition: none; }
   #detail .close { float: right; font-size: 17px; }
   #detail .cardnav { display: flex; gap: 14px; align-items: baseline; color: var(--muted); margin-bottom: 4px; }
   #detail .cardnav .textbtn { font-size: 22px; line-height: 1; padding: 0 4px; }
@@ -198,7 +199,6 @@
     .search { order: 3; flex-basis: 100%; }
     #detail { top: auto; height: 64%; width: 100%; border-left: 0; border-top: 1px solid var(--rule);
               transform: translateY(102%); padding: 26px 20px 28px; overscroll-behavior: contain; }
-    #detail.dragging { transition: none; }
     /* Grab bar: the sheet can be pulled down to close. */
     #detail::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px;
                       margin-left: -20px; border-radius: 2px; background: var(--rule); }

@@ -1144,6 +1144,16 @@
   // matches (a series in reading order) when the open book is one of them, otherwise
   // along the shelf.
   function inList() { return hits && selected !== null && hits.set.has(selected); }
+  // The book stepSelection(dir) would open, or null at the end of the list.
+  function stepTo(dir) {
+    if (selected === null) return null;
+    if (inList()) {
+      const next = hits.list.indexOf(selected) + dir;
+      return next >= 0 && next < hits.list.length ? hits.list[next] : null;
+    }
+    const next = selected + dir;
+    return next >= 0 && next < ids.length ? next : null;
+  }
   function stepSelection(dir) {
     if (selected === null) return;
     if (inList()) {
@@ -1196,7 +1206,15 @@
       detail.style.transform = `translateY(${sheet.dy}px)`;
     } else {
       sheet.dx = dx;
-      detail.style.transform = `translateX(${dx * 0.35}px)`;   // a little give, as a hint
+      // The card follows the finger when there's a book to bring in behind it; at the
+      // end of the list it only gives a little.
+      if (stepTo(dx < 0 ? 1 : -1) !== null) {
+        detail.style.transform = `translateX(${dx}px)`;
+        detail.style.opacity = String(1 - 0.6 * Math.min(1, Math.abs(dx) / detail.offsetWidth));
+      } else {
+        detail.style.transform = `translateX(${dx * 0.35}px)`;
+        detail.style.opacity = '';
+      }
     }
     sheet.samples.push([performance.now(), sheet.dx, sheet.dy]);
     if (sheet.samples.length > 5) sheet.samples.shift();
@@ -1205,12 +1223,46 @@
     if (!sheet || !sheet.mode) { sheet = null; return; }
     const [t0, x0, y0] = sheet.samples[0], [t1, x1, y1] = sheet.samples[sheet.samples.length - 1];
     const vx = t1 > t0 ? (x1 - x0) / (t1 - t0) : 0, vy = t1 > t0 ? (y1 - y0) / (t1 - t0) : 0;   // px/ms
-    detail.classList.remove('dragging');
-    detail.style.transform = '';   // the CSS transition carries it home, or off screen
     const { mode, dx, dy } = sheet;
     sheet = null;
+    const dir = dx < 0 ? 1 : -1;
+    if (mode === 'swipe' && (Math.abs(dx) > 60 || Math.abs(vx) > 0.5) && stepTo(dir) !== null) {
+      swapCard(dir);
+      return;
+    }
+    detail.classList.remove('dragging');
+    detail.style.transform = '';   // the CSS transition carries it home, or off screen
+    detail.style.opacity = '';
     if (mode === 'pull' && (dy > detail.offsetHeight * 0.25 || vy > 0.6)) close();
-    if (mode === 'swipe' && (Math.abs(dx) > 60 || Math.abs(vx) > 0.5)) stepSelection(dx < 0 ? 1 : -1);
+  }
+  // Swiped away: the card carries on off that side, and the next book's card comes in
+  // from the other while the shelf glides to it.
+  let swapTimer = null;
+  function swapCard(dir) {
+    clearTimeout(swapTimer);
+    const w = detail.offsetWidth;
+    if (reduceMotion) {
+      detail.classList.remove('dragging');
+      detail.style.transform = detail.style.opacity = '';
+      stepSelection(dir);
+      return;
+    }
+    detail.classList.remove('dragging');
+    detail.style.transition = 'transform 0.16s ease-in, opacity 0.16s ease-in';
+    detail.style.transform = `translateX(${-dir * w}px)`;
+    detail.style.opacity = '0';
+    swapTimer = setTimeout(() => {
+      stepSelection(dir);
+      if (selected === null) { detail.style.transition = detail.style.transform = detail.style.opacity = ''; return; }
+      detail.scrollTop = 0;
+      detail.style.transition = 'none';
+      detail.style.transform = `translateX(${dir * w}px)`;
+      void detail.offsetWidth;     // start the way in from the far side
+      detail.style.transition = 'transform 0.24s ease-out, opacity 0.24s ease-out';
+      detail.style.transform = '';
+      detail.style.opacity = '';
+      swapTimer = setTimeout(() => { detail.style.transition = ''; }, 260);
+    }, 160);
   }
   detail.addEventListener('touchend', endSheet);
   detail.addEventListener('touchcancel', endSheet);
