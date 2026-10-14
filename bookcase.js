@@ -753,8 +753,8 @@
   const view = { x: 0, y: 0, need: 0 };
   const headerEl = document.querySelector('header');
   // Where a world point lands on screen, in CSS px, ignoring the current view shift.
-  function screenPoint(v, W, H) {
-    v.project(camera);
+  function screenPoint(v, W, H, cam = camera) {
+    v.project(cam);
     return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H];
   }
   // Targets come from where the open book will rest (front and centre, fully pulled
@@ -785,9 +785,19 @@
       // Back off until it fills at most 85% of the free height and 70% of the free width.
       const ratio = Math.max((yBot - yTop) / (0.85 * (bottom - top)), (xR - xL) / (0.7 * right));
       tneed = c.z + (camera.position.z - c.z) * ratio - R;
-      const [cx, cy] = screenPoint(c.clone(), W, H);
-      tx = cx - right / 2;
-      ty = cy - (top + bottom) / 2;
+      // Then move the picture only as far as it takes to bring the whole book into the
+      // free area, measured from where the camera will end up, so the book goes straight
+      // there. A book already in the clear doesn't move.
+      const cam = camera.clone();
+      cam.position.z = R + Math.max(restDist, tneed);
+      cam.updateMatrixWorld();
+      const [, t1] = screenPoint(c.clone().setY(c.y + dim.h / 2), W, H, cam);
+      const [, b1] = screenPoint(c.clone().setY(c.y - dim.h / 2), W, H, cam);
+      const [l1] = screenPoint(c.clone().setX(-dim.w / 2), W, H, cam);
+      const [r1] = screenPoint(c.clone().setX(dim.w / 2), W, H, cam);
+      const my = 0.06 * (bottom - top), mx = 0.06 * right;
+      ty = t1 < top + my ? t1 - (top + my) : b1 > bottom - my ? b1 - (bottom - my) : 0;
+      tx = l1 < mx ? l1 - mx : r1 > right - mx ? r1 - (right - mx) : 0;
     }
     const k = force || reduceMotion ? 1 : 1 - Math.exp(-dt * 9);
     const nx = view.x + (tx - view.x) * k, ny = view.y + (ty - view.y) * k;
