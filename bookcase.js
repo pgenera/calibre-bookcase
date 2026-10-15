@@ -255,7 +255,7 @@
   const core = new THREE.Mesh(
     new CylinderGeometry(R - 1.08, R - 1.08, 60, 64, 1, true),
     new THREE.MeshBasicMaterial({ color: 0x24170e }));
-  scene.add(core);
+  tilt.add(core);         // tips back with the books
 
   const box = new BoxGeometry(1, 1, 1);
   const paper = new THREE.MeshBasicMaterial({ color: 0xddd2bb });
