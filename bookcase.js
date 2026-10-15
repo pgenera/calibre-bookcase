@@ -990,6 +990,32 @@
   const pointers = new Map();    // pointerId -> [x, y], for pinch
   let pinch = null;
   const spread = () => { const [a, b] = [...pointers.values()]; return Math.hypot(a[0] - b[0], a[1] - b[1]); };
+  // How far the bookcase may tip (sign -1: top away) before the ends of the shelves
+  // drawn around the camera come into view, which would give away that it isn't endless.
+  const tiltM = new THREE.Matrix4(), tiltP = new THREE.Vector3();
+  function tiltShowsEnd(a) {
+    const turns = Math.min(turnsShown(), MAX_BOOKS / 2 / booksPerTurn()) - 0.5;
+    tiltM.makeRotationX(a);
+    camera.updateMatrixWorld();
+    for (const y of [-turns * PITCH, turns * PITCH + COVER.h]) {
+      for (let k = -8; k <= 8; k++) {           // the near half of the ring; the core hides the rest
+        const th = (k / 16) * Math.PI;
+        tiltP.set(Math.sin(th) * R, y, Math.cos(th) * R).applyMatrix4(tiltM).project(camera);
+        if (tiltP.z < 1 && Math.abs(tiltP.x) <= 1 && Math.abs(tiltP.y) <= 1) return true;
+      }
+    }
+    return false;
+  }
+  function tiltLimit(sign) {
+    const most = sign < 0 ? 1.0 : 0.35;
+    if (!tiltShowsEnd(sign * most)) return most;
+    let lo = 0, hi = most;
+    for (let k = 0; k < 12; k++) {
+      const a = (lo + hi) / 2;
+      if (tiltShowsEnd(sign * a)) hi = a; else lo = a;
+    }
+    return lo;
+  }
   const midY = () => { const [a, b] = [...pointers.values()]; return (a[1] + b[1]) / 2; };
   stage.addEventListener('pointerdown', (e) => {
     stage.setPointerCapture(e.pointerId);
@@ -1011,7 +1037,7 @@
     if (pinch && pointers.size === 2) {
       setZoom((pinch.zoom * pinch.d) / Math.max(1, spread()));
       // Up tips the top away from you; down brings it a little toward you.
-      tiltAngle = clamp(pinch.tilt + (midY() - pinch.y) * 0.004, -1.0, 0.35);
+      tiltAngle = clamp(pinch.tilt + (midY() - pinch.y) * 0.004, -tiltLimit(-1), tiltLimit(1));
       tilt.rotation.x = tiltAngle;
       dirty = true;
       return;
