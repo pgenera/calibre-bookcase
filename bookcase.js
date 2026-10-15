@@ -243,8 +243,13 @@
   camera.position.set(0, 1.4, R + CAM_DIST);
   camera.lookAt(0, 0.5, 0);
 
+  // Two fingers dragged up or down tip the whole bookcase back about the camera's
+  // shelf, just for fun; it rights itself when they lift.
+  const tilt = new THREE.Group();
+  scene.add(tilt);
+  let tiltAngle = 0;
   const helix = new THREE.Group();
-  scene.add(helix);
+  tilt.add(helix);
 
   // The case's dark core hides the far side of the helix.
   const core = new THREE.Mesh(
@@ -945,6 +950,11 @@
       showPull();
       dirty = true;
     }
+    if (!pinch && tiltAngle) {
+      tiltAngle = Math.abs(tiltAngle) < 1e-3 || reduceMotion ? 0 : tiltAngle * Math.exp(-dt * 6);
+      tilt.rotation.x = tiltAngle;
+      dirty = true;
+    }
     if (introT < 1) {
       introT = Math.min(1, introT + dt / 1.4);
       dirty = true;
@@ -980,11 +990,12 @@
   const pointers = new Map();    // pointerId -> [x, y], for pinch
   let pinch = null;
   const spread = () => { const [a, b] = [...pointers.values()]; return Math.hypot(a[0] - b[0], a[1] - b[1]); };
+  const midY = () => { const [a, b] = [...pointers.values()]; return (a[1] + b[1]) / 2; };
   stage.addEventListener('pointerdown', (e) => {
     stage.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, [e.clientX, e.clientY]);
     if (pointers.size === 2) {     // second finger: pinch to zoom instead of dragging
-      pinch = { d: spread(), zoom };
+      pinch = { d: spread(), zoom, y: midY(), tilt: tiltAngle };
       down = null; dragging = false; moved = Infinity;
       stage.classList.remove('dragging');
       return;
@@ -997,7 +1008,14 @@
   });
   stage.addEventListener('pointermove', (e) => {
     if (pointers.has(e.pointerId)) pointers.set(e.pointerId, [e.clientX, e.clientY]);
-    if (pinch && pointers.size === 2) { setZoom((pinch.zoom * pinch.d) / Math.max(1, spread())); return; }
+    if (pinch && pointers.size === 2) {
+      setZoom((pinch.zoom * pinch.d) / Math.max(1, spread()));
+      // Up tips the top away from you; down brings it a little toward you.
+      tiltAngle = clamp(pinch.tilt + (midY() - pinch.y) * 0.004, -1.0, 0.35);
+      tilt.rotation.x = tiltAngle;
+      dirty = true;
+      return;
+    }
     if (!down) return;
     const dx = e.clientX - down.x, dy = e.clientY - down.y;
     moved = Math.max(moved, Math.hypot(dx, dy));

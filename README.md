@@ -15,6 +15,7 @@ Inspired by Google's [WebGL Bookcase](https://developers.googleblog.com/designin
 - Shows every book as a cover on a helical shelf, or as a spine drawn in the colour of its cover.
 - Drag sideways to turn the helix and up or down to slide it. A flick keeps it moving.
   Pinch, ctrl+scroll or <kbd>+</kbd>/<kbd>−</kbd> zoom.
+  On a touch screen, drag two fingers up to tip the whole bookcase back; it rights itself when you let go.
 - Orders books newest first (the default), by author (then series and position), or by title.
 - Search uses calibre's own search syntax, so `author:wolfe` or `series:"Book of the New Sun"` work.
 - Click a book to pull it off the shelf and see its cover, description and download links.
