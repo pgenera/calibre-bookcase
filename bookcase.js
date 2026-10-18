@@ -1241,17 +1241,21 @@
     target = null; liftTarget = null;
     const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
     const dx = e.deltaMode === 1 ? e.deltaX * 16 : e.deltaX;
-    pos = clamp(pos + dx * booksPerTurn() / 1400, 0, ids.length - 1);
     if (e.ctrlKey) {               // trackpad pinch arrives as ctrl+wheel
       setZoom(zoom * Math.exp(px * 0.01));
       return;
     }
-    slide(lift + px / 500);
+    // Each scroll either turns or slides, whichever way it mostly goes, never both.
+    if (Math.abs(dx) > Math.abs(px)) pos = clamp(pos + dx * booksPerTurn() / 1400, 0, ids.length - 1);
+    else slide(lift + px / 500);
     vel = 0; liftVel = 0;
     dirty = true;
   }, { passive: false });
 
   // Drag: horizontal turns the helix along the shelf, vertical slides it up and down.
+  // A drag does one or the other, decided by which way it first goes, so a sideways
+  // swipe that drifts a little up or down still only turns the helix.
+  const AXIS_LOCK = 10;          // px moved before a drag picks its direction
   let down = null, moved = 0, samples = [];
   const pointers = new Map();    // pointerId -> [x, y], for pinch
   let pinch = null;
@@ -1293,7 +1297,7 @@
       return;
     }
     if (pointers.size > 2 || pinch) return;
-    down = { x: e.clientX, y: e.clientY, pos, lift, liftVel };
+    down = { x: e.clientX, y: e.clientY, pos, lift, liftVel, axis: null };
     moved = 0; samples = [[performance.now(), pos, lift]];
     dragging = true; target = null; liftTarget = null; vel = 0; liftVel = 0;
     stage.classList.add('dragging');
@@ -1311,14 +1315,24 @@
     if (!down) return;
     const dx = e.clientX - down.x, dy = e.clientY - down.y;
     moved = Math.max(moved, Math.hypot(dx, dy));
+    if (!down.axis) {
+      if (moved < AXIS_LOCK) return;
+      down.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      // Start from here, so the drag doesn't jump by the distance it took to decide.
+      down.x = e.clientX; down.y = e.clientY;
+      return;
+    }
     const wpp = worldPerPixel();
-    pos = clamp(down.pos - (dx * wpp) / slot(), 0, ids.length - 1);
-    // Dragging down past the top of the shelf is pull-to-refresh.
-    const wanted = down.lift - (dy * wpp) / PITCH;
-    const top = topLift();
-    pull = !refreshing && wanted < top ? ((top - wanted) * PITCH) / wpp : refreshing ? pull : 0;
-    showPull();
-    slide(wanted);
+    if (down.axis === 'x') {
+      pos = clamp(down.pos - (dx * wpp) / slot(), 0, ids.length - 1);
+    } else {
+      // Dragging down past the top of the shelf is pull-to-refresh.
+      const wanted = down.lift - (dy * wpp) / PITCH;
+      const top = topLift();
+      pull = !refreshing && wanted < top ? ((top - wanted) * PITCH) / wpp : refreshing ? pull : 0;
+      showPull();
+      slide(wanted);
+    }
     samples.push([performance.now(), pos, lift]);
     if (samples.length > 6) samples.shift();
     dirty = true;
@@ -1338,8 +1352,9 @@
       pick(e);
     } else if (!reduceMotion && samples.length > 1) {
       const [t0, p0, l0] = samples[0], [t1, p1, l1] = samples[samples.length - 1];
-      if (t1 - t0 > 0) {
+      if (t1 - t0 > 0 && down.axis === 'x') {
         vel = clamp(((p1 - p0) / (t1 - t0)) * 1000, -booksPerTurn() * 3, booksPerTurn() * 3);
+      } else if (t1 - t0 > 0) {
         let v = ((l1 - l0) / (t1 - t0)) * 1000 * LIFT.boost;
         // Flicking again in the same direction adds to the slide already under way.
         if (Math.abs(v) > 0.5 && Math.sign(v) === Math.sign(down.liftVel)) v += down.liftVel;
