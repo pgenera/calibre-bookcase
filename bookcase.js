@@ -1255,7 +1255,7 @@
   // Drag: horizontal turns the helix along the shelf, vertical slides it up and down.
   // Up and down have a dead zone, so a sideways swipe that drifts a little only turns
   // the helix; a drag that goes further up or down slides it too, from there on.
-  const SLIDE_DEAD = 40;         // px
+  const SLIDE_DEAD = 60;         // px
   let down = null, moved = 0, samples = [];
   const pointers = new Map();    // pointerId -> [x, y], for pinch
   let pinch = null;
