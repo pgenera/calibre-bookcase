@@ -39,8 +39,8 @@
   const MAX_THUMB_LOADS = 6;
   const TEXTURE_CACHE = 450;
   // Spines are painted into cells of a few large atlas textures (see "spines" below).
-  const SPINE_PX = { w: 64, h: 384 };
-  const ATLAS = { px: 2048, pages: 4 };
+  const SPINE_PX = { w: 80, h: 480 };
+  const ATLAS = { px: 2048, pages: 6 };
   const SORTS = {
     author: 'sort=author_sort,series,series_index&sort_order=asc',
     title: 'sort=title&sort_order=asc',
@@ -553,19 +553,28 @@
     return hslToRgb(h, Math.min(0.7, s * 1.15), clamp(l, 0.14, 0.72));
   }
 
+  // Relative luminance, for picking the lettering that stands out most from a binding.
+  function luminance(rgb) {
+    const [r, g, b] = rgb.map((v) => { v /= 255; return v <= 0.04 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+  const contrast = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+
+  // Painted at 64 x 384 and scaled to the cell, so the layout doesn't depend on its size.
   function paintSpine(id, mt) {
-    const g = spineCtx, W = SPINE_PX.w, H = SPINE_PX.h;
+    const g = spineCtx, W = 64, H = 384;
     const rgb = bindingColor(id);
-    const lum = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
-    const pale = lum > 150;
-    g.setTransform(1, 0, 0, 1, 0, 0);
+    const L = luminance(rgb);
+    const DARK = '#1b140e', LIGHT = '#f6eedd', GOLD = '#e2c46e';
+    const darkInk = contrast(L, luminance([27, 20, 14])) >= contrast(L, luminance([246, 238, 221]));
+    g.setTransform(SPINE_PX.w / W, 0, 0, SPINE_PX.h / H, 0, 0);
     g.globalAlpha = 1;
+    g.shadowColor = 'transparent';
     g.fillStyle = `rgb(${rgb.map(Math.round).join(',')})`;
     g.fillRect(0, 0, W, H);
     // Cloth grain: faint streaks along the spine.
     for (let k = 0; k < 40; k++) {
-      const r = hash(id * 41 + k);
-      g.fillStyle = r < 0.5 ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.04)';
+      g.fillStyle = hash(id * 41 + k) < 0.5 ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.04)';
       g.fillRect(Math.floor(hash(id * 43 + k) * W), 0, 1, H);
     }
     // Wear at the head and foot, where the spine is handled.
@@ -576,79 +585,71 @@
 
     // One of three bindings, the same for a book every time.
     const style = ['gilt', 'label', 'plain', 'gilt', 'plain'][Math.floor(hash(id + 3) * 5)];
-    const gold = '#d6b65f';
-    let ink = pale ? '#22180f' : '#f2e8d5';
-    const zone = [44, 300];          // the length of spine the title runs along
+    let ink = darkInk ? DARK : LIGHT;
+    const zone = [30, 318];          // the length of spine the title runs along
     if (style === 'gilt') {
-      g.fillStyle = gold;
+      g.fillStyle = GOLD;
       g.globalAlpha = 0.85;
-      for (const y of [14, 22, H - 25, H - 17]) g.fillRect(0, y, W, y % 2 ? 2 : 3);
+      for (const y of [10, 17, H - 20, H - 13]) g.fillRect(0, y, W, y % 2 ? 2 : 3);
       g.globalAlpha = 1;
-      if (lum < 95) ink = gold;      // gilt lettering only reads on a dark binding
+      if (L < 0.06) ink = GOLD;      // gilt lettering only reads on a dark binding
     } else if (style === 'label') {
       // A paper label, or a dark one on a pale binding.
-      g.fillStyle = pale ? '#2b2119' : '#e8dcc2';
-      g.fillRect(9, 40, W - 18, 262);
-      g.strokeStyle = pale ? 'rgba(232,220,194,0.5)' : 'rgba(43,33,25,0.45)';
+      g.fillStyle = darkInk ? '#2b2119' : '#ece2ca';
+      g.fillRect(5, 26, W - 10, 296);
+      g.strokeStyle = darkInk ? 'rgba(236,226,202,0.5)' : 'rgba(43,33,25,0.45)';
       g.lineWidth = 1;
-      g.strokeRect(12.5, 43.5, W - 25, 255);
-      ink = pale ? '#f0e4cc' : '#2b2119';
-      zone[0] = 52; zone[1] = 292;
+      g.strokeRect(8.5, 29.5, W - 17, 289);
+      ink = darkInk ? LIGHT : DARK;
+      zone[0] = 34; zone[1] = 314;
     } else {
       g.fillStyle = ink;
       g.globalAlpha = 0.5;
-      g.fillRect(10, 36, W - 20, 1);
-      g.fillRect(10, 306, W - 20, 1);
+      g.fillRect(8, 24, W - 16, 1);
+      g.fillRect(8, 324, W - 16, 1);
       g.globalAlpha = 1;
     }
-    // A rounded spine: shadowed at both edges, catching the light just left of centre.
-    const round = g.createLinearGradient(0, 0, W, 0);
-    round.addColorStop(0, 'rgba(0,0,0,0.5)');
-    round.addColorStop(0.14, 'rgba(0,0,0,0.12)');
-    round.addColorStop(0.4, 'rgba(255,255,255,0.12)');
-    round.addColorStop(0.62, 'rgba(255,255,255,0)');
-    round.addColorStop(0.86, 'rgba(0,0,0,0.15)');
-    round.addColorStop(1, 'rgba(0,0,0,0.55)');
 
-    // Title and author run down the spine, as on English books.
+    // Title and author run down the spine, as on English books: one line, as large as
+    // the spine allows, slightly emboldened so it survives being small on a phone.
     g.save();
     g.translate(W / 2, 0);
     g.rotate(Math.PI / 2);
-    g.fillStyle = ink;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    spineTitle(g, mt.title, (zone[0] + zone[1]) / 2, zone[1] - zone[0] - 8);
-    g.globalAlpha = style === 'label' ? 0.9 : 0.8;
-    if (style === 'label') g.fillStyle = pale ? '#22180f' : '#f2e8d5';
-    fitText(g, surnameOf(mt).toUpperCase(), 62, 15, '500', SERIF, 344, 1);
+    g.fillStyle = g.strokeStyle = ink;
+    if (ink !== DARK && style !== 'label') { g.shadowColor = 'rgba(0,0,0,0.55)'; g.shadowBlur = 3; }
+    const title = mt.title.replace(/\s*\(.*$/, '') || mt.title;
+    boldText(g, title, (zone[0] + zone[1]) / 2, 2, zone[1] - zone[0] - 6, 40, 26);
+    if (style === 'label') { g.fillStyle = g.strokeStyle = darkInk ? DARK : LIGHT; g.shadowColor = 'transparent'; }
+    else if (ink === DARK) g.shadowColor = 'transparent';
+    boldText(g, surnameOf(mt).toUpperCase(), 352, 1, 54, 20, 12);
     g.restore();
+    g.shadowColor = 'transparent';
+    // A rounded spine: shadowed at both edges, catching the light just left of centre.
+    const round = g.createLinearGradient(0, 0, W, 0);
+    round.addColorStop(0, 'rgba(0,0,0,0.45)');
+    round.addColorStop(0.12, 'rgba(0,0,0,0.08)');
+    round.addColorStop(0.4, 'rgba(255,255,255,0.10)');
+    round.addColorStop(0.62, 'rgba(255,255,255,0)');
+    round.addColorStop(0.88, 'rgba(0,0,0,0.1)');
+    round.addColorStop(1, 'rgba(0,0,0,0.5)');
     g.fillStyle = round;
     g.fillRect(0, 0, W, H);
   }
-  // On one line if it fits at a readable size, otherwise on two.
-  function spineTitle(g, title, mid, maxW) {
-    for (let s = 27; s >= 18; s--) {
-      g.font = `italic 400 ${s}px ${SERIF}`;
-      if (g.measureText(title).width <= maxW) { g.fillText(title, mid, 0); return; }
+  // As large as fits between max and min, cut short with an ellipsis below that.
+  function boldText(g, text, x, y, maxW, max, min) {
+    let s = max;
+    do { g.font = `400 ${s}px ${SERIF}`; } while (g.measureText(text).width > maxW && --s >= min);
+    let t = text;
+    if (g.measureText(t).width > maxW) {
+      while (t.length > 1 && g.measureText(t + '…').width > maxW) t = t.slice(0, -1);
+      t = t.trimEnd() + '…';
     }
-    const words = title.split(/\s+/);
-    if (words.length > 1) {
-      let best = 1, bestD = Infinity;
-      for (let k = 1; k < words.length; k++) {
-        const d = Math.abs(words.slice(0, k).join(' ').length - words.slice(k).join(' ').length);
-        if (d < bestD) { bestD = d; best = k; }
-      }
-      const lines = [words.slice(0, best).join(' '), words.slice(best).join(' ')];
-      let s = 20;
-      for (; s > 14; s--) {
-        g.font = `italic 400 ${s}px ${SERIF}`;
-        if (lines.every((t) => g.measureText(t).width <= maxW)) break;
-      }
-      fitText(g, lines[0], maxW, s, 'italic 400', SERIF, mid, -s * 0.55, s);
-      fitText(g, lines[1], maxW, s, 'italic 400', SERIF, mid, s * 0.55, s);
-      return;
-    }
-    fitText(g, title, maxW, 18, 'italic 400', SERIF, mid, 0, 13);
+    g.lineWidth = Math.max(0.6, s / 32);
+    g.lineJoin = 'round';
+    g.strokeText(t, x, y);
+    g.fillText(t, x, y);
   }
   function rgbToHsl([r, g, b]) {
     r /= 255; g /= 255; b /= 255;
@@ -661,16 +662,6 @@
   function surnameOf(mt) {
     const a = (mt.authors || [])[0] || '';
     return a.split(/\s+/).pop();
-  }
-  function fitText(g, text, maxW, size, weight, family, x, y, min = 14) {
-    let s = size;
-    do { g.font = `${weight} ${s}px ${family}`; } while (g.measureText(text).width > maxW && --s >= min);
-    let t = text;
-    if (g.measureText(t).width > maxW) {
-      while (t.length > 1 && g.measureText(t + '…').width > maxW) t = t.slice(0, -1);
-      t += '…';
-    }
-    g.fillText(t, x, y);
   }
   function hslToRgb(h, s, l) {
     const k = (n) => (n + h / 30) % 12;
@@ -1008,8 +999,9 @@
   }
 
   function placeCamera() {
-    // On narrow screens back off a little so a few covers fit across.
-    const extra = camera.aspect < 0.8 ? 3 : 0;
+    // On narrow screens back off a little so a few covers fit across; spines, being thin,
+    // don't need it, and their lettering needs every pixel.
+    const extra = camera.aspect < 0.8 ? 3 * (1 - m) : 0;
     // Fully zoomed out, the helix's whole width fits across the screen with a little margin.
     const halfWidth = Math.tan((camera.fov * Math.PI) / 360) * camera.aspect;
     const fit = (R + 1.2) / halfWidth - R;
@@ -1205,6 +1197,7 @@
       const mt = mode === 'spines' ? 1 : 0;
       if (m !== mt) {
         m = reduceMotion ? mt : clamp(m + Math.sign(mt - m) * dt * 2.2, 0, 1);
+        if (camera.aspect < 0.8) placeCamera();
         dirty = true;
       }
       if (prevT > 0) {
