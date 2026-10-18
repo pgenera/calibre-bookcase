@@ -1253,9 +1253,9 @@
   }, { passive: false });
 
   // Drag: horizontal turns the helix along the shelf, vertical slides it up and down.
-  // A drag does one or the other, decided by which way it first goes, so a sideways
-  // swipe that drifts a little up or down still only turns the helix.
-  const AXIS_LOCK = 10;          // px moved before a drag picks its direction
+  // Up and down have a dead zone, so a sideways swipe that drifts a little only turns
+  // the helix; a drag that goes further up or down slides it too, from there on.
+  const SLIDE_DEAD = 40;         // px
   let down = null, moved = 0, samples = [];
   const pointers = new Map();    // pointerId -> [x, y], for pinch
   let pinch = null;
@@ -1297,7 +1297,7 @@
       return;
     }
     if (pointers.size > 2 || pinch) return;
-    down = { x: e.clientX, y: e.clientY, pos, lift, liftVel, axis: null };
+    down = { x: e.clientX, y: e.clientY, pos, lift, liftVel, sliding: false };
     moved = 0; samples = [[performance.now(), pos, lift]];
     dragging = true; target = null; liftTarget = null; vel = 0; liftVel = 0;
     stage.classList.add('dragging');
@@ -1315,19 +1315,16 @@
     if (!down) return;
     const dx = e.clientX - down.x, dy = e.clientY - down.y;
     moved = Math.max(moved, Math.hypot(dx, dy));
-    if (!down.axis) {
-      if (moved < AXIS_LOCK) return;
-      down.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-      // Start from here, so the drag doesn't jump by the distance it took to decide.
-      down.x = e.clientX; down.y = e.clientY;
-      return;
-    }
     const wpp = worldPerPixel();
-    if (down.axis === 'x') {
-      pos = clamp(down.pos - (dx * wpp) / slot(), 0, ids.length - 1);
-    } else {
+    pos = clamp(down.pos - (dx * wpp) / slot(), 0, ids.length - 1);
+    if (!down.sliding && Math.abs(dy) > SLIDE_DEAD) {
+      down.sliding = true;
+      down.y += Math.sign(dy) * SLIDE_DEAD;   // slide from here on, without a jump
+    }
+    if (down.sliding) {
+      const sy = e.clientY - down.y;
       // Dragging down past the top of the shelf is pull-to-refresh.
-      const wanted = down.lift - (dy * wpp) / PITCH;
+      const wanted = down.lift - (sy * wpp) / PITCH;
       const top = topLift();
       pull = !refreshing && wanted < top ? ((top - wanted) * PITCH) / wpp : refreshing ? pull : 0;
       showPull();
@@ -1352,9 +1349,8 @@
       pick(e);
     } else if (!reduceMotion && samples.length > 1) {
       const [t0, p0, l0] = samples[0], [t1, p1, l1] = samples[samples.length - 1];
-      if (t1 - t0 > 0 && down.axis === 'x') {
-        vel = clamp(((p1 - p0) / (t1 - t0)) * 1000, -booksPerTurn() * 3, booksPerTurn() * 3);
-      } else if (t1 - t0 > 0) {
+      if (t1 - t0 > 0) vel = clamp(((p1 - p0) / (t1 - t0)) * 1000, -booksPerTurn() * 3, booksPerTurn() * 3);
+      if (t1 - t0 > 0 && down.sliding) {
         let v = ((l1 - l0) / (t1 - t0)) * 1000 * LIFT.boost;
         // Flicking again in the same direction adds to the slide already under way.
         if (Math.abs(v) > 0.5 && Math.sign(v) === Math.sign(down.liftVel)) v += down.liftVel;
