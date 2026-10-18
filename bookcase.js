@@ -32,12 +32,15 @@
   // in the direction the helix is already sliding adds to it.
   const LIFT = { friction: 1.2, maxVel: 40, settle: 0.35, boost: 2.5 };
   // Work allowed per frame, so books streaming past don't stall the frame.
-  const PER_FRAME = { uploads: 6, spines: 3 };
+  const PER_FRAME = { uploads: 6, spines: 24 };
   const PULL_REFRESH = 120;      // px past the top of the shelf that triggers a refresh
   const PREFETCH = { covers: 2, idleMs: 1500 };   // background filling of the offline cache
   const MAX_META_FETCHES = 2;
   const MAX_THUMB_LOADS = 6;
   const TEXTURE_CACHE = 450;
+  // Spines are painted into cells of a few large atlas textures (see "spines" below).
+  const SPINE_PX = { w: 64, h: 384 };
+  const ATLAS = { px: 2048, pages: 4 };
   const SORTS = {
     author: 'sort=author_sort,series,series_index&sort_order=asc',
     title: 'sort=title&sort_order=asc',
@@ -275,15 +278,17 @@
   const active = new Map();      // index -> mesh
   function makeBook() {
     const face = new THREE.MeshBasicMaterial({ map: blank, color: 0xffffff });
-    const mesh = new THREE.Mesh(box, [board, board, paper, paper, face, board]);
+    const mats = [board, board, paper, paper, face, board];
+    const mesh = new THREE.Mesh(box, mats);
     mesh.userData.face = face;
+    mesh.userData.mats = mats;
     mesh.visible = false;
     helix.add(mesh);
     return mesh;
   }
 
   // --- textures ---------------------------------------------------------------------
-  // One LRU for both cover thumbnails and generated spines.
+  // An LRU of cover thumbnails.
   const textures = new Map();    // key -> {tex, img?}
   function touch(key) {
     const v = textures.get(key);
@@ -303,7 +308,8 @@
   const thumbQueue = [];
   const thumbPending = new Set();
   let thumbLoads = 0;
-  const avgColor = new Map();    // id -> css color from the cover
+  const avgColor = new Map();    // id -> [r, g, b] from the cover, for its spine
+  const noCover = new Set();     // ids whose thumbnail wouldn't load: spines in a made-up colour
   const coverAspect = new Map(); // id -> width / height of the cover image
 
   const thumbUrl = (id) => source.thumb(id);
@@ -342,70 +348,323 @@
         tex.generateMipmaps = false;
         tex.needsUpdate = true;
         remember('t' + id, { tex, img });
-        avgColor.set(id, averageColor(img));
+        const rgb = averageColor(img), was = avgColor.get(id);
+        if (!was || rgb.some((v, k) => Math.abs(v - was[k]) > 2)) {
+          avgColor.set(id, rgb);
+          forgetSpine(id);            // paint the spine (again) in the cover's colour
+          saveMeta();
+        }
         if (img.naturalWidth && img.naturalHeight) coverAspect.set(id, img.naturalWidth / img.naturalHeight);
-        textures.delete('s' + id);    // redraw the spine in the cover's colour
         dirty = true; pumpThumbs();
       };
-      img.onerror = () => { thumbLoads--; thumbPending.delete(id); pumpThumbs(); };
+      img.onerror = () => { thumbLoads--; thumbPending.delete(id); noCover.add(id); dirty = true; pumpThumbs(); };
       img.src = thumbUrl(id);
     }
   }
 
+  // The cover's colour, favouring its coloured parts over white margins and black type.
   const sampler = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
   sampler.canvas.width = sampler.canvas.height = 8;
   function averageColor(img) {
     sampler.drawImage(img, 0, 0, 8, 8);
     const d = sampler.getImageData(0, 0, 8, 8).data;
-    let r = 0, g = 0, b = 0;
-    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; }
-    const n = d.length / 4;
+    let r = 0, g = 0, b = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4) {
+      const w = 0.15 + (Math.max(d[i], d[i + 1], d[i + 2]) - Math.min(d[i], d[i + 1], d[i + 2])) / 255;
+      r += d[i] * w; g += d[i + 1] * w; b += d[i + 2] * w; n += w;
+    }
     return [r / n, g / n, b / n];
   }
 
-  function spineTexture(id) {
-    const key = 's' + id;
-    if (textures.has(key)) return touch(key).tex;
-    const mt = meta.get(id);
-    if (!mt || frameBudget.spines <= 0) return null;
-    frameBudget.spines--;
-    const c = document.createElement('canvas');
-    c.width = 64; c.height = 384;
-    const g = c.getContext('2d');
-    let rgb = avgColor.get(id);
-    if (!rgb) {
-      const h = hash(id) * 360;
-      rgb = hslToRgb(h, 0.3, 0.3);
-    }
-    g.fillStyle = `rgb(${rgb.map(Math.round).join(',')})`;
-    g.fillRect(0, 0, c.width, c.height);
-    const light = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) > 150;
-    const ink = light ? '#1d1712' : '#f6efe4';
-    // Bands near the head and foot, like a cloth binding.
-    g.fillStyle = light ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.28)';
-    g.fillRect(0, 18, 64, 3); g.fillRect(0, 363, 64, 3);
-    g.save();
-    g.translate(32, 30);
-    g.rotate(Math.PI / 2);          // read top to bottom, as English spines do
-    g.fillStyle = ink;
-    g.textBaseline = 'middle';
-    fitText(g, mt.title, 250, 28, 'italic 400', SERIF, 0, -1);
-    g.globalAlpha = 0.85;
-    fitText(g, surnameOf(mt), 70, 19, '400', SERIF, 262, 0);
-    g.restore();
-    const tex = srgb(new THREE.CanvasTexture(c));
+  // --- spines ---------------------------------------------------------------------------
+  // Each spine is painted once on a small canvas and copied into a cell of a large atlas
+  // texture. One instanced mesh per atlas page draws every spine on it, so the shelf
+  // costs a few draw calls rather than six per book. Cells are reused, least recently
+  // seen first.
+  const ATLAS_COLS = Math.floor(ATLAS.px / SPINE_PX.w), ATLAS_ROWS = Math.floor(ATLAS.px / SPINE_PX.h);
+  const pages = [];
+  const freeCells = [];
+  const spineCells = new Map();  // id -> cell, least recently drawn first
+  let frameStamp = 0;
+  const hiddenMat = new THREE.MeshBasicMaterial({ visible: false });
+  const wallRgb = hexRgb(css('--wall', '#14211b'));
+  const paperRgb = hexRgb('#b3a78f');   // page edges, a little in shadow
+  const spineCanvas = document.createElement('canvas');
+  spineCanvas.width = SPINE_PX.w; spineCanvas.height = SPINE_PX.h;
+  const spineCtx = spineCanvas.getContext('2d');
+  const spineSrc = new THREE.Texture(spineCanvas);
+
+  function hexRgb(hex) {
+    const v = parseInt(hex.replace('#', ''), 16);
+    return [(v >> 16) / 255, ((v >> 8) & 255) / 255, (v & 255) / 255];
+  }
+
+  // Colours are used as they are, with no colour management, in every three.js release.
+  const SPINE_VERT = `
+    attribute float face;
+    attribute vec4 cell;
+    attribute vec3 tint;
+    attribute float shade;
+    uniform float fogNear, fogFar;
+    varying vec2 vUv;
+    varying vec3 vTint;
+    varying float vFace, vShade, vFog, vPainted;
+    void main() {
+      vUv = vec2(cell.x + uv.x * cell.z, cell.y + (1.0 - uv.y) * cell.w);
+      vTint = tint; vFace = face; vShade = shade; vPainted = cell.z;
+      vec4 mv = modelViewMatrix * instanceMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * mv;
+      vFog = smoothstep(fogNear, fogFar, -mv.z);
+    }`;
+  const SPINE_FRAG = `
+    uniform sampler2D atlas;
+    uniform vec3 fogColor, paper;
+    varying vec2 vUv;
+    varying vec3 vTint;
+    varying float vFace, vShade, vFog, vPainted;
+    void main() {
+      vec3 c;
+      if (vFace < 0.5) c = vPainted > 0.0 ? texture2D(atlas, vUv).rgb : vTint * 0.8;  // the spine
+      else if (vFace < 1.5) c = vTint * 0.42;                                           // boards, edge on
+      else c = paper;                                                                  // page edges
+      gl_FragColor = vec4(mix(c * vShade, fogColor, vFog), 1.0);
+    }`;
+  // Which box faces are the spine (0), the boards (1) and the page edges (2): BoxGeometry
+  // lists +x, -x, +y, -y, +z, -z, four corners each.
+  const FACE_KIND = [1, 1, 2, 2, 0, 1].flatMap((k) => [k, k, k, k]);
+
+  function addPage() {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = ATLAS.px;
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.flipY = false;
     tex.minFilter = THREE.LinearFilter;
     tex.generateMipmaps = false;
-    remember(key, { tex });
-    return tex;
+    const geo = new BoxGeometry(1, 1, 1);
+    const attr = (k) => {
+      const a = new THREE.InstancedBufferAttribute(new Float32Array(MAX_BOOKS * k), k);
+      if (a.setUsage) a.setUsage(THREE.DynamicDrawUsage);
+      return a;
+    };
+    const attrs = { cell: attr(4), tint: attr(3), shade: attr(1) };
+    geo.setAttribute('face', new THREE.BufferAttribute(new Float32Array(FACE_KIND), 1));
+    for (const [k, a] of Object.entries(attrs)) geo.setAttribute(k, a);
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: SPINE_VERT, fragmentShader: SPINE_FRAG,
+      uniforms: {
+        atlas: { value: tex },
+        fogColor: { value: new THREE.Vector3(...wallRgb) },
+        paper: { value: new THREE.Vector3(...paperRgb) },
+        fogNear: { value: 0 }, fogFar: { value: 1 },
+      },
+    });
+    const mesh = new THREE.InstancedMesh(geo, mat, MAX_BOOKS);
+    mesh.count = 0;
+    mesh.frustumCulled = false;
+    helix.add(mesh);
+    const page = { tex, mesh, mat, attrs, n: 0 };
+    pages.push(page);
+    for (let k = 0; k < ATLAS_COLS * ATLAS_ROWS; k++) {
+      const x = (k % ATLAS_COLS) * SPINE_PX.w, y = Math.floor(k / ATLAS_COLS) * SPINE_PX.h;
+      // Half a texel in from the edges, so filtering never picks up the next cell.
+      freeCells.push({ page, x, y, uv: [(x + 0.5) / ATLAS.px, (y + 0.5) / ATLAS.px,
+                                         (SPINE_PX.w - 1) / ATLAS.px, (SPINE_PX.h - 1) / ATLAS.px] });
+    }
+    return page;
+  }
+
+  function takeCell() {
+    if (!freeCells.length && pages.length < ATLAS.pages) addPage();
+    if (freeCells.length) return freeCells.pop();
+    // Reuse the cell of the book seen longest ago, unless it's on screen now.
+    const [id, cell] = spineCells.entries().next().value;
+    if (cell.seen === frameStamp) return null;
+    spineCells.delete(id);
+    return cell;
+  }
+  function forgetSpine(id) {
+    const cell = spineCells.get(id);
+    if (cell) { spineCells.delete(id); freeCells.push(cell); }
+  }
+  function copyToAtlas(cell) {
+    const gl = renderer.getContext();
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    const at = new THREE.Vector2(cell.x, cell.y);
+    // The arguments were reordered in r165.
+    if (+THREE.REVISION >= 165) renderer.copyTextureToTexture(spineSrc, cell.page.tex, null, at);
+    else renderer.copyTextureToTexture(at, spineSrc, cell.page.tex);
+  }
+
+  // The spine's cell, painting it if there's time this frame and the cover's colour is in.
+  function spineCell(id) {
+    let cell = spineCells.get(id);
+    if (cell) {
+      spineCells.delete(id);
+      spineCells.set(id, cell);
+      cell.seen = frameStamp;
+      return cell;
+    }
+    const mt = meta.get(id);
+    if (!mt || frameBudget.spines <= 0 || !(avgColor.has(id) || noCover.has(id))) return null;
+    cell = takeCell();
+    if (!cell) return null;
+    frameBudget.spines--;
+    paintSpine(id, mt);
+    copyToAtlas(cell);
+    cell.seen = frameStamp;
+    spineCells.set(id, cell);
+    return cell;
+  }
+
+  function beginSpines() {
+    frameStamp++;
+    for (const p of pages) p.n = 0;
+  }
+  function addSpine(id, matrix, light) {
+    const cell = spineCell(id);
+    // A book without a painted spine yet is drawn plain, on whichever page has room.
+    const page = cell ? cell.page : pages.find((p) => p.n < MAX_BOOKS) || (pages.length ? null : addPage());
+    if (!page) return;
+    const n = page.n++;
+    page.mesh.setMatrixAt(n, matrix);
+    const uv = cell ? cell.uv : [0, 0, 0, 0];
+    page.attrs.cell.array.set(uv, n * 4);
+    page.attrs.tint.array.set(bindingColor(id).map((v) => v / 255), n * 3);
+    page.attrs.shade.array[n] = light;
+  }
+  function endSpines() {
+    for (const p of pages) {
+      p.mesh.count = p.n;
+      if (!p.n) continue;
+      p.mesh.instanceMatrix.needsUpdate = true;
+      for (const a of Object.values(p.attrs)) a.needsUpdate = true;
+      p.mat.uniforms.fogNear.value = scene.fog.near;
+      p.mat.uniforms.fogFar.value = scene.fog.far;
+    }
+  }
+
+  // The binding: the cover's colour, kept from going too pale or too black to read as
+  // cloth, or a quiet made-up one for a book with no cover yet.
+  function bindingColor(id) {
+    const rgb = avgColor.get(id);
+    if (!rgb) return hslToRgb(hash(id) * 360, 0.28, 0.3);
+    const [h, s, l] = rgbToHsl(rgb);
+    return hslToRgb(h, Math.min(0.7, s * 1.15), clamp(l, 0.14, 0.72));
+  }
+
+  function paintSpine(id, mt) {
+    const g = spineCtx, W = SPINE_PX.w, H = SPINE_PX.h;
+    const rgb = bindingColor(id);
+    const lum = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+    const pale = lum > 150;
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.globalAlpha = 1;
+    g.fillStyle = `rgb(${rgb.map(Math.round).join(',')})`;
+    g.fillRect(0, 0, W, H);
+    // Cloth grain: faint streaks along the spine.
+    for (let k = 0; k < 40; k++) {
+      const r = hash(id * 41 + k);
+      g.fillStyle = r < 0.5 ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.04)';
+      g.fillRect(Math.floor(hash(id * 43 + k) * W), 0, 1, H);
+    }
+    // Wear at the head and foot, where the spine is handled.
+    const wear = g.createLinearGradient(0, 0, 0, H);
+    wear.addColorStop(0, 'rgba(0,0,0,0.25)'); wear.addColorStop(0.05, 'rgba(0,0,0,0)');
+    wear.addColorStop(0.95, 'rgba(0,0,0,0)'); wear.addColorStop(1, 'rgba(0,0,0,0.3)');
+    g.fillStyle = wear; g.fillRect(0, 0, W, H);
+
+    // One of three bindings, the same for a book every time.
+    const style = ['gilt', 'label', 'plain', 'gilt', 'plain'][Math.floor(hash(id + 3) * 5)];
+    const gold = '#d6b65f';
+    let ink = pale ? '#22180f' : '#f2e8d5';
+    const zone = [44, 300];          // the length of spine the title runs along
+    if (style === 'gilt') {
+      g.fillStyle = gold;
+      g.globalAlpha = 0.85;
+      for (const y of [14, 22, H - 25, H - 17]) g.fillRect(0, y, W, y % 2 ? 2 : 3);
+      g.globalAlpha = 1;
+      if (lum < 95) ink = gold;      // gilt lettering only reads on a dark binding
+    } else if (style === 'label') {
+      // A paper label, or a dark one on a pale binding.
+      g.fillStyle = pale ? '#2b2119' : '#e8dcc2';
+      g.fillRect(9, 40, W - 18, 262);
+      g.strokeStyle = pale ? 'rgba(232,220,194,0.5)' : 'rgba(43,33,25,0.45)';
+      g.lineWidth = 1;
+      g.strokeRect(12.5, 43.5, W - 25, 255);
+      ink = pale ? '#f0e4cc' : '#2b2119';
+      zone[0] = 52; zone[1] = 292;
+    } else {
+      g.fillStyle = ink;
+      g.globalAlpha = 0.5;
+      g.fillRect(10, 36, W - 20, 1);
+      g.fillRect(10, 306, W - 20, 1);
+      g.globalAlpha = 1;
+    }
+    // A rounded spine: shadowed at both edges, catching the light just left of centre.
+    const round = g.createLinearGradient(0, 0, W, 0);
+    round.addColorStop(0, 'rgba(0,0,0,0.5)');
+    round.addColorStop(0.14, 'rgba(0,0,0,0.12)');
+    round.addColorStop(0.4, 'rgba(255,255,255,0.12)');
+    round.addColorStop(0.62, 'rgba(255,255,255,0)');
+    round.addColorStop(0.86, 'rgba(0,0,0,0.15)');
+    round.addColorStop(1, 'rgba(0,0,0,0.55)');
+
+    // Title and author run down the spine, as on English books.
+    g.save();
+    g.translate(W / 2, 0);
+    g.rotate(Math.PI / 2);
+    g.fillStyle = ink;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    spineTitle(g, mt.title, (zone[0] + zone[1]) / 2, zone[1] - zone[0] - 8);
+    g.globalAlpha = style === 'label' ? 0.9 : 0.8;
+    if (style === 'label') g.fillStyle = pale ? '#22180f' : '#f2e8d5';
+    fitText(g, surnameOf(mt).toUpperCase(), 62, 15, '500', SERIF, 344, 1);
+    g.restore();
+    g.fillStyle = round;
+    g.fillRect(0, 0, W, H);
+  }
+  // On one line if it fits at a readable size, otherwise on two.
+  function spineTitle(g, title, mid, maxW) {
+    for (let s = 27; s >= 18; s--) {
+      g.font = `italic 400 ${s}px ${SERIF}`;
+      if (g.measureText(title).width <= maxW) { g.fillText(title, mid, 0); return; }
+    }
+    const words = title.split(/\s+/);
+    if (words.length > 1) {
+      let best = 1, bestD = Infinity;
+      for (let k = 1; k < words.length; k++) {
+        const d = Math.abs(words.slice(0, k).join(' ').length - words.slice(k).join(' ').length);
+        if (d < bestD) { bestD = d; best = k; }
+      }
+      const lines = [words.slice(0, best).join(' '), words.slice(best).join(' ')];
+      let s = 20;
+      for (; s > 14; s--) {
+        g.font = `italic 400 ${s}px ${SERIF}`;
+        if (lines.every((t) => g.measureText(t).width <= maxW)) break;
+      }
+      fitText(g, lines[0], maxW, s, 'italic 400', SERIF, mid, -s * 0.55, s);
+      fitText(g, lines[1], maxW, s, 'italic 400', SERIF, mid, s * 0.55, s);
+      return;
+    }
+    fitText(g, title, maxW, 18, 'italic 400', SERIF, mid, 0, 13);
+  }
+  function rgbToHsl([r, g, b]) {
+    r /= 255; g /= 255; b /= 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+    if (!d) return [0, 0, l];
+    const s = d / (1 - Math.abs(2 * l - 1));
+    const h = mx === r ? ((g - b) / d + 6) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return [h * 60, s, l];
   }
   function surnameOf(mt) {
     const a = (mt.authors || [])[0] || '';
     return a.split(/\s+/).pop();
   }
-  function fitText(g, text, maxW, size, weight, family, x, y) {
+  function fitText(g, text, maxW, size, weight, family, x, y, min = 14) {
     let s = size;
-    do { g.font = `${weight} ${s}px ${family}`; } while (g.measureText(text).width > maxW && --s > 13);
+    do { g.font = `${weight} ${s}px ${family}`; } while (g.measureText(text).width > maxW && --s >= min);
     let t = text;
     if (g.measureText(t).width > maxW) {
       while (t.length > 1 && g.measureText(t + '…').width > maxW) t = t.slice(0, -1);
@@ -483,10 +742,10 @@
 
   // Forget the drawn cover and spine, so they're made again from a fresh thumbnail.
   function dropCover(id) {
-    for (const k of ['t' + id, 's' + id]) {
-      if (textures.has(k)) { textures.get(k).tex.dispose(); textures.delete(k); }
-    }
+    if (textures.has('t' + id)) { textures.get('t' + id).tex.dispose(); textures.delete('t' + id); }
     avgColor.delete(id);
+    noCover.delete(id);
+    forgetSpine(id);
   }
 
   // Titles, authors and series are kept on the device, so the whole shelf is
@@ -496,8 +755,9 @@
     try {
       const saved = JSON.parse(localStorage.getItem(metaKey()) || 'null');
       if (!saved || saved.v !== 1) return;
-      for (const [id, [title, authors, series, series_index, main, lm]] of Object.entries(saved.books)) {
+      for (const [id, [title, authors, series, series_index, main, lm, color]] of Object.entries(saved.books)) {
         if (!meta.has(+id)) meta.set(+id, { title, authors, series, series_index, main, lm });
+        if (color && !avgColor.has(+id)) avgColor.set(+id, [0, 2, 4].map((k) => parseInt(color.substr(k, 2), 16)));
       }
     } catch (e) { /* no storage, or a damaged copy: start empty */ }
   }
@@ -506,7 +766,11 @@
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       const books = {};
-      for (const [id, mt] of meta) books[id] = [mt.title, mt.authors, mt.series, mt.series_index, mt.main, mt.lm];
+      const hex = (rgb) => rgb.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
+      for (const [id, mt] of meta) {
+        books[id] = [mt.title, mt.authors, mt.series, mt.series_index, mt.main, mt.lm];
+        if (avgColor.has(id)) books[id].push(hex(avgColor.get(id)));   // the spine's colour
+      }
       try { localStorage.setItem(metaKey(), JSON.stringify({ v: 1, books })); } catch (e) { /* full or private */ }
     }, 2000);
   }
@@ -614,7 +878,7 @@
     const aspect = coverAspect.get(id);
     const coverW = aspect ? clamp(COVER.h * aspect, 0.75, COVER.slot - 0.06) : COVER.w;
     return {
-      w: lerp(coverW, 0.18 + 0.1 * h, m),
+      w: lerp(coverW, 0.17 + 0.09 * h, m),
       h: lerp(COVER.h, 1.32 + 0.22 * hash(id + 7), m),
       d: lerp(COVER.depth, SPINE.depth, m),
     };
@@ -632,6 +896,8 @@
   function layout() {
     frameBudget.uploads = PER_FRAME.uploads;
     frameBudget.spines = PER_FRAME.spines;
+    const spines = m >= 0.5;      // halfway through the change, covers give way to spines
+    beginSpines();
     const fast = Math.abs(liftVel) > 2.5 || Math.abs(vel) > booksPerTurn() * 2;
     const s = slot();
     const perTurn = booksPerTurn();
@@ -691,16 +957,21 @@
       mesh.rotation.set(0, th, 0);
       mesh.scale.set(dim.w * Math.max(0.001, g), dim.h * Math.max(0.001, g), dim.d);
 
-      // Face texture: the cover, or the spine drawn in the cover's colour.
-      const face = mesh.userData.face;
       // While flying past at speed, use only covers already loaded; fill in as it slows.
-      const cover = wantThumb(id, !fast);
-      let tex = m < 0.5 ? (cover || blank) : (spineTexture(id) || blank);
-      if (tex !== blank && !onGpu.has(tex)) {
-        // A texture is uploaded to the GPU the first time it's drawn: only a few a frame.
-        if (frameBudget.uploads > 0) { frameBudget.uploads--; onGpu.add(tex); } else tex = blank;
+      // Spines only need the cover for its colour.
+      const cover = wantThumb(id, !fast && (!spines || !avgColor.has(id)));
+      const face = mesh.userData.face;
+      if (!spines) {
+        let tex = cover || blank;
+        if (tex !== blank && !onGpu.has(tex)) {
+          // A texture is uploaded to the GPU the first time it's drawn: only a few a frame.
+          if (frameBudget.uploads > 0) { frameBudget.uploads--; onGpu.add(tex); } else tex = blank;
+        }
+        if (face.map !== tex) face.map = tex;
       }
-      if (face.map !== tex) face.map = tex;
+      // In spine mode the mesh stays where the book is, to be clicked, but the atlas draws it.
+      const mats = spines ? hiddenMat : mesh.userData.mats;
+      if (mesh.material !== mats) mesh.material = mats;
       // Lit as if by a lamp in front: darker round the curve and further up or down.
       let phiI = (th - theta(pos)) % (2 * Math.PI);
       if (phiI > Math.PI) phiI -= 2 * Math.PI;
@@ -711,6 +982,7 @@
       light *= 0.25 + 0.75 * rise;
       if (hits && !hits.set.has(i)) light *= 0.28;                 // dim non-matches
       face.color.setScalar(light);
+      if (spines) { mesh.updateMatrix(); addSpine(id, mesh.matrix, light); }
 
       // Shelf plank under the book.
       tmpP.set(Math.sin(th) * (R - 0.55), shelfY(i) - 0.03, Math.cos(th) * (R - 0.55));
@@ -721,6 +993,7 @@
     }
     shelves.count = n;
     shelves.instanceMatrix.needsUpdate = true;
+    endSpines();
     // Placeholders still waiting for their turn to upload: keep drawing until they're in.
     if (frameBudget.uploads <= 0 || frameBudget.spines <= 0) dirty = true;
     const now = performance.now();
@@ -1759,7 +2032,7 @@
   function redrawSpinesWhenFontLoads() {
     if (!document.fonts) return;
     document.fonts.load(`italic 28px ${SERIF}`).then(() => {
-      for (const k of [...textures.keys()]) if (k[0] === 's') { textures.get(k).tex.dispose(); textures.delete(k); }
+      for (const id of [...spineCells.keys()]) forgetSpine(id);
       dirty = true;
     }).catch(() => {});
   }
