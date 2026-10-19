@@ -1155,10 +1155,9 @@
     target = i; liftTarget = null;
   }
 
-  // Up and down move the books a row (or three) by turning the helix whole turns, as a
-  // sideways swipe does, rather than sliding it past the camera: the shelves hold still
-  // on screen and the books ride along them, instead of the rows seeming to tip as they
-  // pass eye level.
+  // Up and down move the books a row (or three) in one step. A whole turn of the helix
+  // looks exactly like no turn, so the shelves stay where they are and only the books
+  // change; sliding the helix past the camera instead made the rows seem to tip.
   function turnRows(turns) {
     const n = booksPerTurn();
     const from = target ?? pos;
@@ -1166,11 +1165,8 @@
     const l = clamp(lift, topLift(i), bottomLift(i));
     if (i === Math.round(from) && l === lift) return;
     vel = 0; liftVel = 0; liftTarget = null;
+    pos = i; lift = l; target = null; tween = null;
     dirty = true;
-    if (reduceMotion) { pos = i; lift = l; target = null; tween = null; return; }
-    const dur = Math.min(1.1, 0.5 + 0.15 * Math.abs(turns));
-    tween = { p0: pos, l0: lift, p1: i, l1: l, l, t0: performance.now(), dur };
-    target = i;
   }
 
   let last = performance.now();
