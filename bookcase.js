@@ -45,7 +45,12 @@
     author: 'sort=author_sort,series,series_index&sort_order=asc',
     title: 'sort=title&sort_order=asc',
     added: 'sort=timestamp&sort_order=desc',
+    lcc: 'sort=%23lcc_sort,author_sort,title&sort_order=asc',
+    ddc: 'sort=%23ddc,author_sort,title&sort_order=asc',
   };
+  // Library-classification orders, from calibre columns of that name (the demo has none).
+  // Books without a number go after the rest rather than first.
+  const CLASS_COLUMNS = { lcc: '#lcc_sort', ddc: '#ddc' };
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const $ = (sel) => document.querySelector(sel);
@@ -110,11 +115,18 @@
   function calibreSource(library) {
     const q = (path, fresh) => getJSON(path, fresh);
     const order = (sortKey, seriesOrder) => (seriesOrder ? 'sort=series_index&sort_order=asc' : SORTS[sortKey]);
+    async function unclassedLast(list, sortKey, seriesOrder) {
+      const col = !seriesOrder && CLASS_COLUMNS[sortKey];
+      if (!col) return list;
+      const none = new Set((await q(`/ajax/search/${library}?num=100000&query=${encodeURIComponent(col + ':false')}`)).book_ids);
+      return list.filter((id) => !none.has(id)).concat(list.filter((id) => none.has(id)));
+    }
     return {
       name: library, home: '/', live: true, demo: false,
-      order: async (sortKey) => (await q(`/ajax/search/${library}?num=100000&${order(sortKey)}`)).book_ids,
-      search: async (text, sortKey, seriesOrder) =>
+      order: async (sortKey) => unclassedLast((await q(`/ajax/search/${library}?num=100000&${order(sortKey)}`)).book_ids, sortKey),
+      search: async (text, sortKey, seriesOrder) => unclassedLast(
         (await q(`/ajax/search/${library}?num=100000&${order(sortKey, seriesOrder)}&query=${encodeURIComponent(text)}`)).book_ids,
+        sortKey, seriesOrder),
       recent: async (days) =>
         (await q(`/ajax/search/${library}?num=100000&${SORTS.added}&query=${encodeURIComponent(`date:>${days}daysago`)}`)).book_ids,
       books: (list, fresh) => q(`/ajax/books/${library}?ids=${list.join(',')}&category_urls=false`, fresh),
@@ -1909,9 +1921,21 @@
         if (source.demo) $('.mark a').title = 'About this demo';
         loadMeta();
         if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
-        if (!sortChosen || !SORTS[sortChosen]) { sortKey = defaultSort(); sortSel.value = sortKey; }
+        if (source.demo) {
+          for (const k of Object.keys(CLASS_COLUMNS)) sortSel.querySelector(`option[value="${k}"]`).remove();
+        }
+        if (!sortChosen || !SORTS[sortChosen] || (source.demo && CLASS_COLUMNS[sortKey])) {
+          sortKey = defaultSort(); sortSel.value = sortKey;
+        }
       }
-      ids = await source.order(sortKey);
+      try {
+        ids = await source.order(sortKey);
+      } catch (e) {
+        if (!CLASS_COLUMNS[sortKey]) throw e;
+        // A library without the classification columns: newest first instead.
+        sortKey = defaultSort(); sortSel.value = sortKey;
+        ids = await source.order(sortKey);
+      }
     } catch (e) {
       fail('The library isn’t answering right now. <a href="/">Open the regular library view</a> or reload in a minute.');
       return;

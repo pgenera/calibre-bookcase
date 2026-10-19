@@ -17,6 +17,9 @@ Inspired by Google's [WebGL Bookcase](https://developers.googleblog.com/designin
   Pinch, ctrl+scroll or <kbd>+</kbd>/<kbd>−</kbd> zoom.
   On a touch screen, drag two fingers up to tip the whole bookcase back; it rights itself when you let go.
 - Orders books newest first (the default), by author (then series and position), or by title.
+  Libraries with Library of Congress or Dewey numbers in calibre text columns `#lcc_sort` (a key that
+  sorts LC numbers properly, such as `PS-3561.00000000.I483 S5`) or `#ddc` can be shelved by those too,
+  with unclassified books at the end.
 - Search uses calibre's own search syntax, so `author:wolfe` or `series:"Book of the New Sun"` work.
 - Click a book to pull it off the shelf and see its cover, description and download links.
   Its authors and series link to the rest of their books, which light up on the shelf.
