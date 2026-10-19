@@ -1436,6 +1436,7 @@
     updateCardNav();
     detail.classList.add('open');
     detail.setAttribute('aria-hidden', 'false');
+    prefetchNeighbours();
     try {
       const b = await bookDetails(id);
       if (token === detailToken) fillDetail(id, b);
@@ -1449,6 +1450,25 @@
     details.set(id, b);
     if (details.size > 8) details.delete(details.keys().next().value);
     return b;
+  }
+  // The books a swipe either way would bring in (the next and previous in a series or
+  // search when the open book is one of its matches, otherwise on the shelf): fetch
+  // their details and full covers now, so the card that slides in is complete.
+  // Holding the images keeps them in the page's list of available images, which a
+  // card's <img> with the same address draws from at once.
+  let neighbourCovers = [];
+  function prefetchNeighbours() {
+    const near = [1, -1].map(stepTo).filter((n) => n !== null).map((n) => ids[n]);
+    neighbourCovers = near.map((id) => {
+      const keep = neighbourCovers.find((img) => img.dataset.id === String(id));
+      if (keep) return keep;
+      const img = new Image();
+      img.dataset.id = id;
+      img.decoding = 'async';
+      img.src = source.cover(id);
+      return img;
+    });
+    for (const id of near) if (!details.has(id)) bookDetails(id).catch(() => {});
   }
   function stub(id) {
     const mt = meta.get(id) || {};
