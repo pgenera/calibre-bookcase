@@ -1155,6 +1155,24 @@
     target = i; liftTarget = null;
   }
 
+  // Up and down move the books a row (or three) by turning the helix whole turns, as a
+  // sideways swipe does, rather than sliding it past the camera: the shelves hold still
+  // on screen and the books ride along them, instead of the rows seeming to tip as they
+  // pass eye level.
+  function turnRows(turns) {
+    const n = booksPerTurn();
+    const from = target ?? pos;
+    const i = clamp(Math.round(from + turns * n), 0, Math.max(0, ids.length - 1));
+    const l = clamp(lift, topLift(i), bottomLift(i));
+    if (i === Math.round(from) && l === lift) return;
+    vel = 0; liftVel = 0; liftTarget = null;
+    dirty = true;
+    if (reduceMotion) { pos = i; lift = l; target = null; tween = null; return; }
+    const dur = Math.min(1.1, 0.5 + 0.15 * Math.abs(turns));
+    tween = { p0: pos, l0: lift, p1: i, l1: l, l, t0: performance.now(), dur };
+    target = i;
+  }
+
   let last = performance.now();
   let dragging = false;
   function frame(now) {
@@ -1397,10 +1415,7 @@
     const turns = { ArrowDown: 1, ArrowUp: -1, PageDown: 3, PageUp: -3 }[e.key];
     if (turns) {
       e.preventDefault();
-      liftTarget = clampLift(Math.round(liftTarget ?? lift) + turns);
-      liftDir = Math.sign(turns);
-      if (reduceMotion) { lift = liftTarget; liftTarget = null; }
-      dirty = true;
+      turnRows(turns);
       return;
     }
     if (e.key === '+' || e.key === '=') { setZoom(zoom / 1.15); return; }
