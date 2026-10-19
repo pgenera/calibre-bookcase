@@ -1619,6 +1619,9 @@
       if (commit) {
         // The open card becomes the one just swiped in, put in its place without moving.
         detail.style.transition = 'none';
+        // The swiped-in card's cover is already loaded: take it rather than load it again.
+        const mine = detail.querySelector('.cover'), theirs = peek.querySelector('.cover'), mark = new Comment();
+        mine.replaceWith(mark); theirs.replaceWith(mine); mark.replaceWith(theirs);
         stepSelection(dir);
         detail.scrollTop = 0;
         detail.style.transform = '';
@@ -1641,9 +1644,19 @@
   detail.addEventListener('touchcancel', endSheet);
 
   function fillDetail(id, b, card = detail) {
-    const img = card.querySelector('.cover');
+    let img = card.querySelector('.cover');
     const src = source.cover(id);
-    if (img.getAttribute('src') !== src) img.src = src;
+    if (img.getAttribute('src') !== src) {
+      // A fresh image, because browsers keep showing the old one until the new one loads,
+      // so a quick swipe would show the last book's cover. The shelf's thumbnail (usually
+      // already on the device) stands in meanwhile.
+      const fresh = img.cloneNode(false);
+      fresh.style.backgroundImage = `url("${thumbUrl(id)}")`;
+      fresh.onload = () => { fresh.style.backgroundImage = ''; };
+      fresh.src = src;
+      img.replaceWith(fresh);
+      img = fresh;
+    }
     img.alt = b.title ? `Cover of ${b.title}` : '';
     card.querySelector('h2').textContent = b.title || '';
     const sub = (b.user_metadata && b.user_metadata['#subtitle'] && b.user_metadata['#subtitle']['#value#']) || '';
